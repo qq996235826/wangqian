@@ -216,7 +216,7 @@ public class SupplierService {
         SupplierExample supplierExample=new SupplierExample();
         supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
-        if(supplierList.size()<0)
+        if(supplierList.size()==0)
         {
             return false;
         }
