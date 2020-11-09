@@ -4,6 +4,7 @@ package com.contract.controller;
 import com.contract.dto.ContractInfoDTO;
 import com.contract.dto.ResultDTO;
 import com.contract.service.ContractService;
+import com.itextpdf.text.pdf.AcroFields;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
@@ -46,14 +47,14 @@ public class ContractController {
     }
 
     /**
-     * 上传新的合同接口
-     * @param contractInfoDTO
+     * 获得新的合同
+     * @param  file,  phoneNum, item, price
      * @return 合同模板存储路径
      */
     @ResponseBody
     @PostMapping("/getContract")
-    public ResultDTO getContract(@RequestBody ContractInfoDTO contractInfoDTO) {
-        return ResultDTO.okOf(contractService.getContract(contractInfoDTO));
+    public ResultDTO getContract(MultipartFile file, String phoneNum,String item,String price) {
+        return ResultDTO.okOf(contractService.getContract(file,phoneNum,item,price));
     }
 
 

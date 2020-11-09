@@ -5,6 +5,9 @@ target/
 !**/src/test/**/target/
 src/main/resources/*.properties
 src/main/resources/generatorConfig.xml
+src/main/resources/order
+src/main/resources/template
+
 
 ### STS ###
 .apt_generated

@@ -65,13 +65,13 @@ public class ContractService {
     /**
      * 根据信息生成一份合同
      * @return 合同路径
-     * @param contractInfoDTO
+     * @param  file,  phoneNum, item, price
      */
-    public String getContract(ContractInfoDTO contractInfoDTO)
+    public String getContract(MultipartFile file, String phoneNum,String item,String price)
     {
         //获得供货人
         SupplierExample supplierExample=new SupplierExample();
-        supplierExample.createCriteria().andPhoneNumEqualTo(contractInfoDTO.getPhoneNum());
+        supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
         List<Supplier> suppliers=supplierMapper.selectByExample(supplierExample);
         //正常情况一个号码只能得到一个供货人
         if(suppliers.size()!=1)
@@ -98,23 +98,25 @@ public class ContractService {
                 //开户行
                 infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
                 //物品名
-                infoMap.put(KeyWord.ITEM_NAM.getValue(),contractInfoDTO.getItem());
+                infoMap.put(KeyWord.ITEM_NAM.getValue(),item);
                 //价格
-                if(StringUtils.isNullOrEmpty(contractInfoDTO.getPrice()))
+                if(StringUtils.isNullOrEmpty(price))
                 {
                     infoMap.put(KeyWord.PRICE.getValue(),"    ");
                 }
                 else
                 {
-                    infoMap.put(KeyWord.PRICE.getValue(),contractInfoDTO.getPrice());
+                    infoMap.put(KeyWord.PRICE.getValue(),price);
                 }
                 //获得合同
                 ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
                 contractTemplateExample.createCriteria().andIsUsingEqualTo(true);
                 String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
                 //新合同路径
-                String path=getNewOrderContract(new File(temPath),contractInfoDTO.getPhoneNum());
+                String path=getNewOrderContract(new File(temPath),phoneNum);
                 //WordUtils.replaceAll(path,infoMap);
+                //上传签名照片
+                String signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
 
                 //后台替换关键字
                 //WordUtils.replaceAndGenerateWord(path,path,infoMap);
@@ -123,10 +125,10 @@ public class ContractService {
                 header.put("width",150);
                 header.put("height",75);
                 header.put("type", "png");
-                header.put("content", "F:\\project\\JAVA\\hetong\\src\\main\\java\\com\\contract\\Utils\\签名.png");//图片路径
+                header.put("content", signature);//图片路径
                 infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
                 //替换关键字和图片
-                XWPFDocument doc = WordUtils.generateWord(infoMap, "F:\\project\\JAVA\\hetong\\src\\main\\java\\com\\contract\\Utils\\合同——新格式.docx");
+                XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
                 try {
                     FileOutputStream fopts = new FileOutputStream(path);
                     doc.write(fopts);
@@ -146,7 +148,7 @@ public class ContractService {
                 //设置创建时间
                 order.setCreateTime(new Date());
                 //设置货物名称
-                order.setItemName(contractInfoDTO.getItem());
+                order.setItemName(item);
                 //设置审核状态,0未审核
                 order.setStatus(0);
                 //设置合同存储路径
