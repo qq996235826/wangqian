@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contract.mapper.SupplierMapper">
+  <resultMap id="BaseResultMap" type="com.contract.model.Supplier">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="idNum" jdbcType="VARCHAR" property="idNum" />
+    <result column="bankNumber" jdbcType="VARCHAR" property="bankNumber" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <result column="homeAddress" jdbcType="VARCHAR" property="homeAddress" />
+    <result column="phoneNum" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="id0Path" jdbcType="VARCHAR" property="id0Path" />
+    <result column="id1Path" jdbcType="VARCHAR" property="id1Path" />
+    <result column="bank0Path" jdbcType="VARCHAR" property="bank0Path" />
+    <result column="bank1Path" jdbcType="VARCHAR" property="bank1Path" />
+    <result column="ststus" jdbcType="INTEGER" property="ststus" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateBy" jdbcType="BIGINT" property="updateBy" />
+    <result column="check1Time" jdbcType="TIMESTAMP" property="check1Time" />
+    <result column="chech1By" jdbcType="BIGINT" property="chech1By" />
+    <result column="check1Note" jdbcType="VARCHAR" property="check1Note" />
+    <result column="check2Time" jdbcType="TIMESTAMP" property="check2Time" />
+    <result column="chech2By" jdbcType="BIGINT" property="chech2By" />
+    <result column="check2Note" jdbcType="VARCHAR" property="check2Note" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, idNum, bankNumber, bankName, homeAddress, phoneNum, id0Path, id1Path, bank0Path, 
+    bank1Path, ststus, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
+    chech2By, check2Note
+  </sql>
+  <select id="selectByExample" parameterType="com.contract.model.SupplierExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supplier
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from supplier
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.contract.model.SupplierExample">
+    delete from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.contract.model.Supplier">
+    insert into supplier (id, name, idNum, 
+      bankNumber, bankName, homeAddress, 
+      phoneNum, id0Path, id1Path, 
+      bank0Path, bank1Path, ststus, 
+      updateTime, updateBy, check1Time, 
+      chech1By, check1Note, check2Time, 
+      chech2By, check2Note)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{idNum,jdbcType=VARCHAR}, 
+      #{bankNumber,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
+      #{phoneNum,jdbcType=VARCHAR}, #{id0Path,jdbcType=VARCHAR}, #{id1Path,jdbcType=VARCHAR}, 
+      #{bank0Path,jdbcType=VARCHAR}, #{bank1Path,jdbcType=VARCHAR}, #{ststus,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
+      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
+      #{chech2By,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.contract.model.Supplier">
+    insert into supplier
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="idNum != null">
+        idNum,
+      </if>
+      <if test="bankNumber != null">
+        bankNumber,
+      </if>
+      <if test="bankName != null">
+        bankName,
+      </if>
+      <if test="homeAddress != null">
+        homeAddress,
+      </if>
+      <if test="phoneNum != null">
+        phoneNum,
+      </if>
+      <if test="id0Path != null">
+        id0Path,
+      </if>
+      <if test="id1Path != null">
+        id1Path,
+      </if>
+      <if test="bank0Path != null">
+        bank0Path,
+      </if>
+      <if test="bank1Path != null">
+        bank1Path,
+      </if>
+      <if test="ststus != null">
+        ststus,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateBy != null">
+        updateBy,
+      </if>
+      <if test="check1Time != null">
+        check1Time,
+      </if>
+      <if test="chech1By != null">
+        chech1By,
+      </if>
+      <if test="check1Note != null">
+        check1Note,
+      </if>
+      <if test="check2Time != null">
+        check2Time,
+      </if>
+      <if test="chech2By != null">
+        chech2By,
+      </if>
+      <if test="check2Note != null">
+        check2Note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idNum != null">
+        #{idNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNumber != null">
+        #{bankNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="id0Path != null">
+        #{id0Path,jdbcType=VARCHAR},
+      </if>
+      <if test="id1Path != null">
+        #{id1Path,jdbcType=VARCHAR},
+      </if>
+      <if test="bank0Path != null">
+        #{bank0Path,jdbcType=VARCHAR},
+      </if>
+      <if test="bank1Path != null">
+        #{bank1Path,jdbcType=VARCHAR},
+      </if>
+      <if test="ststus != null">
+        #{ststus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="check1Time != null">
+        #{check1Time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chech1By != null">
+        #{chech1By,jdbcType=BIGINT},
+      </if>
+      <if test="check1Note != null">
+        #{check1Note,jdbcType=VARCHAR},
+      </if>
+      <if test="check2Time != null">
+        #{check2Time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chech2By != null">
+        #{chech2By,jdbcType=BIGINT},
+      </if>
+      <if test="check2Note != null">
+        #{check2Note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.contract.model.SupplierExample" resultType="java.lang.Long">
+    select count(*) from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update supplier
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idNum != null">
+        idNum = #{record.idNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankNumber != null">
+        bankNumber = #{record.bankNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankName != null">
+        bankName = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homeAddress != null">
+        homeAddress = #{record.homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneNum != null">
+        phoneNum = #{record.phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id0Path != null">
+        id0Path = #{record.id0Path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.id1Path != null">
+        id1Path = #{record.id1Path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bank0Path != null">
+        bank0Path = #{record.bank0Path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bank1Path != null">
+        bank1Path = #{record.bank1Path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ststus != null">
+        ststus = #{record.ststus,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        updateBy = #{record.updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.check1Time != null">
+        check1Time = #{record.check1Time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.chech1By != null">
+        chech1By = #{record.chech1By,jdbcType=BIGINT},
+      </if>
+      <if test="record.check1Note != null">
+        check1Note = #{record.check1Note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.check2Time != null">
+        check2Time = #{record.check2Time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.chech2By != null">
+        chech2By = #{record.chech2By,jdbcType=BIGINT},
+      </if>
+      <if test="record.check2Note != null">
+        check2Note = #{record.check2Note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update supplier
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      idNum = #{record.idNum,jdbcType=VARCHAR},
+      bankNumber = #{record.bankNumber,jdbcType=VARCHAR},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      homeAddress = #{record.homeAddress,jdbcType=VARCHAR},
+      phoneNum = #{record.phoneNum,jdbcType=VARCHAR},
+      id0Path = #{record.id0Path,jdbcType=VARCHAR},
+      id1Path = #{record.id1Path,jdbcType=VARCHAR},
+      bank0Path = #{record.bank0Path,jdbcType=VARCHAR},
+      bank1Path = #{record.bank1Path,jdbcType=VARCHAR},
+      ststus = #{record.ststus,jdbcType=INTEGER},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      updateBy = #{record.updateBy,jdbcType=BIGINT},
+      check1Time = #{record.check1Time,jdbcType=TIMESTAMP},
+      chech1By = #{record.chech1By,jdbcType=BIGINT},
+      check1Note = #{record.check1Note,jdbcType=VARCHAR},
+      check2Time = #{record.check2Time,jdbcType=TIMESTAMP},
+      chech2By = #{record.chech2By,jdbcType=BIGINT},
+      check2Note = #{record.check2Note,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.Supplier">
+    update supplier
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idNum != null">
+        idNum = #{idNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNumber != null">
+        bankNumber = #{bankNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        homeAddress = #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        phoneNum = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="id0Path != null">
+        id0Path = #{id0Path,jdbcType=VARCHAR},
+      </if>
+      <if test="id1Path != null">
+        id1Path = #{id1Path,jdbcType=VARCHAR},
+      </if>
+      <if test="bank0Path != null">
+        bank0Path = #{bank0Path,jdbcType=VARCHAR},
+      </if>
+      <if test="bank1Path != null">
+        bank1Path = #{bank1Path,jdbcType=VARCHAR},
+      </if>
+      <if test="ststus != null">
+        ststus = #{ststus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        updateBy = #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="check1Time != null">
+        check1Time = #{check1Time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chech1By != null">
+        chech1By = #{chech1By,jdbcType=BIGINT},
+      </if>
+      <if test="check1Note != null">
+        check1Note = #{check1Note,jdbcType=VARCHAR},
+      </if>
+      <if test="check2Time != null">
+        check2Time = #{check2Time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chech2By != null">
+        chech2By = #{chech2By,jdbcType=BIGINT},
+      </if>
+      <if test="check2Note != null">
+        check2Note = #{check2Note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.contract.model.Supplier">
+    update supplier
+    set name = #{name,jdbcType=VARCHAR},
+      idNum = #{idNum,jdbcType=VARCHAR},
+      bankNumber = #{bankNumber,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      homeAddress = #{homeAddress,jdbcType=VARCHAR},
+      phoneNum = #{phoneNum,jdbcType=VARCHAR},
+      id0Path = #{id0Path,jdbcType=VARCHAR},
+      id1Path = #{id1Path,jdbcType=VARCHAR},
+      bank0Path = #{bank0Path,jdbcType=VARCHAR},
+      bank1Path = #{bank1Path,jdbcType=VARCHAR},
+      ststus = #{ststus,jdbcType=INTEGER},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateBy = #{updateBy,jdbcType=BIGINT},
+      check1Time = #{check1Time,jdbcType=TIMESTAMP},
+      chech1By = #{chech1By,jdbcType=BIGINT},
+      check1Note = #{check1Note,jdbcType=VARCHAR},
+      check2Time = #{check2Time,jdbcType=TIMESTAMP},
+      chech2By = #{chech2By,jdbcType=BIGINT},
+      check2Note = #{check2Note,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.SupplierExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supplier
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

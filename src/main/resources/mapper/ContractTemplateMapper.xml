@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contract.mapper.ContractTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.contract.model.ContractTemplate">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="isUsing" jdbcType="BIT" property="isUsing" />
+    <result column="versionNum" jdbcType="VARCHAR" property="versionNum" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateBy" jdbcType="BIGINT" property="updateBy" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="ossName" jdbcType="VARCHAR" property="ossName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, path, createTime, isUsing, versionNum, updateTime, updateBy, note, ossName
+  </sql>
+  <select id="selectByExample" parameterType="com.contract.model.ContractTemplateExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from contract_template
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from contract_template
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from contract_template
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.contract.model.ContractTemplateExample">
+    delete from contract_template
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.contract.model.ContractTemplate">
+    insert into contract_template (id, path, createTime, 
+      isUsing, versionNum, updateTime, 
+      updateBy, note, ossName
+      )
+    values (#{id,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{isUsing,jdbcType=BIT}, #{versionNum,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, #{ossName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.contract.model.ContractTemplate">
+    insert into contract_template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="isUsing != null">
+        isUsing,
+      </if>
+      <if test="versionNum != null">
+        versionNum,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateBy != null">
+        updateBy,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="ossName != null">
+        ossName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isUsing != null">
+        #{isUsing,jdbcType=BIT},
+      </if>
+      <if test="versionNum != null">
+        #{versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ossName != null">
+        #{ossName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.contract.model.ContractTemplateExample" resultType="java.lang.Long">
+    select count(*) from contract_template
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update contract_template
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.path != null">
+        path = #{record.path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isUsing != null">
+        isUsing = #{record.isUsing,jdbcType=BIT},
+      </if>
+      <if test="record.versionNum != null">
+        versionNum = #{record.versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        updateBy = #{record.updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ossName != null">
+        ossName = #{record.ossName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update contract_template
+    set id = #{record.id,jdbcType=BIGINT},
+      path = #{record.path,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      isUsing = #{record.isUsing,jdbcType=BIT},
+      versionNum = #{record.versionNum,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      updateBy = #{record.updateBy,jdbcType=BIGINT},
+      note = #{record.note,jdbcType=VARCHAR},
+      ossName = #{record.ossName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.ContractTemplate">
+    update contract_template
+    <set>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isUsing != null">
+        isUsing = #{isUsing,jdbcType=BIT},
+      </if>
+      <if test="versionNum != null">
+        versionNum = #{versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        updateBy = #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ossName != null">
+        ossName = #{ossName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.contract.model.ContractTemplate">
+    update contract_template
+    set path = #{path,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      isUsing = #{isUsing,jdbcType=BIT},
+      versionNum = #{versionNum,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateBy = #{updateBy,jdbcType=BIGINT},
+      note = #{note,jdbcType=VARCHAR},
+      ossName = #{ossName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.ContractTemplateExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from contract_template
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>
