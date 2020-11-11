@@ -36,15 +36,15 @@ public class BackstageService {
         for (int a=0;a<orders.size();a++)
         {
             Map map=new HashMap();
-            map.put("订单号",orders.get(a).getId());
-            map.put("合同模板序号",orders.get(a).getTemplateId());
-            map.put("供货人序号",orders.get(a).getSupplierId());
-            map.put("订单生成时间",orders.get(a).getCreateTime());
-            map.put("货物名称",orders.get(a).getItemName());
-            map.put("业务编码",orders.get(a).getOrderNum());
-            map.put("审核状态",orders.get(a).getStatus());
-            map.put("更新时间",orders.get(a).getUpdateTime());
-            map.put("订单合同路径",orders.get(a).getPath());
+            map.put("id",orders.get(a).getId());
+            map.put("templateId",orders.get(a).getTemplateId());
+            map.put("supplierId",orders.get(a).getSupplierId());
+            map.put("createTime",orders.get(a).getCreateTime());
+            map.put("itemName",orders.get(a).getItemName());
+            map.put("orderNum",orders.get(a).getOrderNum());
+            map.put("status",orders.get(a).getStatus());
+            map.put("updateTime",orders.get(a).getUpdateTime());
+            map.put("path",orders.get(a).getPath());
             rows.add(map);
         }
         result.put("total",rows.size());

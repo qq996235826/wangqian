@@ -39,7 +39,7 @@ public class BackstageController {
         return "review";
     }
 
-    @GetMapping("/getOrders")
+    @RequestMapping("/getOrders")
     @ResponseBody
     public Map getOrders()
     {
