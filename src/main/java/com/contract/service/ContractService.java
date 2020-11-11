@@ -165,7 +165,7 @@ public class ContractService {
     }
 
     /**
-     * 根据模板获得一个合同
+     * 根据模板获得一个合同文件用于覆盖信息
      * @param file
      * @param phoneNum
      * @return 新合同路径
@@ -193,10 +193,11 @@ public class ContractService {
             //创建新文件
             File file1=new File(newFilePath);
             //判断文件夹是否存在,不存在则创建
-            if(file1.getParentFile().exists())
+            if(!file1.getParentFile().exists())
             {
                 file1.getParentFile().mkdirs();
             }
+
             //写入新文件
             Files.copy(file.toPath(), file1.toPath());
             //成功返回文件路径
@@ -313,6 +314,7 @@ public class ContractService {
     {
         //获得最新版合同
         ContractTemplateExample example=new ContractTemplateExample();
+        //获得在用的合同
         example.createCriteria().andIsUsingEqualTo(true);
         List<ContractTemplate> templates=contractTemplateMapper.selectByExample(example);
         if(templates.size()==1)
