@@ -9,7 +9,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     //其实这个枚举相当于一个方法,它就是下面的CustomizeErrorCode方法,调用该枚举就会把后面括号的东西作为方法参数来执行该方法
     //也就是把本类的message成员变成括号里的东西
     SYSTEM_ERROR(1000, "其他错误"),
-    HAVE_PHONE(2000, "该电话号码已经注册"),
+    HAVE_PHONE(200, "该电话号码已经注册"),
     HAVEN_PHONE(2000,"该号码未注册"),
     SUPPLIER_INFO_WRONG(2000,"该号码在后台的数据出现错误,联系管理员解决"),
     SUPPLIER_WRONG(2000,"供货人信息有误"),
@@ -30,6 +30,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     NOT_CONTRACT_TEMPLATE(3000,"没有模板合同"),
     CONTRACT_TEMPLATE_IMAGE_WRONG(3000,"后台生效合同模板图片缺失,请联系管理员"),
     NOT_ODER(3001,"没有合同"),
+    NOT_OSS_ODER(3002,"合同未上传到云端"),
     IMAGE_WRONG(2000, "照片类别错误"),
     SQL_SEARCH_FAIL(4000, "数据库查询失败"),
     SQL_INSERT_FAIL(4000, "数据库插入失败"),

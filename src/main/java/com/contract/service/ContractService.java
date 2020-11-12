@@ -383,24 +383,27 @@ public class ContractService {
      * @param phoneNum
      * @return 审核状态
      */
-    public String getOrderStatus(String phoneNum) {
+    public Map<String,String> getOrderStatus(String phoneNum) {
+        //返回结果
+        Map<String,String> map=new HashMap();
         //获得最新合同
         Supplier supplier=getSupplier(phoneNum);
         Order order=getLastOrderBySupplierId(supplier.getId());
+        map.put("id",order.getId().toString());
         //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
         if(order.getStatus()==0)
         {
-            return "checking";
+            map.put("status","checking");
         }
         else if(order.getStatus()==1)
         {
-            return "checkPass";
+            map.put("status","checkPass");
         }
         else if(order.getStatus()==2)
         {
-            return "checkFail";
+            map.put("status","checkFail");
         }
-        return null;
+        return map;
     }
 
 
@@ -465,5 +468,42 @@ public class ContractService {
             throw new CustomizeException(CustomizeErrorCode.NOT_ODER);
         }
         return orders.get(orders.size()-1);
+    }
+
+    /**
+     * 返回订单合同的下载链接
+     * @param orderId
+     * @return
+     */
+    public String getOrderUrl(Long orderId) {
+        Order order=orderMapper.selectByPrimaryKey(orderId);
+        if(StringUtils.isNullOrEmpty(order.getOssPath()))
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_OSS_ODER);
+        }
+        return order.getOssPath();
+    }
+
+    /**
+     * 通过审核的接口
+     * @param id
+     * @return 信息
+     */
+    public String passOrder(String id) {
+        //获得订单ID
+        Long orderId=Long.valueOf(id);
+        //获得order
+        Order order=orderMapper.selectByPrimaryKey(orderId);
+        //设置状态为通过
+        order.setStatus(1);
+        if(orderMapper.updateByPrimaryKey(order)==1)
+        {
+            return "审核通过";
+        }
+        else
+        {
+            return "审核出错";
+        }
+
     }
 }

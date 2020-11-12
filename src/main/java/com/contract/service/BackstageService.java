@@ -46,7 +46,21 @@ public class BackstageService {
             map.put("createTime",orders.get(a).getCreateTime());
             map.put("itemName",orders.get(a).getItemName());
             map.put("orderNum",orders.get(a).getOrderNum());
-            map.put("status",orders.get(a).getStatus());
+            //审核状态
+            //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
+            if(orders.get(a).getStatus()==0)
+            {
+                map.put("status","审核中");
+            }
+            else if(orders.get(a).getStatus()==1)
+            {
+                map.put("status","审核通过");
+            }
+            else if(orders.get(a).getStatus()==2)
+            {
+                map.put("status","审核未通过");
+            }
+
             map.put("updateTime",orders.get(a).getUpdateTime());
             map.put("path",orders.get(a).getPath());
             rows.add(map);

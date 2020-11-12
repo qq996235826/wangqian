@@ -212,17 +212,18 @@ public class SupplierService {
      * @param phoneNum
      * @return true或者false
      */
-    public Boolean Registered(String phoneNum) {
+    public String Registered(String phoneNum) {
         SupplierExample supplierExample=new SupplierExample();
         supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
         if(supplierList.size()==0)
         {
-            return false;
+            createSupplier(phoneNum);
+            return "改手机号没有注册，但是现在已经帮你注册了";
         }
         else if(supplierList.size()==1)
         {
-            return true;
+            return "已注册";
         }
         else {
             throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);

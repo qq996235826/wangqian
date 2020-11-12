@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -79,7 +80,7 @@ public class ContractController {
     }
 
     /**
-     * 指定合同审核状态
+     * 获得指定合同审核状态
      * @return 状态
      */
     @ResponseBody
@@ -89,6 +90,28 @@ public class ContractController {
         return ResultDTO.okOf(contractService.getOrderStatus(phoneNum));
     }
 
+    /**
+     * 根据orderId获得下载地址
+     * @return 状态
+     */
+    @ResponseBody
+    @PostMapping("/getOrderUrl")
+    public ResultDTO getOrderUrl(Long orderId)
+    {
+        return ResultDTO.okOf(contractService.getOrderUrl(orderId));
+    }
+
+
+    /**
+     * 通过指定合同审核
+     * @return 信息
+     */
+    @ResponseBody
+    @RequestMapping("/passOrder")
+    public ResultDTO passOrder(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(contractService.passOrder(request.getParameter("id")));
+    }
 
 
 
