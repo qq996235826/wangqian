@@ -20,18 +20,19 @@
        rownumbers="true"
        fitColumns="true"
        singleSelect="true"
-       loadMsg="正在查询...">
+       loadMsg="正在查询..."
+       data-options="onClickCell:onClickCell">
     <thead>
     <tr>
         <th field="id" width="10%" >订单号</th>
         <th field="templateId" width="10%" >合同模板序号</th>
-        <th field="supplierId" width="10%" >供货人序号</th>
-        <th field="createTime" width="10%" >订单生成时间</th>
-        <th field="itemName" width="10%" >货物名称</th>
-        <th field="orderNum" width="10%" >业务编码</th>
+        <th field="supplierId" width="10%" data-options="editor:'text'">供货人序号</th>
+        <th field="createTime" width="10%" data-options="editor:'text'">订单生成时间</th>
+        <th field="itemName" width="10%" data-options="editor:'text'">货物名称</th>
+        <th field="orderNum" width="10%" data-options="editor:'text'">业务编码</th>
         <th field="status" width="10%" >审核状态</th>
-        <th field="updateTime" width="10%" >更新时间</th>
-        <th field="path" width="20%" >订单合同路径</th>
+        <th field="updateTime" width="10%" data-options="editor:'text'">更新时间</th>
+        <th field="path" width="20%" data-options="editor:'text'">订单合同路径</th>
     </tr>
     </thead>
 </table>
@@ -39,9 +40,11 @@
     <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="pass()">审核通过</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="notpass()">审核不通过</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="deleteOrder()">删除记录</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新记录</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">提交修改</a>
 </div>
 </body>
-<script>
+<script type="text/javascript">
     //通过审核
     function pass() {
         var row = $('#dg').datagrid('getSelected');
@@ -98,6 +101,55 @@
             });
         }
     }
+    //刷新
+    function reload() {
+        $('#dg').datagrid('reload');
+    }
 
+
+</script>
+
+
+<!--表格可编辑-->
+<script type="text/javascript">
+    $.extend($.fn.datagrid.methods, {
+        editCell: function (jq, param) {
+            return jq.each(function () {
+                var opts = $(this).datagrid('options');
+                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor1 = col.editor;
+                    if (fields[i] != param.field) {
+                        col.editor = null;
+                    }
+                }
+                $(this).datagrid('beginEdit', param.index);
+                for (var i = 0; i < fields.length; i++) {
+                    var col = $(this).datagrid('getColumnOption', fields[i]);
+                    col.editor = col.editor1;
+                }
+            });
+        }
+    });
+
+    var editIndex = undefined;
+    function endEditing() {
+        if (editIndex == undefined) { return true }
+        if ($('#dg').datagrid('validateRow', editIndex)) {
+            $('#dg').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickCell(index, field) {
+        if (endEditing()) {
+            $('#dg').datagrid('selectRow', index)
+                .datagrid('editCell', { index: index, field: field });
+            editIndex = index;
+        }
+    }
 </script>
 </html>
