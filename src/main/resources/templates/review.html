@@ -40,8 +40,23 @@
 </div>
 </body>
 <script>
-
-
+    function pass() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            var id=row.id;
+            $.ajax({
+                url:"http://just.guohe3.cn/contract/passOrder",
+                type:"post",
+                data:{
+                    id:id,
+                },
+                datatype:"josn",
+                success:function(result){
+                    $('#dg').datagrid('reload');
+                }
+            });
+        }
+    }
 
 
 </script>
