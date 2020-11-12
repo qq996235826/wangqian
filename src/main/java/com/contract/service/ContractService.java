@@ -99,18 +99,23 @@ public class ContractService {
                 infoMap.put(KeyWord.BANK_ID.getValue(),supplier.getBankNumber());
                 //开户行
                 infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
+
                 //物品名
+                String s;
                 if(item.equals("paper"))
                 {
                     infoMap.put(KeyWord.ITEM_NAM.getValue(),"废纸");
+                    s="废纸";
                 }
                 else if(item.equals("steel"))
                 {
                     infoMap.put(KeyWord.ITEM_NAM.getValue(),"废钢");
+                    s="废钢";
                 }
                 else
                 {
                     infoMap.put(KeyWord.ITEM_NAM.getValue(),"    ");
+                    s="    ";
                 }
                 //价格
                 if(StringUtils.isNullOrEmpty(price))
@@ -161,7 +166,7 @@ public class ContractService {
                 //设置创建时间
                 order.setCreateTime(new Date());
                 //设置货物名称
-                order.setItemName(item);
+                order.setItemName(s);
                 //设置审核状态,0未审核
                 order.setStatus(0);
                 //设置合同存储路径
