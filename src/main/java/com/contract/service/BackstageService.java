@@ -4,7 +4,6 @@ import com.contract.mapper.OrderMapper;
 import com.contract.model.Order;
 import com.contract.model.OrderExample;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,16 +22,21 @@ public class BackstageService {
     @Resource
     private OrderMapper orderMapper;
 
+    /**
+     * 负责给审核页面的表格返回数据
+     * @return Map
+     */
     public Map getOrders()
     {
         //创建map用于返回
         Map result=new HashMap<>();
+        //List放在result里
         List<Map> rows=new ArrayList<>();
-        //获得数据
+        //从数据获得数据
         OrderExample example=new OrderExample();
         example.createCriteria().andIdIsNotNull();
         List<Order> orders=orderMapper.selectByExample(example);
-        //把数据填入map
+        //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
         {
             Map map=new HashMap();
@@ -47,7 +51,9 @@ public class BackstageService {
             map.put("path",orders.get(a).getPath());
             rows.add(map);
         }
+        //设置数据行数
         result.put("total",rows.size());
+        //把list放入Map中
         result.put("rows",rows);
         return result;
     }

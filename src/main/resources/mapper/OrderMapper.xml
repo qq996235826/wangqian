@@ -22,6 +22,7 @@
     <result column="chech2Bby" jdbcType="BIGINT" property="chech2Bby" />
     <result column="check2Note" jdbcType="VARCHAR" property="check2Note" />
     <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="ossPath" jdbcType="VARCHAR" property="ossPath" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +85,7 @@
   <sql id="Base_Column_List">
     id, templateId, supplierId, createTime, itemName, weight, price, amount, endTime, 
     orderNum, status, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
-    chech2Bby, check2Note, path
+    chech2Bby, check2Note, path, ossPath
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -123,14 +124,16 @@
       orderNum, status, updateTime, 
       updateBy, check1Time, chech1By, 
       check1Note, check2Time, chech2Bby, 
-      check2Note, path)
+      check2Note, path, ossPath
+      )
     values (#{id,jdbcType=BIGINT}, #{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{itemName,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
       #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, #{endTime,jdbcType=TIMESTAMP}, 
       #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
       #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
-      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR})
+      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{ossPath,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Order">
     insert into business_order
@@ -195,6 +198,9 @@
       <if test="path != null">
         path,
       </if>
+      <if test="ossPath != null">
+        ossPath,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -256,6 +262,9 @@
       </if>
       <if test="path != null">
         #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="ossPath != null">
+        #{ossPath,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -328,6 +337,9 @@
       <if test="record.path != null">
         path = #{record.path,jdbcType=VARCHAR},
       </if>
+      <if test="record.ossPath != null">
+        ossPath = #{record.ossPath,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -354,7 +366,8 @@
       check2Time = #{record.check2Time,jdbcType=TIMESTAMP},
       chech2Bby = #{record.chech2Bby,jdbcType=BIGINT},
       check2Note = #{record.check2Note,jdbcType=VARCHAR},
-      path = #{record.path,jdbcType=VARCHAR}
+      path = #{record.path,jdbcType=VARCHAR},
+      ossPath = #{record.ossPath,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -419,6 +432,9 @@
       <if test="path != null">
         path = #{path,jdbcType=VARCHAR},
       </if>
+      <if test="ossPath != null">
+        ossPath = #{ossPath,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -442,7 +458,8 @@
       check2Time = #{check2Time,jdbcType=TIMESTAMP},
       chech2Bby = #{chech2Bby,jdbcType=BIGINT},
       check2Note = #{check2Note,jdbcType=VARCHAR},
-      path = #{path,jdbcType=VARCHAR}
+      path = #{path,jdbcType=VARCHAR},
+      ossPath = #{ossPath,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">

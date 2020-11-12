@@ -29,9 +29,20 @@ public class ContractController {
      * @return 合同模板存储路径
      */
     @ResponseBody
-    @PostMapping("/uploadContract")
+    @PostMapping("/uploadContractTemplate")
     public ResultDTO uploadContract(MultipartFile upload) {
-        return ResultDTO.okOf(contractService.uploadContract(upload));
+        return ResultDTO.okOf(contractService.uploadContractTemplate(upload));
+    }
+
+    /**
+     * 上传模板合同图片给前端客户浏览
+     * @param file
+     * @return 图片下载链接
+     */
+    @ResponseBody
+    @PostMapping("/uploadContractTemplateImage")
+    public ResultDTO uploadContractTemplateImage(MultipartFile file) {
+        return ResultDTO.okOf(contractService.uploadContractTemplateImage(file));
     }
 
     /**
@@ -46,7 +57,7 @@ public class ContractController {
     }
 
     /**
-     * 获得新的合同
+     * 获得新的合成好的合同
      * @param  file,  phoneNum, item, price
      * @return 合同存储路径
      */
@@ -55,6 +66,8 @@ public class ContractController {
     public ResultDTO getContract(MultipartFile file, String phoneNum,String item,String price) {
         return ResultDTO.okOf(contractService.getContract(file,phoneNum,item,price));
     }
+
+
 
 
 }

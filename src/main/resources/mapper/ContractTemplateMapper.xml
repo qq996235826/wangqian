@@ -10,7 +10,10 @@
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="updateBy" jdbcType="BIGINT" property="updateBy" />
     <result column="note" jdbcType="VARCHAR" property="note" />
-    <result column="ossName" jdbcType="VARCHAR" property="ossName" />
+    <result column="ossUrl" jdbcType="VARCHAR" property="ossUrl" />
+    <result column="pdfPath" jdbcType="VARCHAR" property="pdfPath" />
+    <result column="jpgPath" jdbcType="VARCHAR" property="jpgPath" />
+    <result column="jpgOssUrl" jdbcType="VARCHAR" property="jpgOssUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,7 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, path, createTime, isUsing, versionNum, updateTime, updateBy, note, ossName
+    id, path, createTime, isUsing, versionNum, updateTime, updateBy, note, ossUrl, pdfPath, 
+    jpgPath, jpgOssUrl
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.ContractTemplateExample" resultMap="BaseResultMap">
     select
@@ -106,11 +110,13 @@
   <insert id="insert" parameterType="com.contract.model.ContractTemplate">
     insert into contract_template (id, path, createTime, 
       isUsing, versionNum, updateTime, 
-      updateBy, note, ossName
+      updateBy, note, ossUrl, 
+      pdfPath, jpgPath, jpgOssUrl
       )
     values (#{id,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{isUsing,jdbcType=BIT}, #{versionNum,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, #{ossName,jdbcType=VARCHAR}
+      #{updateBy,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, #{ossUrl,jdbcType=VARCHAR}, 
+      #{pdfPath,jdbcType=VARCHAR}, #{jpgPath,jdbcType=VARCHAR}, #{jpgOssUrl,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.ContractTemplate">
@@ -140,8 +146,17 @@
       <if test="note != null">
         note,
       </if>
-      <if test="ossName != null">
-        ossName,
+      <if test="ossUrl != null">
+        ossUrl,
+      </if>
+      <if test="pdfPath != null">
+        pdfPath,
+      </if>
+      <if test="jpgPath != null">
+        jpgPath,
+      </if>
+      <if test="jpgOssUrl != null">
+        jpgOssUrl,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -169,8 +184,17 @@
       <if test="note != null">
         #{note,jdbcType=VARCHAR},
       </if>
-      <if test="ossName != null">
-        #{ossName,jdbcType=VARCHAR},
+      <if test="ossUrl != null">
+        #{ossUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pdfPath != null">
+        #{pdfPath,jdbcType=VARCHAR},
+      </if>
+      <if test="jpgPath != null">
+        #{jpgPath,jdbcType=VARCHAR},
+      </if>
+      <if test="jpgOssUrl != null">
+        #{jpgOssUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -207,8 +231,17 @@
       <if test="record.note != null">
         note = #{record.note,jdbcType=VARCHAR},
       </if>
-      <if test="record.ossName != null">
-        ossName = #{record.ossName,jdbcType=VARCHAR},
+      <if test="record.ossUrl != null">
+        ossUrl = #{record.ossUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pdfPath != null">
+        pdfPath = #{record.pdfPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jpgPath != null">
+        jpgPath = #{record.jpgPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jpgOssUrl != null">
+        jpgOssUrl = #{record.jpgOssUrl,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -225,7 +258,10 @@
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       updateBy = #{record.updateBy,jdbcType=BIGINT},
       note = #{record.note,jdbcType=VARCHAR},
-      ossName = #{record.ossName,jdbcType=VARCHAR}
+      ossUrl = #{record.ossUrl,jdbcType=VARCHAR},
+      pdfPath = #{record.pdfPath,jdbcType=VARCHAR},
+      jpgPath = #{record.jpgPath,jdbcType=VARCHAR},
+      jpgOssUrl = #{record.jpgOssUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -254,8 +290,17 @@
       <if test="note != null">
         note = #{note,jdbcType=VARCHAR},
       </if>
-      <if test="ossName != null">
-        ossName = #{ossName,jdbcType=VARCHAR},
+      <if test="ossUrl != null">
+        ossUrl = #{ossUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pdfPath != null">
+        pdfPath = #{pdfPath,jdbcType=VARCHAR},
+      </if>
+      <if test="jpgPath != null">
+        jpgPath = #{jpgPath,jdbcType=VARCHAR},
+      </if>
+      <if test="jpgOssUrl != null">
+        jpgOssUrl = #{jpgOssUrl,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -269,7 +314,10 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       updateBy = #{updateBy,jdbcType=BIGINT},
       note = #{note,jdbcType=VARCHAR},
-      ossName = #{ossName,jdbcType=VARCHAR}
+      ossUrl = #{ossUrl,jdbcType=VARCHAR},
+      pdfPath = #{pdfPath,jdbcType=VARCHAR},
+      jpgPath = #{jpgPath,jdbcType=VARCHAR},
+      jpgOssUrl = #{jpgOssUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.ContractTemplateExample" resultMap="BaseResultMap">

@@ -32,6 +32,11 @@ public class UploadOss {
     String bucketName;
 
 
+    /**
+     * 上传文件到云端
+     * @param filePath
+     * @return Sting 文件在云端下载链接
+     */
     public String uploadOss(String filePath)
     {
         //构造一个带指定 Region 对象的配置类
@@ -48,7 +53,9 @@ public class UploadOss {
             Response response = uploadManager.put(filePath, key, upToken);
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return putRet.key;
+            String domainOfBucket = "http://qjfkdtkza.hd-bkt.clouddn.com";
+            String ossUrl=String.format("%s/%s", domainOfBucket, putRet.key);
+            return ossUrl;
             //System.out.println(putRet.hash);
         } catch (QiniuException ex) {
             Response r = ex.response;

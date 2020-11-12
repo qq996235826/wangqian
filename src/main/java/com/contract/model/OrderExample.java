@@ -1354,6 +1354,76 @@ public class OrderExample {
             addCriterion("path not between", value1, value2, "path");
             return (Criteria) this;
         }
+
+        public Criteria andOssPathIsNull() {
+            addCriterion("ossPath is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathIsNotNull() {
+            addCriterion("ossPath is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathEqualTo(String value) {
+            addCriterion("ossPath =", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotEqualTo(String value) {
+            addCriterion("ossPath <>", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathGreaterThan(String value) {
+            addCriterion("ossPath >", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathGreaterThanOrEqualTo(String value) {
+            addCriterion("ossPath >=", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLessThan(String value) {
+            addCriterion("ossPath <", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLessThanOrEqualTo(String value) {
+            addCriterion("ossPath <=", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathLike(String value) {
+            addCriterion("ossPath like", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotLike(String value) {
+            addCriterion("ossPath not like", value, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathIn(List<String> values) {
+            addCriterion("ossPath in", values, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotIn(List<String> values) {
+            addCriterion("ossPath not in", values, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathBetween(String value1, String value2) {
+            addCriterion("ossPath between", value1, value2, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andOssPathNotBetween(String value1, String value2) {
+            addCriterion("ossPath not between", value1, value2, "ossPath");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

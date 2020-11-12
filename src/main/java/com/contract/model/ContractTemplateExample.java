@@ -615,73 +615,283 @@ public class ContractTemplateExample {
             return (Criteria) this;
         }
 
-        public Criteria andOssNameIsNull() {
-            addCriterion("ossName is null");
+        public Criteria andOssUrlIsNull() {
+            addCriterion("ossUrl is null");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameIsNotNull() {
-            addCriterion("ossName is not null");
+        public Criteria andOssUrlIsNotNull() {
+            addCriterion("ossUrl is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameEqualTo(String value) {
-            addCriterion("ossName =", value, "ossName");
+        public Criteria andOssUrlEqualTo(String value) {
+            addCriterion("ossUrl =", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameNotEqualTo(String value) {
-            addCriterion("ossName <>", value, "ossName");
+        public Criteria andOssUrlNotEqualTo(String value) {
+            addCriterion("ossUrl <>", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameGreaterThan(String value) {
-            addCriterion("ossName >", value, "ossName");
+        public Criteria andOssUrlGreaterThan(String value) {
+            addCriterion("ossUrl >", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameGreaterThanOrEqualTo(String value) {
-            addCriterion("ossName >=", value, "ossName");
+        public Criteria andOssUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("ossUrl >=", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameLessThan(String value) {
-            addCriterion("ossName <", value, "ossName");
+        public Criteria andOssUrlLessThan(String value) {
+            addCriterion("ossUrl <", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameLessThanOrEqualTo(String value) {
-            addCriterion("ossName <=", value, "ossName");
+        public Criteria andOssUrlLessThanOrEqualTo(String value) {
+            addCriterion("ossUrl <=", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameLike(String value) {
-            addCriterion("ossName like", value, "ossName");
+        public Criteria andOssUrlLike(String value) {
+            addCriterion("ossUrl like", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameNotLike(String value) {
-            addCriterion("ossName not like", value, "ossName");
+        public Criteria andOssUrlNotLike(String value) {
+            addCriterion("ossUrl not like", value, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameIn(List<String> values) {
-            addCriterion("ossName in", values, "ossName");
+        public Criteria andOssUrlIn(List<String> values) {
+            addCriterion("ossUrl in", values, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameNotIn(List<String> values) {
-            addCriterion("ossName not in", values, "ossName");
+        public Criteria andOssUrlNotIn(List<String> values) {
+            addCriterion("ossUrl not in", values, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameBetween(String value1, String value2) {
-            addCriterion("ossName between", value1, value2, "ossName");
+        public Criteria andOssUrlBetween(String value1, String value2) {
+            addCriterion("ossUrl between", value1, value2, "ossUrl");
             return (Criteria) this;
         }
 
-        public Criteria andOssNameNotBetween(String value1, String value2) {
-            addCriterion("ossName not between", value1, value2, "ossName");
+        public Criteria andOssUrlNotBetween(String value1, String value2) {
+            addCriterion("ossUrl not between", value1, value2, "ossUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathIsNull() {
+            addCriterion("pdfPath is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathIsNotNull() {
+            addCriterion("pdfPath is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathEqualTo(String value) {
+            addCriterion("pdfPath =", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathNotEqualTo(String value) {
+            addCriterion("pdfPath <>", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathGreaterThan(String value) {
+            addCriterion("pdfPath >", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathGreaterThanOrEqualTo(String value) {
+            addCriterion("pdfPath >=", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathLessThan(String value) {
+            addCriterion("pdfPath <", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathLessThanOrEqualTo(String value) {
+            addCriterion("pdfPath <=", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathLike(String value) {
+            addCriterion("pdfPath like", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathNotLike(String value) {
+            addCriterion("pdfPath not like", value, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathIn(List<String> values) {
+            addCriterion("pdfPath in", values, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathNotIn(List<String> values) {
+            addCriterion("pdfPath not in", values, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathBetween(String value1, String value2) {
+            addCriterion("pdfPath between", value1, value2, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andPdfPathNotBetween(String value1, String value2) {
+            addCriterion("pdfPath not between", value1, value2, "pdfPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathIsNull() {
+            addCriterion("jpgPath is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathIsNotNull() {
+            addCriterion("jpgPath is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathEqualTo(String value) {
+            addCriterion("jpgPath =", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathNotEqualTo(String value) {
+            addCriterion("jpgPath <>", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathGreaterThan(String value) {
+            addCriterion("jpgPath >", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathGreaterThanOrEqualTo(String value) {
+            addCriterion("jpgPath >=", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathLessThan(String value) {
+            addCriterion("jpgPath <", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathLessThanOrEqualTo(String value) {
+            addCriterion("jpgPath <=", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathLike(String value) {
+            addCriterion("jpgPath like", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathNotLike(String value) {
+            addCriterion("jpgPath not like", value, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathIn(List<String> values) {
+            addCriterion("jpgPath in", values, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathNotIn(List<String> values) {
+            addCriterion("jpgPath not in", values, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathBetween(String value1, String value2) {
+            addCriterion("jpgPath between", value1, value2, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgPathNotBetween(String value1, String value2) {
+            addCriterion("jpgPath not between", value1, value2, "jpgPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlIsNull() {
+            addCriterion("jpgOssUrl is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlIsNotNull() {
+            addCriterion("jpgOssUrl is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlEqualTo(String value) {
+            addCriterion("jpgOssUrl =", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlNotEqualTo(String value) {
+            addCriterion("jpgOssUrl <>", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlGreaterThan(String value) {
+            addCriterion("jpgOssUrl >", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("jpgOssUrl >=", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlLessThan(String value) {
+            addCriterion("jpgOssUrl <", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlLessThanOrEqualTo(String value) {
+            addCriterion("jpgOssUrl <=", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlLike(String value) {
+            addCriterion("jpgOssUrl like", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlNotLike(String value) {
+            addCriterion("jpgOssUrl not like", value, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlIn(List<String> values) {
+            addCriterion("jpgOssUrl in", values, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlNotIn(List<String> values) {
+            addCriterion("jpgOssUrl not in", values, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlBetween(String value1, String value2) {
+            addCriterion("jpgOssUrl between", value1, value2, "jpgOssUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andJpgOssUrlNotBetween(String value1, String value2) {
+            addCriterion("jpgOssUrl not between", value1, value2, "jpgOssUrl");
             return (Criteria) this;
         }
     }

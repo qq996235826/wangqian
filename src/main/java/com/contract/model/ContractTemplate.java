@@ -19,7 +19,13 @@ public class ContractTemplate {
 
     private String note;
 
-    private String ossName;
+    private String ossUrl;
+
+    private String pdfPath;
+
+    private String jpgPath;
+
+    private String jpgOssUrl;
 
     public Long getId() {
         return id;
@@ -85,11 +91,35 @@ public class ContractTemplate {
         this.note = note == null ? null : note.trim();
     }
 
-    public String getOssName() {
-        return ossName;
+    public String getOssUrl() {
+        return ossUrl;
     }
 
-    public void setOssName(String ossName) {
-        this.ossName = ossName == null ? null : ossName.trim();
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl == null ? null : ossUrl.trim();
+    }
+
+    public String getPdfPath() {
+        return pdfPath;
+    }
+
+    public void setPdfPath(String pdfPath) {
+        this.pdfPath = pdfPath == null ? null : pdfPath.trim();
+    }
+
+    public String getJpgPath() {
+        return jpgPath;
+    }
+
+    public void setJpgPath(String jpgPath) {
+        this.jpgPath = jpgPath == null ? null : jpgPath.trim();
+    }
+
+    public String getJpgOssUrl() {
+        return jpgOssUrl;
+    }
+
+    public void setJpgOssUrl(String jpgOssUrl) {
+        this.jpgOssUrl = jpgOssUrl == null ? null : jpgOssUrl.trim();
     }
 }

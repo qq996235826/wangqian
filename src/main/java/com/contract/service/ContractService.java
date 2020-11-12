@@ -4,7 +4,6 @@ import com.contract.Utils.PdfUtils;
 import com.contract.Utils.SupplierUtils;
 import com.contract.Utils.WordUtils;
 import com.contract.contractEnumerate.KeyWord;
-import com.contract.dto.ContractInfoDTO;
 import com.contract.exception.CustomizeErrorCode;
 import com.contract.exception.CustomizeException;
 import com.contract.mapper.ContractTemplateMapper;
@@ -15,11 +14,11 @@ import com.contract.oss.UploadOss;
 import com.mysql.cj.util.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.text.DateFormat;
@@ -48,6 +47,9 @@ public class ContractService {
 
     @Resource
     private UploadOss uploadOss;
+
+    @Value("${contractJPGPatch}")
+    private String contractJPGPatch;
 
     /**
      *  @filePath 合同模板文件存放路径,在配置文件中规定
@@ -153,9 +155,11 @@ public class ContractService {
                 order.setStatus(0);
                 //设置合同存储路径
                 order.setPath(path);
+                //上传文件到云端并且保存他的下载链接
+                String ossUrl=uploadOss.uploadOss(path);
+                order.setOssPath(ossUrl);
                 orderMapper.insert(order);
-
-                return path;
+                return ossUrl;
             }
             else
             {
@@ -237,7 +241,7 @@ public class ContractService {
      * @param upload
      * @return 文件路径
      */
-    public String uploadContract(MultipartFile upload) {
+    public String uploadContractTemplate(MultipartFile upload) {
         //上传模板文件
         String path=upload(upload,filePath);
         //把以前的模板全部失效
@@ -250,13 +254,13 @@ public class ContractService {
             contractTemplateMapper.updateByPrimaryKey(con);
         }
         //合同模板上传至七牛云
-        String ossName=uploadOss.uploadOss(path);
+        String ossUrl=uploadOss.uploadOss(path);
         //把模板文件数据写入数据库
         ContractTemplate contractTemplate=new ContractTemplate();
         contractTemplate.setIsUsing(true);
         contractTemplate.setPath(path);
         contractTemplate.setCreateTime(new Date());
-        contractTemplate.setOssName(ossName);
+        contractTemplate.setOssUrl(ossUrl);
         contractTemplateMapper.insert(contractTemplate);
 
         return path;
@@ -270,11 +274,6 @@ public class ContractService {
      * @return
      */
     public String upload(MultipartFile upload,String patch) {
-        //判断文件夹是否存在,不存在则创建
-        File file=new File(patch);
-        if(!file.exists()){
-            file.mkdirs();
-        }
 
         //获取原始文件名
         String originalFileName = upload.getOriginalFilename();
@@ -291,6 +290,12 @@ public class ContractService {
         String newFileName = UUID.randomUUID()+typename;
         //新文件的路径
         String newFilePath=patch+newFileName;
+        //判断文件夹是否存在,不存在则创建
+
+        File file=new File(newFilePath);
+        if(!file.exists()){
+            file.mkdirs();
+        }
         //将传来的文件写入新建的文件
         try {
             //创建新文件
@@ -319,13 +324,41 @@ public class ContractService {
         List<ContractTemplate> templates=contractTemplateMapper.selectByExample(example);
         if(templates.size()==1)
         {
-            String fileName = templates.get(0).getOssName();
-            String domainOfBucket = "http://qjfkdtkza.hd-bkt.clouddn.com";
-            return String.format("%s/%s", domainOfBucket, fileName);
+            return templates.get(0).getOssUrl();
         }
         else
         {
             throw new  CustomizeException(CustomizeErrorCode.CONTRACT_TEMPLATE_WRONG);
+        }
+
+    }
+
+
+    /**
+     * 上传当前模板图片
+     * @param file
+     * @return 图片下载链接
+     */
+    public String uploadContractTemplateImage(MultipartFile file) {
+        //上传到本地文件夹
+        String localJPGPath=upload(file,contractJPGPatch);
+        //上传到云端
+        String ossUrl=uploadOss.uploadOss(localJPGPath);
+        //更新数据
+        ContractTemplateExample example=new ContractTemplateExample();
+        example.createCriteria().andIsUsingEqualTo(true);
+        List<ContractTemplate> templates=contractTemplateMapper.selectByExample(example);
+        //应该只有一个合同在用的
+        if(templates.size()==1)
+        {
+            templates.get(0).setJpgOssUrl(ossUrl);
+            templates.get(0).setJpgPath(localJPGPath);
+            templates.get(0).setUpdateTime(new Date());
+            contractTemplateMapper.updateByPrimaryKey(templates.get(0));
+            return ossUrl;
+        }
+        else {
+            throw new CustomizeException(CustomizeErrorCode.CONTRACT_TEMPLATE_WRONG);
         }
 
     }

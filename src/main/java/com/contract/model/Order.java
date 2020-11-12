@@ -43,6 +43,8 @@ public class Order {
 
     private String path;
 
+    private String ossPath;
+
     public Long getId() {
         return id;
     }
@@ -201,5 +203,13 @@ public class Order {
 
     public void setPath(String path) {
         this.path = path == null ? null : path.trim();
+    }
+
+    public String getOssPath() {
+        return ossPath;
+    }
+
+    public void setOssPath(String ossPath) {
+        this.ossPath = ossPath == null ? null : ossPath.trim();
     }
 }
