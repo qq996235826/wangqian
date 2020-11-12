@@ -100,11 +100,11 @@ public class ContractService {
                 //开户行
                 infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
                 //物品名
-                if(item.equals("1"))
+                if(item.equals("paper"))
                 {
                     infoMap.put(KeyWord.ITEM_NAM.getValue(),"废纸");
                 }
-                else if(item.equals("2"))
+                else if(item.equals("steel"))
                 {
                     infoMap.put(KeyWord.ITEM_NAM.getValue(),"废钢");
                 }
