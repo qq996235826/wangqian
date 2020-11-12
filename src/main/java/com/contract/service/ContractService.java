@@ -500,13 +500,13 @@ public class ContractService {
      * @param id
      * @return 信息
      */
-    public String passOrder(String id) {
+    public String changeOrderStatus(String id,int status) {
         //获得订单ID
         Long orderId=Long.valueOf(id);
         //获得order
         Order order=orderMapper.selectByPrimaryKey(orderId);
         //设置状态为通过
-        order.setStatus(1);
+        order.setStatus(status);
         if(orderMapper.updateByPrimaryKey(order)==1)
         {
             return "审核通过";
@@ -516,5 +516,20 @@ public class ContractService {
             return "审核出错";
         }
 
+    }
+
+
+    public String deleteOrder(String id) {
+        //获得订单ID
+        Long orderId=Long.valueOf(id);
+        //删除order
+        if(orderMapper.deleteByPrimaryKey(orderId)==1)
+        {
+            return "审核通过";
+        }
+        else
+        {
+            return "审核出错";
+        }
     }
 }

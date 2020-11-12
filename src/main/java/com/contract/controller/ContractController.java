@@ -110,9 +110,31 @@ public class ContractController {
     @RequestMapping("/passOrder")
     public ResultDTO passOrder(HttpServletRequest request)
     {
-        return ResultDTO.okOf(contractService.passOrder(request.getParameter("id")));
+        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),1));
     }
 
+
+    /**
+     * 不通过指定合同审核
+     * @return 信息
+     */
+    @ResponseBody
+    @RequestMapping("/notPassOrder")
+    public ResultDTO notPassOrder(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),2));
+    }
+
+    /**
+     * 删除指定合同记录
+     * @return 信息
+     */
+    @ResponseBody
+    @RequestMapping("/deleteOrder")
+    public ResultDTO deleteOrder(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(contractService.deleteOrder(request.getParameter("id")));
+    }
 
 
 

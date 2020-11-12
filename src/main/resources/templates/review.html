@@ -37,9 +37,12 @@
 </table>
 <div id="toolbar">
     <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="pass()">审核通过</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="notpass()">审核不通过</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="deleteOrder()">删除记录</a>
 </div>
 </body>
 <script>
+    //通过审核
     function pass() {
         var row = $('#dg').datagrid('getSelected');
         if (row){
@@ -58,6 +61,43 @@
         }
     }
 
+    //不通过审核
+    function notpass() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            var id=row.id;
+            $.ajax({
+                url:"https://just.guohe3.cn/contract/notPassOrder",
+                type:"post",
+                data:{
+                    id:id,
+                },
+                datatype:"josn",
+                success:function(result){
+                    $('#dg').datagrid('reload');
+                }
+            });
+        }
+    }
+
+    //不通过审核
+    function deleteOrder() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            var id=row.id;
+            $.ajax({
+                url:"https://just.guohe3.cn/contract/deleteOrder",
+                type:"post",
+                data:{
+                    id:id,
+                },
+                datatype:"josn",
+                success:function(result){
+                    $('#dg').datagrid('reload');
+                }
+            });
+        }
+    }
 
 </script>
 </html>
