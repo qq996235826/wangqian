@@ -100,7 +100,18 @@ public class ContractService {
                 //开户行
                 infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
                 //物品名
-                infoMap.put(KeyWord.ITEM_NAM.getValue(),item);
+                if(item.equals("1"))
+                {
+                    infoMap.put(KeyWord.ITEM_NAM.getValue(),"废纸");
+                }
+                else if(item.equals("2"))
+                {
+                    infoMap.put(KeyWord.ITEM_NAM.getValue(),"废钢");
+                }
+                else
+                {
+                    infoMap.put(KeyWord.ITEM_NAM.getValue(),"    ");
+                }
                 //价格
                 if(StringUtils.isNullOrEmpty(price))
                 {
