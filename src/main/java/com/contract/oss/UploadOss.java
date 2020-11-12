@@ -31,6 +31,9 @@ public class UploadOss {
     @Value("${bucketName}")
     String bucketName;
 
+    @Value("${domainOfBucket}")
+    String domainOfBucket;
+
 
     /**
      * 上传文件到云端
@@ -53,7 +56,6 @@ public class UploadOss {
             Response response = uploadManager.put(filePath, key, upToken);
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            String domainOfBucket = "http://qjfkdtkza.hd-bkt.clouddn.com";
             String ossUrl=String.format("%s/%s", domainOfBucket, putRet.key);
             return ossUrl;
             //System.out.println(putRet.hash);
