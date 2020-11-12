@@ -362,4 +362,108 @@ public class ContractService {
         }
 
     }
+
+    /**
+     * 获得最新模板图片下载地址
+     * @return 最新模板图片下载地址
+     */
+    public String getContractTemplateImage() {
+        String imageUrl=getContractTemplate().getJpgOssUrl();
+        if(imageUrl.isEmpty())
+        {
+            throw new CustomizeException(CustomizeErrorCode.CONTRACT_TEMPLATE_IMAGE_WRONG);
+        }
+        else {
+            return imageUrl;
+        }
+    }
+
+    /**
+     * 获得指定合同审核状态
+     * @param phoneNum
+     * @return 审核状态
+     */
+    public String getOrderStatus(String phoneNum) {
+        //获得最新合同
+        Supplier supplier=getSupplier(phoneNum);
+        Order order=getLastOrderBySupplierId(supplier.getId());
+        //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
+        if(order.getStatus()==0)
+        {
+            return "checking";
+        }
+        else if(order.getStatus()==1)
+        {
+            return "checkPass";
+        }
+        else if(order.getStatus()==2)
+        {
+            return "checkFail";
+        }
+        return null;
+    }
+
+
+    /**
+     * 通过号码获得唯一供货人
+     * @return Supplier
+     */
+    private Supplier getSupplier(String phoneNum)
+    {
+        SupplierExample supplierExample=new SupplierExample();
+        supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
+        List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
+        if(supplierList.size()==1)
+        {
+            return supplierList.get(0);
+        }
+        else if(supplierList.size()==0)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_SUPPLIER);
+        }
+        else {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
+        }
+    }
+
+    /**
+     * 获得唯一最新合同模板
+     * @return ContractTemplate
+     */
+    private ContractTemplate getContractTemplate()
+    {
+        ContractTemplateExample example=new ContractTemplateExample();
+        example.createCriteria().andIsUsingEqualTo(true);
+        List<ContractTemplate> templates=contractTemplateMapper.selectByExample(example);
+        if(templates.size()==1)
+        {
+            return templates.get(0);
+        }
+        else if(templates.size()==0)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_CONTRACT_TEMPLATE);
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.CONTRACT_TEMPLATE_WRONG);
+        }
+    }
+
+
+    /**
+     * 获得指定供货人最新的合同
+     * @param id
+     * @return Order
+     */
+    private Order getLastOrderBySupplierId(Long id)
+    {
+        OrderExample example=new OrderExample();
+        example.createCriteria().andSupplierIdEqualTo(id);
+        List<Order> orders=orderMapper.selectByExample(example);
+        if(orders.size()<1)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_ODER);
+        }
+        return orders.get(orders.size()-1);
+    }
 }

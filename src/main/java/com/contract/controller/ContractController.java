@@ -67,6 +67,29 @@ public class ContractController {
         return ResultDTO.okOf(contractService.getContract(file,phoneNum,item,price));
     }
 
+    /**
+     * 获得最新模板图片
+     * @return 图片下载链接
+     */
+    @ResponseBody
+    @PostMapping("/getContractTemplateImage")
+    public ResultDTO getContractTemplateImage()
+    {
+        return ResultDTO.okOf(contractService.getContractTemplateImage());
+    }
+
+    /**
+     * 指定合同审核状态
+     * @return 状态
+     */
+    @ResponseBody
+    @PostMapping("/getOrderStatus")
+    public ResultDTO getOrderStatus(String phoneNum)
+    {
+        return ResultDTO.okOf(contractService.getOrderStatus(phoneNum));
+    }
+
+
 
 
 
