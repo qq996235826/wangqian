@@ -26,9 +26,9 @@ public class SupplierController {
      */
     @ResponseBody
     @PostMapping("/create")
-    public ResultDTO createSupplier(String phoneNum)
+    public ResultDTO createSupplier(@RequestBody SupplierDTO supplierDTO)
     {
-        return ResultDTO.okOf(supplierService.createSupplier(phoneNum));
+        return ResultDTO.okOf(supplierService.createSupplier(supplierDTO));
     }
 
     /**
@@ -53,6 +53,18 @@ public class SupplierController {
     @ResponseBody
     @PostMapping("/phoneRegistered")
     public ResultDTO phoneRegistered(String phoneNum) {
+        return ResultDTO.okOf(supplierService.Registered(phoneNum));
+    }
+
+
+    /**
+     * 获得供货人信息
+     * @param phoneNum
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/getSupplierInfo")
+    public ResultDTO getSupplierInfo(String phoneNum) {
         return ResultDTO.okOf(supplierService.Registered(phoneNum));
     }
 }

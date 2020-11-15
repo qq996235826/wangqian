@@ -3,12 +3,14 @@
 <mapper namespace="com.contract.mapper.SupplierMapper">
   <resultMap id="BaseResultMap" type="com.contract.model.Supplier">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="idNum" jdbcType="VARCHAR" property="idNum" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="phoneNum" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="bankNumber" jdbcType="VARCHAR" property="bankNumber" />
     <result column="bankName" jdbcType="VARCHAR" property="bankName" />
     <result column="homeAddress" jdbcType="VARCHAR" property="homeAddress" />
-    <result column="phoneNum" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="birth" jdbcType="VARCHAR" property="birth" />
     <result column="id0Path" jdbcType="VARCHAR" property="id0Path" />
     <result column="id1Path" jdbcType="VARCHAR" property="id1Path" />
     <result column="bank0Path" jdbcType="VARCHAR" property="bank0Path" />
@@ -82,9 +84,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, idNum, bankNumber, bankName, homeAddress, phoneNum, id0Path, id1Path, bank0Path, 
-    bank1Path, ststus, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
-    chech2By, check2Note
+    id, idNum, password, phoneNum, name, bankNumber, bankName, homeAddress, birth, id0Path, 
+    id1Path, bank0Path, bank1Path, ststus, updateTime, updateBy, check1Time, chech1By, 
+    check1Note, check2Time, chech2By, check2Note
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.SupplierExample" resultMap="BaseResultMap">
     select
@@ -117,20 +119,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.contract.model.Supplier">
-    insert into supplier (id, name, idNum, 
-      bankNumber, bankName, homeAddress, 
-      phoneNum, id0Path, id1Path, 
-      bank0Path, bank1Path, ststus, 
-      updateTime, updateBy, check1Time, 
-      chech1By, check1Note, check2Time, 
-      chech2By, check2Note)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{idNum,jdbcType=VARCHAR}, 
-      #{bankNumber,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
-      #{phoneNum,jdbcType=VARCHAR}, #{id0Path,jdbcType=VARCHAR}, #{id1Path,jdbcType=VARCHAR}, 
-      #{bank0Path,jdbcType=VARCHAR}, #{bank1Path,jdbcType=VARCHAR}, #{ststus,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
-      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
-      #{chech2By,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR})
+    insert into supplier (id, idNum, password, 
+      phoneNum, name, bankNumber, 
+      bankName, homeAddress, birth, 
+      id0Path, id1Path, bank0Path, 
+      bank1Path, ststus, updateTime, 
+      updateBy, check1Time, chech1By, 
+      check1Note, check2Time, chech2By, 
+      check2Note)
+    values (#{id,jdbcType=BIGINT}, #{idNum,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{phoneNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{bankNumber,jdbcType=VARCHAR}, 
+      #{bankName,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, #{birth,jdbcType=VARCHAR}, 
+      #{id0Path,jdbcType=VARCHAR}, #{id1Path,jdbcType=VARCHAR}, #{bank0Path,jdbcType=VARCHAR}, 
+      #{bank1Path,jdbcType=VARCHAR}, #{ststus,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
+      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2By,jdbcType=BIGINT}, 
+      #{check2Note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Supplier">
     insert into supplier
@@ -138,11 +142,17 @@
       <if test="id != null">
         id,
       </if>
-      <if test="name != null">
-        name,
-      </if>
       <if test="idNum != null">
         idNum,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="phoneNum != null">
+        phoneNum,
+      </if>
+      <if test="name != null">
+        name,
       </if>
       <if test="bankNumber != null">
         bankNumber,
@@ -153,8 +163,8 @@
       <if test="homeAddress != null">
         homeAddress,
       </if>
-      <if test="phoneNum != null">
-        phoneNum,
+      <if test="birth != null">
+        birth,
       </if>
       <if test="id0Path != null">
         id0Path,
@@ -200,11 +210,17 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
       <if test="idNum != null">
         #{idNum,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="bankNumber != null">
         #{bankNumber,jdbcType=VARCHAR},
@@ -215,8 +231,8 @@
       <if test="homeAddress != null">
         #{homeAddress,jdbcType=VARCHAR},
       </if>
-      <if test="phoneNum != null">
-        #{phoneNum,jdbcType=VARCHAR},
+      <if test="birth != null">
+        #{birth,jdbcType=VARCHAR},
       </if>
       <if test="id0Path != null">
         #{id0Path,jdbcType=VARCHAR},
@@ -271,11 +287,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
-      </if>
       <if test="record.idNum != null">
         idNum = #{record.idNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneNum != null">
+        phoneNum = #{record.phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.bankNumber != null">
         bankNumber = #{record.bankNumber,jdbcType=VARCHAR},
@@ -286,8 +308,8 @@
       <if test="record.homeAddress != null">
         homeAddress = #{record.homeAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.phoneNum != null">
-        phoneNum = #{record.phoneNum,jdbcType=VARCHAR},
+      <if test="record.birth != null">
+        birth = #{record.birth,jdbcType=VARCHAR},
       </if>
       <if test="record.id0Path != null">
         id0Path = #{record.id0Path,jdbcType=VARCHAR},
@@ -336,12 +358,14 @@
   <update id="updateByExample" parameterType="map">
     update supplier
     set id = #{record.id,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
       idNum = #{record.idNum,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      phoneNum = #{record.phoneNum,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
       bankNumber = #{record.bankNumber,jdbcType=VARCHAR},
       bankName = #{record.bankName,jdbcType=VARCHAR},
       homeAddress = #{record.homeAddress,jdbcType=VARCHAR},
-      phoneNum = #{record.phoneNum,jdbcType=VARCHAR},
+      birth = #{record.birth,jdbcType=VARCHAR},
       id0Path = #{record.id0Path,jdbcType=VARCHAR},
       id1Path = #{record.id1Path,jdbcType=VARCHAR},
       bank0Path = #{record.bank0Path,jdbcType=VARCHAR},
@@ -362,11 +386,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.Supplier">
     update supplier
     <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
       <if test="idNum != null">
         idNum = #{idNum,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        phoneNum = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="bankNumber != null">
         bankNumber = #{bankNumber,jdbcType=VARCHAR},
@@ -377,8 +407,8 @@
       <if test="homeAddress != null">
         homeAddress = #{homeAddress,jdbcType=VARCHAR},
       </if>
-      <if test="phoneNum != null">
-        phoneNum = #{phoneNum,jdbcType=VARCHAR},
+      <if test="birth != null">
+        birth = #{birth,jdbcType=VARCHAR},
       </if>
       <if test="id0Path != null">
         id0Path = #{id0Path,jdbcType=VARCHAR},
@@ -424,12 +454,14 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.contract.model.Supplier">
     update supplier
-    set name = #{name,jdbcType=VARCHAR},
-      idNum = #{idNum,jdbcType=VARCHAR},
+    set idNum = #{idNum,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      phoneNum = #{phoneNum,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       bankNumber = #{bankNumber,jdbcType=VARCHAR},
       bankName = #{bankName,jdbcType=VARCHAR},
       homeAddress = #{homeAddress,jdbcType=VARCHAR},
-      phoneNum = #{phoneNum,jdbcType=VARCHAR},
+      birth = #{birth,jdbcType=VARCHAR},
       id0Path = #{id0Path,jdbcType=VARCHAR},
       id1Path = #{id1Path,jdbcType=VARCHAR},
       bank0Path = #{bank0Path,jdbcType=VARCHAR},

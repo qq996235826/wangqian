@@ -21,11 +21,17 @@ public class SupplierUtils {
      */
     public static void update(Supplier supplier, SupplierDTO supplierDTO)
     {
+        //身份证号
         supplier.setIdNum(supplierDTO.getIdNum()==null?supplier.getIdNum():supplierDTO.getIdNum());
+        //银行卡号
         supplier.setBankNumber(supplierDTO.getBankNum()==null?supplier.getBankNumber():supplierDTO.getBankNum());
+        //开户行名
         supplier.setBankName(supplierDTO.getBankName()==null?supplier.getBankName():supplierDTO.getBankName());
+        //家庭住址
         supplier.setHomeAddress(supplierDTO.getHomeAddress()==null?supplier.getHomeAddress():supplierDTO.getHomeAddress());
+        //手机号
         supplier.setPhoneNum(supplierDTO.getPhoneNum()==null?supplier.getPhoneNum():supplierDTO.getPhoneNum());
+        //供货人名
         supplier.setName(supplierDTO.getName()==null?supplier.getName():supplierDTO.getName());
     }
 

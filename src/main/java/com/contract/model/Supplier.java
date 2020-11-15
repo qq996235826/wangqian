@@ -5,9 +5,13 @@ import java.util.Date;
 public class Supplier {
     private Long id;
 
-    private String name;
-
     private String idNum;
+
+    private String password;
+
+    private String phoneNum;
+
+    private String name;
 
     private String bankNumber;
 
@@ -15,7 +19,7 @@ public class Supplier {
 
     private String homeAddress;
 
-    private String phoneNum;
+    private String birth;
 
     private String id0Path;
 
@@ -51,20 +55,36 @@ public class Supplier {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
     public String getIdNum() {
         return idNum;
     }
 
     public void setIdNum(String idNum) {
         this.idNum = idNum == null ? null : idNum.trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum == null ? null : phoneNum.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getBankNumber() {
@@ -91,12 +111,12 @@ public class Supplier {
         this.homeAddress = homeAddress == null ? null : homeAddress.trim();
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getBirth() {
+        return birth;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum == null ? null : phoneNum.trim();
+    public void setBirth(String birth) {
+        this.birth = birth == null ? null : birth.trim();
     }
 
     public String getId0Path() {

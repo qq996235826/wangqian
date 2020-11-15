@@ -1,5 +1,6 @@
 package com.contract.dto;
 
+import com.mysql.cj.util.StringUtils;
 import lombok.Data;
 
 /**
@@ -10,20 +11,37 @@ import lombok.Data;
  */
 @Data
 public class SupplierDTO {
-    //数据库主键
-    Long id;
-    //供货单位名
-    String name;
     //身份证号
     String idNum;
+    //密码
+    String password;
+    //电话号
+    String phoneNum;
+    //供货单位名
+    String name;
     //银行卡号
     String bankNum;
     //开户行名
     String bankName;
-    //地址
+    //家庭地址
     String homeAddress;
-    //电话号
-    String phoneNum;
+    //出生日期
+    String birth;
 
+
+    /**
+     * 判断注册需要的信息是不是都不为空
+     * @return
+     */
+    public Boolean registeredReady()
+    {
+        if(StringUtils.isNullOrEmpty(idNum)||StringUtils.isNullOrEmpty(password)||StringUtils.isNullOrEmpty(phoneNum))
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
 }

@@ -35,21 +35,28 @@ public class SupplierService {
 
     /**
      * 通过号码注册供货人
-     * @param phoneNum
+     * @param supplierDTO
      * @return 供货人id
      */
-    public Long createSupplier(String phoneNum) {
+    public Long createSupplier(SupplierDTO supplierDTO) {
+        //检查需要的参数是否完整
+        if(!supplierDTO.registeredReady())
+        {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_LOST);
+        }
 
         //先看看数据库里是否已经有了这个电话
         SupplierExample supplierExample=new SupplierExample();
-        supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
+        supplierExample.createCriteria().andPhoneNumEqualTo(supplierDTO.getPhoneNum());
         if(supplierMapper.selectByExample(supplierExample).size()!=0)
         {
             throw new CustomizeException(CustomizeErrorCode.HAVE_PHONE);
         }
-        //没有这个号码
+        //没有这个号码,新建用户并插入
         Supplier supplier=new Supplier();
-        supplier.setPhoneNum(phoneNum);
+        supplier.setPhoneNum(supplierDTO.getPhoneNum());
+        supplier.setIdNum(supplierDTO.getIdNum());
+        supplier.setPassword(supplierDTO.getPassword());
         if(supplierMapper.insert(supplier)!=1)
         {
             throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
@@ -80,7 +87,6 @@ public class SupplierService {
         //没有这个用户
         else
         {
-
             throw new CustomizeException(CustomizeErrorCode.HAVEN_PHONE);
         }
 
@@ -212,18 +218,18 @@ public class SupplierService {
      * @param phoneNum
      * @return true或者false
      */
-    public String Registered(String phoneNum) {
+    public Boolean Registered(String phoneNum) {
         SupplierExample supplierExample=new SupplierExample();
         supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
         if(supplierList.size()==0)
         {
-            createSupplier(phoneNum);
-            return "改手机号没有注册，但是现在已经帮你注册了";
+//            createSupplier(phoneNum);
+            return false;
         }
         else if(supplierList.size()==1)
         {
-            return "已注册";
+            return true;
         }
         else {
             throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
