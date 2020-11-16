@@ -168,7 +168,7 @@ public class ContractController {
 
     @ResponseBody
     @RequestMapping("/update")
-    public ResultDTO update(@RequestBody OrderDTO orderDTO)
+    public ResultDTO update(@RequestParam OrderDTO orderDTO)
     {
         return ResultDTO.okOf(contractService.update(orderDTO));
     }
