@@ -57,14 +57,4 @@ public class SupplierController {
     }
 
 
-    /**
-     * 获得供货人信息
-     * @param phoneNum
-     * @return
-     */
-    @ResponseBody
-    @PostMapping("/getSupplierInfo")
-    public ResultDTO getSupplierInfo(String phoneNum) {
-        return ResultDTO.okOf(supplierService.Registered(phoneNum));
-    }
 }

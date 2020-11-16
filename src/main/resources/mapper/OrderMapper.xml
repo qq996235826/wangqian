@@ -7,6 +7,7 @@
     <result column="supplierId" jdbcType="BIGINT" property="supplierId" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="itemName" jdbcType="VARCHAR" property="itemName" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
     <result column="weight" jdbcType="DOUBLE" property="weight" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="amount" jdbcType="DOUBLE" property="amount" />
@@ -83,9 +84,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, templateId, supplierId, createTime, itemName, weight, price, amount, endTime, 
-    orderNum, status, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
-    chech2Bby, check2Note, path, ossPath
+    id, templateId, supplierId, createTime, itemName, companyName, weight, price, amount, 
+    endTime, orderNum, status, updateTime, updateBy, check1Time, chech1By, check1Note, 
+    check2Time, chech2Bby, check2Note, path, ossPath
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -119,21 +120,21 @@
   </delete>
   <insert id="insert" parameterType="com.contract.model.Order">
     insert into business_order (id, templateId, supplierId, 
-      createTime, itemName, weight, 
-      price, amount, endTime, 
-      orderNum, status, updateTime, 
-      updateBy, check1Time, chech1By, 
-      check1Note, check2Time, chech2Bby, 
-      check2Note, path, ossPath
-      )
+      createTime, itemName, companyName, 
+      weight, price, amount, 
+      endTime, orderNum, status, 
+      updateTime, updateBy, check1Time, 
+      chech1By, check1Note, check2Time, 
+      chech2Bby, check2Note, path, 
+      ossPath)
     values (#{id,jdbcType=BIGINT}, #{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{itemName,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
-      #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
-      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
-      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{ossPath,jdbcType=VARCHAR}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{itemName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
+      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
+      #{chech2Bby,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{ossPath,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Order">
     insert into business_order
@@ -152,6 +153,9 @@
       </if>
       <if test="itemName != null">
         itemName,
+      </if>
+      <if test="companyName != null">
+        companyName,
       </if>
       <if test="weight != null">
         weight,
@@ -217,6 +221,9 @@
       </if>
       <if test="itemName != null">
         #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
       </if>
       <if test="weight != null">
         #{weight,jdbcType=DOUBLE},
@@ -292,6 +299,9 @@
       <if test="record.itemName != null">
         itemName = #{record.itemName,jdbcType=VARCHAR},
       </if>
+      <if test="record.companyName != null">
+        companyName = #{record.companyName,jdbcType=VARCHAR},
+      </if>
       <if test="record.weight != null">
         weight = #{record.weight,jdbcType=DOUBLE},
       </if>
@@ -352,6 +362,7 @@
       supplierId = #{record.supplierId,jdbcType=BIGINT},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       itemName = #{record.itemName,jdbcType=VARCHAR},
+      companyName = #{record.companyName,jdbcType=VARCHAR},
       weight = #{record.weight,jdbcType=DOUBLE},
       price = #{record.price,jdbcType=DOUBLE},
       amount = #{record.amount,jdbcType=DOUBLE},
@@ -386,6 +397,9 @@
       </if>
       <if test="itemName != null">
         itemName = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        companyName = #{companyName,jdbcType=VARCHAR},
       </if>
       <if test="weight != null">
         weight = #{weight,jdbcType=DOUBLE},
@@ -444,6 +458,7 @@
       supplierId = #{supplierId,jdbcType=BIGINT},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       itemName = #{itemName,jdbcType=VARCHAR},
+      companyName = #{companyName,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DOUBLE},
       price = #{price,jdbcType=DOUBLE},
       amount = #{amount,jdbcType=DOUBLE},

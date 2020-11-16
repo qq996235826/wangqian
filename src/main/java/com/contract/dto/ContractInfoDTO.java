@@ -16,4 +16,6 @@ public class ContractInfoDTO {
     String item;
     //价格
     String price;
+    //需方
+    String company;
 }

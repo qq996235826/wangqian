@@ -106,6 +106,35 @@
         $('#dg').datagrid('reload');
     }
 
+    //更新数据
+    function update() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            var id=row.id;
+            var templateId=row.templateId;
+            var supplierId=row.supplierId;
+            var itemName=row.itemName;
+            var orderNum=row.orderNum;
+            var status=row.status;
+            $.ajax({
+                url:"https://just.guohe3.cn/contract/update",
+                type:"post",
+                data:{
+                    id:id,
+                    templateId:templateId,
+                    supplierId:supplierId,
+                    itemName:itemName,
+                    orderNum:orderNum,
+                    status:status
+                },
+                datatype:"josn",
+                success:function(result){
+                    $('#dg').datagrid('reload');
+                }
+            });
+        }
+    }
+
 
 </script>
 

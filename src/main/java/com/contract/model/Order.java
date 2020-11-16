@@ -13,6 +13,8 @@ public class Order {
 
     private String itemName;
 
+    private String companyName;
+
     private Double weight;
 
     private Double price;
@@ -83,6 +85,14 @@ public class Order {
 
     public void setItemName(String itemName) {
         this.itemName = itemName == null ? null : itemName.trim();
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
     }
 
     public Double getWeight() {

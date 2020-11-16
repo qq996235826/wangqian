@@ -3,6 +3,8 @@ package com.contract.dto;
 import com.mysql.cj.util.StringUtils;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author deng
  * @version 1.0
@@ -17,7 +19,7 @@ public class SupplierDTO {
     String password;
     //电话号
     String phoneNum;
-    //供货单位名
+    //供货人名
     String name;
     //银行卡号
     String bankNum;
@@ -27,6 +29,15 @@ public class SupplierDTO {
     String homeAddress;
     //出生日期
     String birth;
+    //发证机关
+    String agencies;
+    //性别
+    String sex;
+    //民族
+    String ethnic;
+    //身份证有效期
+    String idCardTimeLimit;
+
 
 
     /**

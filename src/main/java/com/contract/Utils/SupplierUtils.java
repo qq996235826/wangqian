@@ -22,17 +22,27 @@ public class SupplierUtils {
     public static void update(Supplier supplier, SupplierDTO supplierDTO)
     {
         //身份证号
-        supplier.setIdNum(supplierDTO.getIdNum()==null?supplier.getIdNum():supplierDTO.getIdNum());
+        supplier.setIdNum(StringUtils.isNullOrEmpty(supplierDTO.getIdNum())?supplier.getIdNum():supplierDTO.getIdNum());
         //银行卡号
-        supplier.setBankNumber(supplierDTO.getBankNum()==null?supplier.getBankNumber():supplierDTO.getBankNum());
+        supplier.setBankNumber(StringUtils.isNullOrEmpty(supplierDTO.getBankNum())?supplier.getBankNumber():supplierDTO.getBankNum());
         //开户行名
-        supplier.setBankName(supplierDTO.getBankName()==null?supplier.getBankName():supplierDTO.getBankName());
+        supplier.setBankName(StringUtils.isNullOrEmpty(supplierDTO.getBankName())?supplier.getBankName():supplierDTO.getBankName());
         //家庭住址
-        supplier.setHomeAddress(supplierDTO.getHomeAddress()==null?supplier.getHomeAddress():supplierDTO.getHomeAddress());
+        supplier.setHomeAddress(StringUtils.isNullOrEmpty(supplierDTO.getHomeAddress())?supplier.getHomeAddress():supplierDTO.getHomeAddress());
         //手机号
-        supplier.setPhoneNum(supplierDTO.getPhoneNum()==null?supplier.getPhoneNum():supplierDTO.getPhoneNum());
+        supplier.setPhoneNum(StringUtils.isNullOrEmpty(supplierDTO.getPhoneNum())?supplier.getPhoneNum():supplierDTO.getPhoneNum());
         //供货人名
-        supplier.setName(supplierDTO.getName()==null?supplier.getName():supplierDTO.getName());
+        supplier.setName(StringUtils.isNullOrEmpty(supplierDTO.getName())?supplier.getName():supplierDTO.getName());
+        //出生日期
+        supplier.setBirth(StringUtils.isNullOrEmpty(supplierDTO.getBirth())?supplier.getBirth():supplierDTO.getBirth());
+        //发证机关
+        supplier.setAgencies(StringUtils.isNullOrEmpty(supplierDTO.getAgencies())?supplier.getName():supplierDTO.getAgencies());
+        //性别
+        supplier.setSex(StringUtils.isNullOrEmpty(supplierDTO.getSex())?supplier.getSex():supplierDTO.getSex());
+        //民族
+        supplier.setEthnic(StringUtils.isNullOrEmpty(supplierDTO.getEthnic())?supplier.getEthnic():supplierDTO.getEthnic());
+        //身份证有效期
+        supplier.setIdCardTimeLimit(StringUtils.isNullOrEmpty(supplierDTO.getIdCardTimeLimit())?supplier.getIdCardTimeLimit():supplierDTO.getIdCardTimeLimit());
     }
 
     /**

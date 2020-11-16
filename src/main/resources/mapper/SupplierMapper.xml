@@ -11,6 +11,10 @@
     <result column="bankName" jdbcType="VARCHAR" property="bankName" />
     <result column="homeAddress" jdbcType="VARCHAR" property="homeAddress" />
     <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="agencies" jdbcType="VARCHAR" property="agencies" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="ethnic" jdbcType="VARCHAR" property="ethnic" />
+    <result column="idCardTimeLimit" jdbcType="VARCHAR" property="idCardTimeLimit" />
     <result column="id0Path" jdbcType="VARCHAR" property="id0Path" />
     <result column="id1Path" jdbcType="VARCHAR" property="id1Path" />
     <result column="bank0Path" jdbcType="VARCHAR" property="bank0Path" />
@@ -84,9 +88,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, idNum, password, phoneNum, name, bankNumber, bankName, homeAddress, birth, id0Path, 
-    id1Path, bank0Path, bank1Path, ststus, updateTime, updateBy, check1Time, chech1By, 
-    check1Note, check2Time, chech2By, check2Note
+    id, idNum, password, phoneNum, name, bankNumber, bankName, homeAddress, birth, agencies, 
+    sex, ethnic, idCardTimeLimit, id0Path, id1Path, bank0Path, bank1Path, ststus, updateTime, 
+    updateBy, check1Time, chech1By, check1Note, check2Time, chech2By, check2Note
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.SupplierExample" resultMap="BaseResultMap">
     select
@@ -122,19 +126,21 @@
     insert into supplier (id, idNum, password, 
       phoneNum, name, bankNumber, 
       bankName, homeAddress, birth, 
-      id0Path, id1Path, bank0Path, 
-      bank1Path, ststus, updateTime, 
-      updateBy, check1Time, chech1By, 
-      check1Note, check2Time, chech2By, 
-      check2Note)
+      agencies, sex, ethnic, 
+      idCardTimeLimit, id0Path, id1Path, 
+      bank0Path, bank1Path, ststus, 
+      updateTime, updateBy, check1Time, 
+      chech1By, check1Note, check2Time, 
+      chech2By, check2Note)
     values (#{id,jdbcType=BIGINT}, #{idNum,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{phoneNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{bankNumber,jdbcType=VARCHAR}, 
       #{bankName,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, #{birth,jdbcType=VARCHAR}, 
-      #{id0Path,jdbcType=VARCHAR}, #{id1Path,jdbcType=VARCHAR}, #{bank0Path,jdbcType=VARCHAR}, 
-      #{bank1Path,jdbcType=VARCHAR}, #{ststus,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
-      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2By,jdbcType=BIGINT}, 
-      #{check2Note,jdbcType=VARCHAR})
+      #{agencies,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{ethnic,jdbcType=VARCHAR}, 
+      #{idCardTimeLimit,jdbcType=VARCHAR}, #{id0Path,jdbcType=VARCHAR}, #{id1Path,jdbcType=VARCHAR}, 
+      #{bank0Path,jdbcType=VARCHAR}, #{bank1Path,jdbcType=VARCHAR}, #{ststus,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
+      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
+      #{chech2By,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Supplier">
     insert into supplier
@@ -165,6 +171,18 @@
       </if>
       <if test="birth != null">
         birth,
+      </if>
+      <if test="agencies != null">
+        agencies,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="ethnic != null">
+        ethnic,
+      </if>
+      <if test="idCardTimeLimit != null">
+        idCardTimeLimit,
       </if>
       <if test="id0Path != null">
         id0Path,
@@ -233,6 +251,18 @@
       </if>
       <if test="birth != null">
         #{birth,jdbcType=VARCHAR},
+      </if>
+      <if test="agencies != null">
+        #{agencies,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnic != null">
+        #{ethnic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardTimeLimit != null">
+        #{idCardTimeLimit,jdbcType=VARCHAR},
       </if>
       <if test="id0Path != null">
         #{id0Path,jdbcType=VARCHAR},
@@ -311,6 +341,18 @@
       <if test="record.birth != null">
         birth = #{record.birth,jdbcType=VARCHAR},
       </if>
+      <if test="record.agencies != null">
+        agencies = #{record.agencies,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ethnic != null">
+        ethnic = #{record.ethnic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardTimeLimit != null">
+        idCardTimeLimit = #{record.idCardTimeLimit,jdbcType=VARCHAR},
+      </if>
       <if test="record.id0Path != null">
         id0Path = #{record.id0Path,jdbcType=VARCHAR},
       </if>
@@ -366,6 +408,10 @@
       bankName = #{record.bankName,jdbcType=VARCHAR},
       homeAddress = #{record.homeAddress,jdbcType=VARCHAR},
       birth = #{record.birth,jdbcType=VARCHAR},
+      agencies = #{record.agencies,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      ethnic = #{record.ethnic,jdbcType=VARCHAR},
+      idCardTimeLimit = #{record.idCardTimeLimit,jdbcType=VARCHAR},
       id0Path = #{record.id0Path,jdbcType=VARCHAR},
       id1Path = #{record.id1Path,jdbcType=VARCHAR},
       bank0Path = #{record.bank0Path,jdbcType=VARCHAR},
@@ -409,6 +455,18 @@
       </if>
       <if test="birth != null">
         birth = #{birth,jdbcType=VARCHAR},
+      </if>
+      <if test="agencies != null">
+        agencies = #{agencies,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnic != null">
+        ethnic = #{ethnic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardTimeLimit != null">
+        idCardTimeLimit = #{idCardTimeLimit,jdbcType=VARCHAR},
       </if>
       <if test="id0Path != null">
         id0Path = #{id0Path,jdbcType=VARCHAR},
@@ -462,6 +520,10 @@
       bankName = #{bankName,jdbcType=VARCHAR},
       homeAddress = #{homeAddress,jdbcType=VARCHAR},
       birth = #{birth,jdbcType=VARCHAR},
+      agencies = #{agencies,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      ethnic = #{ethnic,jdbcType=VARCHAR},
+      idCardTimeLimit = #{idCardTimeLimit,jdbcType=VARCHAR},
       id0Path = #{id0Path,jdbcType=VARCHAR},
       id1Path = #{id1Path,jdbcType=VARCHAR},
       bank0Path = #{bank0Path,jdbcType=VARCHAR},

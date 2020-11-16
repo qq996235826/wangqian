@@ -21,6 +21,14 @@ public class Supplier {
 
     private String birth;
 
+    private String agencies;
+
+    private String sex;
+
+    private String ethnic;
+
+    private String idCardTimeLimit;
+
     private String id0Path;
 
     private String id1Path;
@@ -117,6 +125,38 @@ public class Supplier {
 
     public void setBirth(String birth) {
         this.birth = birth == null ? null : birth.trim();
+    }
+
+    public String getAgencies() {
+        return agencies;
+    }
+
+    public void setAgencies(String agencies) {
+        this.agencies = agencies == null ? null : agencies.trim();
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex == null ? null : sex.trim();
+    }
+
+    public String getEthnic() {
+        return ethnic;
+    }
+
+    public void setEthnic(String ethnic) {
+        this.ethnic = ethnic == null ? null : ethnic.trim();
+    }
+
+    public String getIdCardTimeLimit() {
+        return idCardTimeLimit;
+    }
+
+    public void setIdCardTimeLimit(String idCardTimeLimit) {
+        this.idCardTimeLimit = idCardTimeLimit == null ? null : idCardTimeLimit.trim();
     }
 
     public String getId0Path() {

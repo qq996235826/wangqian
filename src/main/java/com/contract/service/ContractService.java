@@ -4,6 +4,7 @@ import com.contract.Utils.PdfUtils;
 import com.contract.Utils.SupplierUtils;
 import com.contract.Utils.WordUtils;
 import com.contract.contractEnumerate.KeyWord;
+import com.contract.dto.OrderDTO;
 import com.contract.exception.CustomizeErrorCode;
 import com.contract.exception.CustomizeException;
 import com.contract.mapper.ContractTemplateMapper;
@@ -14,7 +15,6 @@ import com.contract.oss.UploadOss;
 import com.mysql.cj.util.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
@@ -69,118 +69,109 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String phoneNum,String item,String price)
+    public String getContract(MultipartFile file, String phoneNum,String item,String price,String company)
     {
         //获得供货人
-        SupplierExample supplierExample=new SupplierExample();
-        supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
-        List<Supplier> suppliers=supplierMapper.selectByExample(supplierExample);
-        //正常情况一个号码只能得到一个供货人
-        if(suppliers.size()!=1)
+        Supplier supplier=getSupplier(phoneNum);
+        if(SupplierUtils.infoComplete(supplier))
         {
-            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_WRONG);
-        }
-        else {
-            //获得供货人
-            Supplier supplier=suppliers.get(0);
-            if(SupplierUtils.infoComplete(supplier))
+            Map<String,Object> infoMap=new HashMap<>();
+            //设置标记符和替换变量
+            //签订时间
+            infoMap.put(KeyWord.CREATE_TIME.getValue(), DateFormat.getDateInstance().format(new Date()));
+            //乙方
+            infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
+            //身份证号
+            infoMap.put(KeyWord.ID_NUM.getValue(),supplier.getIdNum());
+            //电话号
+            infoMap.put(KeyWord.PHONE_NUM.getValue(),supplier.getPhoneNum());
+            //银行卡号
+            infoMap.put(KeyWord.BANK_ID.getValue(),supplier.getBankNumber());
+            //开户行
+            infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
+
+            //物品名
+            String s;
+            if(item.equals("paper"))
             {
-                Map<String,Object> infoMap=new HashMap<>();
-                //设置标记符和替换变量
-                //签订时间
-                infoMap.put(KeyWord.CREATE_TIME.getValue(), DateFormat.getDateInstance().format(new Date()));
-                //乙方
-                infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
-                //身份证号
-                infoMap.put(KeyWord.ID_NUM.getValue(),supplier.getIdNum());
-                //电话号
-                infoMap.put(KeyWord.PHONE_NUM.getValue(),supplier.getPhoneNum());
-                //银行卡号
-                infoMap.put(KeyWord.BANK_ID.getValue(),supplier.getBankNumber());
-                //开户行
-                infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
-
-                //物品名
-                String s;
-                if(item.equals("paper"))
-                {
-                    infoMap.put(KeyWord.ITEM_NAM.getValue(),"废纸");
-                    s="废纸";
-                }
-                else if(item.equals("steel"))
-                {
-                    infoMap.put(KeyWord.ITEM_NAM.getValue(),"废钢");
-                    s="废钢";
-                }
-                else
-                {
-                    infoMap.put(KeyWord.ITEM_NAM.getValue(),"    ");
-                    s="    ";
-                }
-                //价格
-                if(StringUtils.isNullOrEmpty(price))
-                {
-                    infoMap.put(KeyWord.PRICE.getValue(),"    ");
-                }
-                else
-                {
-                    infoMap.put(KeyWord.PRICE.getValue(),price);
-                }
-                //获得合同
-                ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
-                contractTemplateExample.createCriteria().andIsUsingEqualTo(true);
-                String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
-                //新合同路径
-                String path=getNewOrderContract(new File(temPath),phoneNum);
-                //WordUtils.replaceAll(path,infoMap);
-                //上传签名照片
-                String signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
-
-                //后台替换关键字
-                //WordUtils.replaceAndGenerateWord(path,path,infoMap);
-                //图片插入
-                Map<String,Object> header = new HashMap<>();
-                header.put("width",150);
-                header.put("height",75);
-                header.put("type", "png");
-                header.put("content", signature);//图片路径
-                infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
-                //替换关键字和图片
-                XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
-                try {
-                    FileOutputStream fopts = new FileOutputStream(path);
-                    doc.write(fopts);
-                    fopts.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-
-                //把新合同写入数据库
-                Order order=new Order();
-                //设置所使用模板id
-                order.setTemplateId(contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getId());
-                //设置供货人id
-                order.setSupplierId(supplier.getId());
-                //设置创建时间
-                order.setCreateTime(new Date());
-                //设置货物名称
-                order.setItemName(s);
-                //设置审核状态,0未审核
-                order.setStatus(0);
-                //设置合同存储路径
-                order.setPath(path);
-                //上传文件到云端并且保存他的下载链接
-                String ossUrl=uploadOss.uploadOss(path);
-                order.setOssPath(ossUrl);
-                orderMapper.insert(order);
-                return ossUrl;
+                infoMap.put(KeyWord.ITEM_NAM.getValue(),"废纸");
+                s="废纸";
+            }
+            else if(item.equals("steel"))
+            {
+                infoMap.put(KeyWord.ITEM_NAM.getValue(),"废钢");
+                s="废钢";
             }
             else
             {
-                throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_LOST);
+                infoMap.put(KeyWord.ITEM_NAM.getValue(),"    ");
+                s="    ";
             }
+            //价格
+            if(StringUtils.isNullOrEmpty(price))
+            {
+                infoMap.put(KeyWord.PRICE.getValue(),"    ");
+            }
+            else
+            {
+                infoMap.put(KeyWord.PRICE.getValue(),price);
+            }
+            //获得合同
+            ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
+            contractTemplateExample.createCriteria().andIsUsingEqualTo(true);
+            String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
+            //新合同路径
+            String path=getNewOrderContract(new File(temPath),phoneNum);
+            //WordUtils.replaceAll(path,infoMap);
+            //上传签名照片
+            String signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
+
+            //后台替换关键字
+            //WordUtils.replaceAndGenerateWord(path,path,infoMap);
+            //图片插入
+            Map<String,Object> header = new HashMap<>();
+            header.put("width",150);
+            header.put("height",75);
+            header.put("type", "png");
+            header.put("content", signature);//图片路径
+            infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
+            //替换关键字和图片
+            XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
+            try {
+                FileOutputStream fopts = new FileOutputStream(path);
+                doc.write(fopts);
+                fopts.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+            //把新合同写入数据库
+            Order order=new Order();
+            //设置所使用模板id
+            order.setTemplateId(contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getId());
+            //设置供货人id
+            order.setSupplierId(supplier.getId());
+            //设置创建时间
+            order.setCreateTime(new Date());
+            //设置货物名称
+            order.setItemName(s);
+            //设置合同需方
+            order.setCompanyName(company);
+            //设置审核状态,0未审核
+            order.setStatus(0);
+            //设置合同存储路径
+            order.setPath(path);
+            //上传文件到云端并且保存他的下载链接
+            String ossUrl=uploadOss.uploadOss(path);
+            order.setOssPath(ossUrl);
+            orderMapper.insert(order);
+            return ossUrl;
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_LOST);
         }
     }
 
@@ -445,6 +436,30 @@ public class ContractService {
         }
     }
 
+
+
+    /**
+     * 通过身份证获得唯一供货人
+     * @return Supplier
+     */
+    private Supplier getSupplierByIdNum(String IdNum)
+    {
+        SupplierExample supplierExample=new SupplierExample();
+        supplierExample.createCriteria().andIdNumEqualTo(IdNum);
+        List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
+        if(supplierList.size()==1)
+        {
+            return supplierList.get(0);
+        }
+        else if(supplierList.size()==0)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_SUPPLIER);
+        }
+        else {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
+        }
+    }
+
     /**
      * 获得唯一最新合同模板
      * @return ContractTemplate
@@ -535,6 +550,79 @@ public class ContractService {
         else
         {
             return "审核出错";
+        }
+    }
+
+    public Boolean onlyOne(String item, String company, String idNum) {
+        //获得订单签订人的id
+        Supplier supplier=getSupplierByIdNum(idNum);
+        //获得订单
+        OrderExample example=new OrderExample();
+        example.createCriteria().andSupplierIdEqualTo(supplier.getId());
+        List<Order> orders=orderMapper.selectByExample(example);
+        for(int a=0;a<orders.size();a++)
+        {
+            if(orders.get(a).getItemName().equals(item)&&orders.get(a).getCompanyName().equals(company))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Map<String,List<Order>> getOrders(String idNum) {
+        //获得供货人
+        Supplier supplier=getSupplierByIdNum(idNum);
+        //获得该供货人下的所有合同
+        OrderExample example=new OrderExample();
+        example.createCriteria().andSupplierIdEqualTo(supplier.getId());
+        List<Order> orders=orderMapper.selectByExample(example);
+        //两个列表分别存放废纸和废钢
+        List<Order> steels=new ArrayList<>();
+        List<Order> papers=new ArrayList<>();
+        for(Order o:orders)
+        {
+            if(o.getItemName().equals("废纸"))
+            {
+                papers.add(o);
+            }
+            else
+            {
+                steels.add(o);
+            }
+        }
+        //Map包含这两个List返回给前端
+        Map<String,List<Order>> map=new HashMap<>();
+        map.put("steel",steels);
+        map.put("paper",papers);
+
+        return map;
+    }
+
+    public Boolean update(OrderDTO orderDTO) {
+        Order order=orderMapper.selectByPrimaryKey(orderDTO.getId());
+        order.setTemplateId(orderDTO.getTemplateId());
+        order.setSupplierId(orderDTO.getSupplierId());
+        order.setItemName(orderDTO.getItemName());
+        order.setOrderNum(orderDTO.getOrderNum());
+        if(orderDTO.getStatus().equals("审核中"))
+        {
+            order.setStatus(0);
+        }
+        else if (orderDTO.getStatus().equals("审核通过"))
+        {
+            order.setStatus(1);
+        }
+        else if(orderDTO.getStatus().equals("审核未通过"))
+        {
+            order.setStatus(2);
+        }
+        if(orderMapper.updateByPrimaryKey(order)==1)
+        {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }

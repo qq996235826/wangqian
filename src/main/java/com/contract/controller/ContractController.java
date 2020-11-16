@@ -1,7 +1,9 @@
 package com.contract.controller;
 
 
+import com.contract.dto.OrderDTO;
 import com.contract.dto.ResultDTO;
+import com.contract.dto.SupplierDTO;
 import com.contract.service.ContractService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,8 +66,8 @@ public class ContractController {
      */
     @ResponseBody
     @PostMapping("/getContract")
-    public ResultDTO getContract(MultipartFile file, String phoneNum,String item,String price) {
-        return ResultDTO.okOf(contractService.getContract(file,phoneNum,item,price));
+    public ResultDTO getContract(MultipartFile file, String phoneNum,String item,String price,String company) {
+        return ResultDTO.okOf(contractService.getContract(file,phoneNum,item,price,company));
     }
 
     /**
@@ -134,6 +136,41 @@ public class ContractController {
     public ResultDTO deleteOrder(HttpServletRequest request)
     {
         return ResultDTO.okOf(contractService.deleteOrder(request.getParameter("id")));
+    }
+
+
+    /**
+     * 确保合同唯一
+     * @param item
+     * @param company
+     * @param idNum
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/onlyOne")
+    public ResultDTO deleteOrder(String item,String company,String idNum)
+    {
+        return ResultDTO.okOf(contractService.onlyOne(item,company,idNum));
+    }
+
+    /**
+     * 获得所有合同列表
+     * @param idNum
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getOrders")
+    public ResultDTO getOrders(String idNum)
+    {
+        return ResultDTO.okOf(contractService.getOrders(idNum));
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/update")
+    public ResultDTO update(@RequestBody OrderDTO orderDTO)
+    {
+        return ResultDTO.okOf(contractService.update(orderDTO));
     }
 
 

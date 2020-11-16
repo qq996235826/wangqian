@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,6 +82,7 @@ public class SupplierService {
             Supplier supplier=supplierList.get(0);
             //更新信息
             SupplierUtils.update(supplier,supplierDTO);
+            supplier.setUpdateTime(new Date());
             supplierMapper.updateByPrimaryKey(supplier);
             return supplier.getId();
         }
