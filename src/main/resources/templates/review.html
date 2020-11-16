@@ -119,14 +119,16 @@
             $.ajax({
                 url:"https://just.guohe3.cn/contract/update",
                 type:"post",
-                data:{
-                    id:id,
-                    templateId:templateId,
-                    supplierId:supplierId,
-                    itemName:itemName,
-                    orderNum:orderNum,
-                    status:status
-                },
+                data:JSON.stringify(
+                    {
+                        id:id,
+                        templateId:templateId,
+                        supplierId:supplierId,
+                        itemName:itemName,
+                        orderNum:orderNum,
+                        status:status
+                    }
+                ),
                 datatype:"josn",
                 success:function(result){
                     $('#dg').datagrid('reload');
