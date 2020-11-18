@@ -23,10 +23,6 @@ public class SupplierUtils {
     {
         //身份证号
         supplier.setIdNum(StringUtils.isNullOrEmpty(supplierDTO.getIdNum())?supplier.getIdNum():supplierDTO.getIdNum());
-        //银行卡号
-        supplier.setBankNumber(StringUtils.isNullOrEmpty(supplierDTO.getBankNum())?supplier.getBankNumber():supplierDTO.getBankNum());
-        //开户行名
-        supplier.setBankName(StringUtils.isNullOrEmpty(supplierDTO.getBankName())?supplier.getBankName():supplierDTO.getBankName());
         //家庭住址
         supplier.setHomeAddress(StringUtils.isNullOrEmpty(supplierDTO.getHomeAddress())?supplier.getHomeAddress():supplierDTO.getHomeAddress());
         //手机号
@@ -55,16 +51,6 @@ public class SupplierUtils {
         if (StringUtils.isNullOrEmpty(supplier.getIdNum()))
         {
             //throw new CustomizeException(CustomizeErrorCode.SUPPLIER_IDNUM_LOST);
-            return false;
-        }
-        else if(StringUtils.isNullOrEmpty(supplier.getBankNumber()))
-        {
-            //throw new CustomizeException(CustomizeErrorCode.SUPPLIER_BANKNUM_LOST);
-            return false;
-        }
-        else if (StringUtils.isNullOrEmpty(supplier.getBankName()))
-        {
-            //throw new CustomizeException(CustomizeErrorCode.SUPPLIER_BANKNUME_LOST);
             return false;
         }
         else if(StringUtils.isNullOrEmpty(supplier.getHomeAddress()))

@@ -7,12 +7,9 @@ import com.contract.exception.CustomizeException;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.Supplier;
 import com.contract.model.SupplierExample;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.Date;
@@ -35,7 +32,7 @@ public class SupplierService {
     String signaturePatch;
 
     /**
-     * 通过号码注册供货人
+     * 通过身份证号注册供货人
      * @param supplierDTO
      * @return 供货人id
      */
@@ -46,14 +43,15 @@ public class SupplierService {
             throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_LOST);
         }
 
-        //先看看数据库里是否已经有了这个电话
+        //先看看数据库里是否已经有了这个身份证号
         SupplierExample supplierExample=new SupplierExample();
-        supplierExample.createCriteria().andPhoneNumEqualTo(supplierDTO.getPhoneNum());
-        if(supplierMapper.selectByExample(supplierExample).size()!=0)
+        supplierExample.createCriteria().andIdNumEqualTo(supplierDTO.getIdNum());
+        List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
+        if(supplierList.size()!=0)
         {
-            throw new CustomizeException(CustomizeErrorCode.HAVE_PHONE);
+            throw new CustomizeException(CustomizeErrorCode.HAVE_ID_NUM);
         }
-        //没有这个号码,新建用户并插入
+        //没有这个身份证,新建用户并插入
         Supplier supplier=new Supplier();
         supplier.setPhoneNum(supplierDTO.getPhoneNum());
         supplier.setIdNum(supplierDTO.getIdNum());
@@ -123,20 +121,6 @@ public class SupplierService {
             {
                 Path=upload(upload,signaturePatch+phoneNum+"/");
                 supplier.setId1Path(Path);
-                supplierMapper.updateByPrimaryKey(supplier);
-                return Path;
-            }
-            else if(role.equals("2"))
-            {
-                Path=upload(upload,signaturePatch+phoneNum+"/");
-                supplier.setBank0Path(Path);
-                supplierMapper.updateByPrimaryKey(supplier);
-                return Path;
-            }
-            else if(role.equals("3"))
-            {
-                Path=upload(upload,signaturePatch+phoneNum+"/");
-                supplier.setBank1Path(Path);
                 supplierMapper.updateByPrimaryKey(supplier);
                 return Path;
             }

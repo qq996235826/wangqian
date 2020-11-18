@@ -21,13 +21,12 @@ public class SupplierController {
     private SupplierService supplierService;
 
     /**
-     * 根据电话号码创建供货人
+     * 通过身份证号注册供货人
      * @return 返回供货人的id主键
      */
     @ResponseBody
     @PostMapping("/create")
-    public ResultDTO createSupplier(@RequestBody SupplierDTO supplierDTO)
-    {
+    public ResultDTO createSupplier(@RequestBody SupplierDTO supplierDTO) {
         return ResultDTO.okOf(supplierService.createSupplier(supplierDTO));
     }
 
@@ -37,8 +36,7 @@ public class SupplierController {
      */
     @ResponseBody
     @PostMapping("/addInfo")
-    public ResultDTO addSupplierInfo(@RequestBody SupplierDTO supplierDTO)
-    {
+    public ResultDTO addSupplierInfo(@RequestBody SupplierDTO supplierDTO) {
         return ResultDTO.okOf(supplierService.addSupplierInfo(supplierDTO));
     }
 

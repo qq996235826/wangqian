@@ -1,18 +1,18 @@
 package com.contract.model;
 
 public class Company {
-    private Integer id;
+    private Integer ID;
 
     private String code;
 
     private String name;
 
-    public Integer getId() {
-        return id;
+    public Integer getID() {
+        return ID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setID(Integer ID) {
+        this.ID = ID;
     }
 
     public String getCode() {

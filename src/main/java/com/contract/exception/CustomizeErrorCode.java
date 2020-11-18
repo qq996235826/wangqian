@@ -9,7 +9,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     //其实这个枚举相当于一个方法,它就是下面的CustomizeErrorCode方法,调用该枚举就会把后面括号的东西作为方法参数来执行该方法
     //也就是把本类的message成员变成括号里的东西
     SYSTEM_ERROR(1000, "其他错误"),
-    HAVE_PHONE(200, "该电话号码已经注册"),
+    HAVE_ID_NUM(200, "该身份已经注册"),
     HAVEN_PHONE(2000,"该号码未注册"),
     SUPPLIER_INFO_WRONG(2000,"该号码在后台的数据出现错误,联系管理员解决"),
     SUPPLIER_WRONG(2000,"供货人信息有误"),

@@ -15,6 +15,10 @@ public class Order {
 
     private String companyName;
 
+    private String bankName;
+
+    private String bankNum;
+
     private Double weight;
 
     private Double price;
@@ -93,6 +97,22 @@ public class Order {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBankNum() {
+        return bankNum;
+    }
+
+    public void setBankNum(String bankNum) {
+        this.bankNum = bankNum == null ? null : bankNum.trim();
     }
 
     public Double getWeight() {

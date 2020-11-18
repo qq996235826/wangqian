@@ -83,7 +83,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from contract_template
+    from contracttemplate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,21 +94,21 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from contract_template
+    from contracttemplate
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from contract_template
+    delete from contracttemplate
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.contract.model.ContractTemplateExample">
-    delete from contract_template
+    delete from contracttemplate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.contract.model.ContractTemplate">
-    insert into contract_template (id, path, createTime, 
+    insert into contracttemplate (id, path, createTime, 
       isUsing, versionNum, updateTime, 
       updateBy, note, ossUrl, 
       pdfPath, jpgPath, jpgOssUrl
@@ -120,7 +120,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.ContractTemplate">
-    insert into contract_template
+    insert into contracttemplate
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -199,13 +199,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.contract.model.ContractTemplateExample" resultType="java.lang.Long">
-    select count(*) from contract_template
+    select count(*) from contracttemplate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update contract_template
+    update contracttemplate
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -249,7 +249,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update contract_template
+    update contracttemplate
     set id = #{record.id,jdbcType=BIGINT},
       path = #{record.path,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -267,7 +267,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.ContractTemplate">
-    update contract_template
+    update contracttemplate
     <set>
       <if test="path != null">
         path = #{path,jdbcType=VARCHAR},
@@ -306,7 +306,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.contract.model.ContractTemplate">
-    update contract_template
+    update contracttemplate
     set path = #{path,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       isUsing = #{isUsing,jdbcType=BIT},
@@ -326,7 +326,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from contract_template
+    from contracttemplate
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

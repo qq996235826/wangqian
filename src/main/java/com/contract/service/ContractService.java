@@ -69,7 +69,7 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String phoneNum,String item,String price,String company)
+    public String getContract(MultipartFile file, String phoneNum,String item,String price,String company,String bankNum,String bankName)
     {
         //获得供货人
         Supplier supplier=getSupplier(phoneNum);
@@ -86,10 +86,9 @@ public class ContractService {
             //电话号
             infoMap.put(KeyWord.PHONE_NUM.getValue(),supplier.getPhoneNum());
             //银行卡号
-            infoMap.put(KeyWord.BANK_ID.getValue(),supplier.getBankNumber());
+            infoMap.put(KeyWord.BANK_ID.getValue(),bankNum);
             //开户行
-            infoMap.put(KeyWord.BANK_NAME.getValue(),supplier.getBankName());
-
+            infoMap.put(KeyWord.BANK_NAME.getValue(),bankName);
             //物品名
             String s;
             if(item.equals("paper"))
@@ -123,18 +122,22 @@ public class ContractService {
             //新合同路径
             String path=getNewOrderContract(new File(temPath),phoneNum);
             //WordUtils.replaceAll(path,infoMap);
-            //上传签名照片
-            String signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
 
             //后台替换关键字
             //WordUtils.replaceAndGenerateWord(path,path,infoMap);
-            //图片插入
-            Map<String,Object> header = new HashMap<>();
-            header.put("width",150);
-            header.put("height",75);
-            header.put("type", "png");
-            header.put("content", signature);//图片路径
-            infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
+            //上传签名照片
+            //如果上传了图片就合成
+            if(file!=null)
+            {
+                String signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
+                //图片插入
+                Map<String,Object> header = new HashMap<>();
+                header.put("width",150);
+                header.put("height",75);
+                header.put("type", "png");
+                header.put("content", signature);//图片路径
+                infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
+            }
             //替换关键字和图片
             XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
             try {
@@ -144,8 +147,6 @@ public class ContractService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
 
             //把新合同写入数据库
             Order order=new Order();
@@ -159,14 +160,22 @@ public class ContractService {
             order.setItemName(s);
             //设置合同需方
             order.setCompanyName(company);
-            //设置审核状态,0未审核
+            //设置审核状态
+            // 0---草拟
+            //10----待盖章
+            //20----打回，需用户修改
+            //90----已盖章
             order.setStatus(0);
             //设置合同存储路径
             order.setPath(path);
             //上传文件到云端并且保存他的下载链接
             String ossUrl=uploadOss.uploadOss(path);
             order.setOssPath(ossUrl);
-            orderMapper.insert(order);
+            //如果有签名
+            if(file!=null)
+            {
+                orderMapper.insert(order);
+            }
             return ossUrl;
         }
         else

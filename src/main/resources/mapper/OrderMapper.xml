@@ -8,6 +8,8 @@
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="itemName" jdbcType="VARCHAR" property="itemName" />
     <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <result column="bankNum" jdbcType="VARCHAR" property="bankNum" />
     <result column="weight" jdbcType="DOUBLE" property="weight" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="amount" jdbcType="DOUBLE" property="amount" />
@@ -84,9 +86,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, templateId, supplierId, createTime, itemName, companyName, weight, price, amount, 
-    endTime, orderNum, status, updateTime, updateBy, check1Time, chech1By, check1Note, 
-    check2Time, chech2Bby, check2Note, path, ossPath
+    id, templateId, supplierId, createTime, itemName, companyName, bankName, bankNum, 
+    weight, price, amount, endTime, orderNum, status, updateTime, updateBy, check1Time, 
+    chech1By, check1Note, check2Time, chech2Bby, check2Note, path, ossPath
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -94,7 +96,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from business_order
+    from businessorder
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -105,39 +107,41 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from business_order
+    from businessorder
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from business_order
+    delete from businessorder
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.contract.model.OrderExample">
-    delete from business_order
+    delete from businessorder
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.contract.model.Order">
-    insert into business_order (id, templateId, supplierId, 
+    insert into businessorder (id, templateId, supplierId, 
       createTime, itemName, companyName, 
-      weight, price, amount, 
-      endTime, orderNum, status, 
-      updateTime, updateBy, check1Time, 
-      chech1By, check1Note, check2Time, 
-      chech2Bby, check2Note, path, 
-      ossPath)
+      bankName, bankNum, weight, 
+      price, amount, endTime, 
+      orderNum, status, updateTime, 
+      updateBy, check1Time, chech1By, 
+      check1Note, check2Time, chech2Bby, 
+      check2Note, path, ossPath
+      )
     values (#{id,jdbcType=BIGINT}, #{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{itemName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{weight,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
-      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
-      #{chech2Bby,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
-      #{ossPath,jdbcType=VARCHAR})
+      #{bankName,jdbcType=VARCHAR}, #{bankNum,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
+      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
+      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{ossPath,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Order">
-    insert into business_order
+    insert into businessorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -156,6 +160,12 @@
       </if>
       <if test="companyName != null">
         companyName,
+      </if>
+      <if test="bankName != null">
+        bankName,
+      </if>
+      <if test="bankNum != null">
+        bankNum,
       </if>
       <if test="weight != null">
         weight,
@@ -225,6 +235,12 @@
       <if test="companyName != null">
         #{companyName,jdbcType=VARCHAR},
       </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNum != null">
+        #{bankNum,jdbcType=VARCHAR},
+      </if>
       <if test="weight != null">
         #{weight,jdbcType=DOUBLE},
       </if>
@@ -276,13 +292,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.contract.model.OrderExample" resultType="java.lang.Long">
-    select count(*) from business_order
+    select count(*) from businessorder
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update business_order
+    update businessorder
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -301,6 +317,12 @@
       </if>
       <if test="record.companyName != null">
         companyName = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankName != null">
+        bankName = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankNum != null">
+        bankNum = #{record.bankNum,jdbcType=VARCHAR},
       </if>
       <if test="record.weight != null">
         weight = #{record.weight,jdbcType=DOUBLE},
@@ -356,13 +378,15 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update business_order
+    update businessorder
     set id = #{record.id,jdbcType=BIGINT},
       templateId = #{record.templateId,jdbcType=BIGINT},
       supplierId = #{record.supplierId,jdbcType=BIGINT},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       itemName = #{record.itemName,jdbcType=VARCHAR},
       companyName = #{record.companyName,jdbcType=VARCHAR},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      bankNum = #{record.bankNum,jdbcType=VARCHAR},
       weight = #{record.weight,jdbcType=DOUBLE},
       price = #{record.price,jdbcType=DOUBLE},
       amount = #{record.amount,jdbcType=DOUBLE},
@@ -384,7 +408,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.Order">
-    update business_order
+    update businessorder
     <set>
       <if test="templateId != null">
         templateId = #{templateId,jdbcType=BIGINT},
@@ -400,6 +424,12 @@
       </if>
       <if test="companyName != null">
         companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNum != null">
+        bankNum = #{bankNum,jdbcType=VARCHAR},
       </if>
       <if test="weight != null">
         weight = #{weight,jdbcType=DOUBLE},
@@ -453,12 +483,14 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.contract.model.Order">
-    update business_order
+    update businessorder
     set templateId = #{templateId,jdbcType=BIGINT},
       supplierId = #{supplierId,jdbcType=BIGINT},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       itemName = #{itemName,jdbcType=VARCHAR},
       companyName = #{companyName,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      bankNum = #{bankNum,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DOUBLE},
       price = #{price,jdbcType=DOUBLE},
       amount = #{amount,jdbcType=DOUBLE},
@@ -483,7 +515,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from business_order
+    from businessorder
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

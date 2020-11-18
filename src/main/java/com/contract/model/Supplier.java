@@ -13,10 +13,6 @@ public class Supplier {
 
     private String name;
 
-    private String bankNumber;
-
-    private String bankName;
-
     private String homeAddress;
 
     private String birth;
@@ -32,10 +28,6 @@ public class Supplier {
     private String id0Path;
 
     private String id1Path;
-
-    private String bank0Path;
-
-    private String bank1Path;
 
     private Integer ststus;
 
@@ -93,22 +85,6 @@ public class Supplier {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getBankNumber() {
-        return bankNumber;
-    }
-
-    public void setBankNumber(String bankNumber) {
-        this.bankNumber = bankNumber == null ? null : bankNumber.trim();
-    }
-
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName == null ? null : bankName.trim();
     }
 
     public String getHomeAddress() {
@@ -173,22 +149,6 @@ public class Supplier {
 
     public void setId1Path(String id1Path) {
         this.id1Path = id1Path == null ? null : id1Path.trim();
-    }
-
-    public String getBank0Path() {
-        return bank0Path;
-    }
-
-    public void setBank0Path(String bank0Path) {
-        this.bank0Path = bank0Path == null ? null : bank0Path.trim();
-    }
-
-    public String getBank1Path() {
-        return bank1Path;
-    }
-
-    public void setBank1Path(String bank1Path) {
-        this.bank1Path = bank1Path == null ? null : bank1Path.trim();
     }
 
     public Integer getStstus() {

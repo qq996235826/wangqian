@@ -11,7 +11,7 @@ public interface CompanyMapper {
 
     int deleteByExample(CompanyExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Integer ID);
 
     int insert(Company record);
 
@@ -21,7 +21,7 @@ public interface CompanyMapper {
 
     List<Company> selectByExample(CompanyExample example);
 
-    Company selectByPrimaryKey(Integer id);
+    Company selectByPrimaryKey(Integer ID);
 
     int updateByExampleSelective(@Param("record") Company record, @Param("example") CompanyExample example);
 
