@@ -19,6 +19,8 @@ public class Order {
 
     private String bankNum;
 
+    private String bankImagePath;
+
     private Double weight;
 
     private Double price;
@@ -113,6 +115,14 @@ public class Order {
 
     public void setBankNum(String bankNum) {
         this.bankNum = bankNum == null ? null : bankNum.trim();
+    }
+
+    public String getBankImagePath() {
+        return bankImagePath;
+    }
+
+    public void setBankImagePath(String bankImagePath) {
+        this.bankImagePath = bankImagePath == null ? null : bankImagePath.trim();
     }
 
     public Double getWeight() {

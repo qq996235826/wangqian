@@ -51,6 +51,8 @@ public class ContractService {
     @Value("${contractJPGPatch}")
     private String contractJPGPatch;
 
+    @Value("${orderBankJPGPatch}")
+    private String orderBankJPGPatch;
     /**
      *  @filePath 合同模板文件存放路径,在配置文件中规定
      */
@@ -69,7 +71,7 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String phoneNum,String item,String price,String company,String bankNum,String bankName)
+    public String getContract(MultipartFile file, String phoneNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage)
     {
         //获得供货人
         Supplier supplier=getSupplier(phoneNum);
@@ -138,6 +140,7 @@ public class ContractService {
                 header.put("content", signature);//图片路径
                 infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
             }
+
             //替换关键字和图片
             XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
             try {
@@ -171,6 +174,10 @@ public class ContractService {
             //上传文件到云端并且保存他的下载链接
             String ossUrl=uploadOss.uploadOss(path);
             order.setOssPath(ossUrl);
+            //上传对应的银行卡照片
+            String bankImageLocal=upload(bankImage,orderBankJPGPatch);
+            String bankImageOss=uploadOss.uploadOss(bankImageLocal);
+            order.setBankImagePath(bankImageOss);
             //如果有签名
             if(file!=null)
             {

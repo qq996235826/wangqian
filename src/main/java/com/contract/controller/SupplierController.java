@@ -39,19 +39,18 @@ public class SupplierController {
     public ResultDTO addSupplierInfo(@RequestBody SupplierDTO supplierDTO) {
         return ResultDTO.okOf(supplierService.addSupplierInfo(supplierDTO));
     }
-
     //上传图片信息
     @ResponseBody
     @PostMapping("/uploadImage")
-    public ResultDTO uploadSignature(MultipartFile upload,String phoneNum, String role) {
-        return ResultDTO.okOf(supplierService.uploadImage(upload,phoneNum,role));
+    public ResultDTO uploadSignature(MultipartFile upload,String idNum, String role) {
+        return ResultDTO.okOf(supplierService.uploadImage(upload,idNum,role));
     }
 
-    //判断该手机号是否注册
+    //判断该身份证号是否注册
     @ResponseBody
-    @PostMapping("/phoneRegistered")
-    public ResultDTO phoneRegistered(String phoneNum) {
-        return ResultDTO.okOf(supplierService.Registered(phoneNum));
+    @PostMapping("/idNumRegistered")
+    public ResultDTO phoneRegistered(String idNum) {
+        return ResultDTO.okOf(supplierService.Registered(idNum));
     }
 
 

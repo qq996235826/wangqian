@@ -71,10 +71,10 @@ public class SupplierService {
      */
     public Long addSupplierInfo(SupplierDTO supplierDTO) {
         //先看看数据库里是否有这个用户
-        if(havePhone(supplierDTO.getPhoneNum()))
+        if(haveIdNum(supplierDTO.getIdNum()))
         {
             SupplierExample example=new SupplierExample();
-            example.createCriteria().andPhoneNumEqualTo(supplierDTO.getPhoneNum());
+            example.createCriteria().andIdNumEqualTo(supplierDTO.getIdNum());
             List<Supplier>supplierList=supplierMapper.selectByExample(example);
             //获得用户
             Supplier supplier=supplierList.get(0);
@@ -95,16 +95,16 @@ public class SupplierService {
     /**
      * 上传供货人图片信息,逻辑上而言,只要查到不是一条数据都不是
      * @param upload
-     * @param phoneNum
+     * @param idNum
      * @param role
      * @return 图片路径
      */
-    public String uploadImage(MultipartFile upload,String phoneNum ,String role) {
+    public String uploadImage(MultipartFile upload,String idNum ,String role) {
         //先看看数据库里是否有这个用户
-        if(havePhone(phoneNum))
+        if(haveIdNum(idNum))
         {
             SupplierExample example=new SupplierExample();
-            example.createCriteria().andPhoneNumEqualTo(phoneNum);
+            example.createCriteria().andIdNumEqualTo(idNum);
             List<Supplier>supplierList=supplierMapper.selectByExample(example);
             //获得用户
             Supplier supplier=supplierList.get(0);
@@ -112,14 +112,14 @@ public class SupplierService {
             String Path="";
             if(role.equals("0"))
             {
-                Path=upload(upload,signaturePatch+phoneNum+"/");
+                Path=upload(upload,signaturePatch+idNum+"/");
                 supplier.setId0Path(Path);
                 supplierMapper.updateByPrimaryKey(supplier);
                 return Path;
             }
             else if(role.equals("1"))
             {
-                Path=upload(upload,signaturePatch+phoneNum+"/");
+                Path=upload(upload,signaturePatch+idNum+"/");
                 supplier.setId1Path(Path);
                 supplierMapper.updateByPrimaryKey(supplier);
                 return Path;
@@ -139,14 +139,14 @@ public class SupplierService {
 
     /**
      * 判断数据库里是否有这个手机号
-     * @param phoneNum
+     * @param idNum
      * @return true或者false
      */
-    public boolean havePhone(String phoneNum)
+    public boolean haveIdNum(String idNum)
     {
         //看看数据库里是否有这个用户
         SupplierExample supplierExample=new SupplierExample();
-        supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
+        supplierExample.createCriteria().andIdNumEqualTo(idNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
         if(supplierList.size()!=1) {
             return false;
@@ -201,12 +201,12 @@ public class SupplierService {
 
     /**
      * 判断改手机号是否注册
-     * @param phoneNum
+     * @param idNum
      * @return true或者false
      */
-    public Boolean Registered(String phoneNum) {
+    public Boolean Registered(String idNum) {
         SupplierExample supplierExample=new SupplierExample();
-        supplierExample.createCriteria().andPhoneNumEqualTo(phoneNum);
+        supplierExample.createCriteria().andIdNumEqualTo(idNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
         if(supplierList.size()==0)
         {

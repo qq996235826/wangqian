@@ -625,6 +625,76 @@ public class OrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andBankImagePathIsNull() {
+            addCriterion("bankImagePath is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathIsNotNull() {
+            addCriterion("bankImagePath is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathEqualTo(String value) {
+            addCriterion("bankImagePath =", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathNotEqualTo(String value) {
+            addCriterion("bankImagePath <>", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathGreaterThan(String value) {
+            addCriterion("bankImagePath >", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathGreaterThanOrEqualTo(String value) {
+            addCriterion("bankImagePath >=", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathLessThan(String value) {
+            addCriterion("bankImagePath <", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathLessThanOrEqualTo(String value) {
+            addCriterion("bankImagePath <=", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathLike(String value) {
+            addCriterion("bankImagePath like", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathNotLike(String value) {
+            addCriterion("bankImagePath not like", value, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathIn(List<String> values) {
+            addCriterion("bankImagePath in", values, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathNotIn(List<String> values) {
+            addCriterion("bankImagePath not in", values, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathBetween(String value1, String value2) {
+            addCriterion("bankImagePath between", value1, value2, "bankImagePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andBankImagePathNotBetween(String value1, String value2) {
+            addCriterion("bankImagePath not between", value1, value2, "bankImagePath");
+            return (Criteria) this;
+        }
+
         public Criteria andWeightIsNull() {
             addCriterion("weight is null");
             return (Criteria) this;
