@@ -71,10 +71,10 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String phoneNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage)
     {
         //获得供货人
-        Supplier supplier=getSupplier(phoneNum);
+        Supplier supplier=getSupplierByIdNum(idNum);
         if(SupplierUtils.infoComplete(supplier))
         {
             Map<String,Object> infoMap=new HashMap<>();
@@ -122,7 +122,7 @@ public class ContractService {
             contractTemplateExample.createCriteria().andIsUsingEqualTo(true);
             String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
             //新合同路径
-            String path=getNewOrderContract(new File(temPath),phoneNum);
+            String path=getNewOrderContract(new File(temPath),idNum);
             //WordUtils.replaceAll(path,infoMap);
 
             //后台替换关键字
