@@ -7,6 +7,7 @@ src/main/resources/*.properties
 src/main/resources/generatorConfig.xml
 src/main/resources/order
 src/main/resources/template
+src/main/resources/supplier
 
 
 ### STS ###
