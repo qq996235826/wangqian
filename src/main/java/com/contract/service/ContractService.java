@@ -604,21 +604,21 @@ public class ContractService {
         example.createCriteria().andSupplierIdEqualTo(supplier.getId());
         List<Order> orders=orderMapper.selectByExample(example);
         //两个列表分别存放废纸和废钢
-        List<Order> steels=new ArrayList<>();
-        List<Order> papers=new ArrayList<>();
+        List<OrderDTO> steels=new ArrayList<>();
+        List<OrderDTO> papers=new ArrayList<>();
         for(Order o:orders)
         {
             if(o.getItemName().equals("废纸"))
             {
                 o.setOssPath("");
                 o.setPath("");
-                papers.add(o);
+                papers.add(new OrderDTO(o));
             }
             else
             {
                 o.setOssPath("");
                 o.setPath("");
-                steels.add(o);
+                steels.add(new OrderDTO(o));
             }
         }
         //Map包含这两个List返回给前端
@@ -651,18 +651,7 @@ public class ContractService {
         order.setSupplierId(orderDTO.getSupplierId());
         order.setItemName(orderDTO.getItemName());
         order.setOrderNum(orderDTO.getOrderNum());
-        if(orderDTO.getStatus().equals("审核中"))
-        {
-            order.setStatus(0);
-        }
-        else if (orderDTO.getStatus().equals("审核通过"))
-        {
-            order.setStatus(1);
-        }
-        else if(orderDTO.getStatus().equals("审核未通过"))
-        {
-            order.setStatus(2);
-        }
+        order.setStatus(orderDTO.getStatus());
         if(orderMapper.updateByPrimaryKey(order)==1)
         {
             return true;
