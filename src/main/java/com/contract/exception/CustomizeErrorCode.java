@@ -31,6 +31,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     CONTRACT_TEMPLATE_IMAGE_WRONG(3000,"后台生效合同模板图片缺失,请联系管理员"),
     NOT_ODER(3001,"没有合同"),
     NOT_OSS_ODER(3002,"合同未上传到云端"),
+    ODER_WRONG(3003,"合同订单数目出错"),
+    ODER_ID_WRONG(3004,"订单ID出错,数据库里查不到该订单"),
     IMAGE_WRONG(2000, "照片类别错误"),
     SQL_SEARCH_FAIL(4000, "数据库查询失败"),
     SQL_INSERT_FAIL(4000, "数据库插入失败"),

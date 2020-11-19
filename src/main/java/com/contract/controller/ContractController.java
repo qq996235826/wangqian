@@ -66,9 +66,23 @@ public class ContractController {
      */
     @ResponseBody
     @PostMapping("/getContract")
-    public ResultDTO getContract(MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage) {
-        return ResultDTO.okOf(contractService.getContract(file,idNum,item,price,company,bankNum,bankName,bankImage));
+    public ResultDTO getContract(Long id,MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName) {
+        return ResultDTO.okOf(contractService.getContract(id,file,idNum,item,price,company,bankNum,bankName));
     }
+
+    /**
+     * 上传对应合同的银行卡照片,同时生成订单
+     * @param  bankImage
+     * @return 合同存储路径
+     */
+    @ResponseBody
+    @PostMapping("/uploadContractBankImage")
+    public ResultDTO uploadContractBankImage(MultipartFile bankImage) {
+        return ResultDTO.okOf(contractService.uploadContractBankImage(bankImage));
+    }
+
+
+
 
     /**
      * 获得最新模板图片

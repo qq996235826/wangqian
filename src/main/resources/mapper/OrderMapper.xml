@@ -121,32 +121,29 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.contract.model.Order">
-    insert into businessorder (id, templateId, supplierId, 
-      createTime, itemName, companyName, 
-      bankName, bankNum, bankImagePath, 
-      weight, price, amount, 
-      endTime, orderNum, status, 
-      updateTime, updateBy, check1Time, 
-      chech1By, check1Note, check2Time, 
-      chech2Bby, check2Note, path, 
-      ossPath)
-    values (#{id,jdbcType=BIGINT}, #{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{itemName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{bankName,jdbcType=VARCHAR}, #{bankNum,jdbcType=VARCHAR}, #{bankImagePath,jdbcType=VARCHAR}, 
-      #{weight,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
-      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
-      #{chech2Bby,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
-      #{ossPath,jdbcType=VARCHAR})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
+    insert into businessorder (templateId, supplierId, createTime, 
+      itemName, companyName, bankName, 
+      bankNum, bankImagePath, weight, 
+      price, amount, endTime, 
+      orderNum, status, updateTime, 
+      updateBy, check1Time, chech1By, 
+      check1Note, check2Time, chech2Bby, 
+      check2Note, path, ossPath
+      )
+    values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{itemName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{bankNum,jdbcType=VARCHAR}, #{bankImagePath,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
+      #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
+      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
+      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{ossPath,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.contract.model.Order">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
     insert into businessorder
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="templateId != null">
         templateId,
       </if>
@@ -221,9 +218,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="templateId != null">
         #{templateId,jdbcType=BIGINT},
       </if>

@@ -71,7 +71,7 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage)
+    public String getContract(Long id,MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
@@ -152,7 +152,11 @@ public class ContractService {
             }
 
             //把新合同写入数据库
-            Order order=new Order();
+            Order order=orderMapper.selectByPrimaryKey(id);
+            if(order==null)
+            {
+                throw new CustomizeException(CustomizeErrorCode.ODER_ID_WRONG);
+            }
             //设置所使用模板id
             order.setTemplateId(contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getId());
             //设置供货人id
@@ -174,14 +178,10 @@ public class ContractService {
             //上传文件到云端并且保存他的下载链接
             String ossUrl=uploadOss.uploadOss(path);
             order.setOssPath(ossUrl);
-            //上传对应的银行卡照片
-            String bankImageLocal=upload(bankImage,orderBankJPGPatch);
-            String bankImageOss=uploadOss.uploadOss(bankImageLocal);
-            order.setBankImagePath(bankImageOss);
             //如果有签名
             if(file!=null)
             {
-                orderMapper.insert(order);
+                orderMapper.updateByPrimaryKey(order);
             }
             return ossUrl;
         }
@@ -639,6 +639,42 @@ public class ContractService {
         }
         else {
             return false;
+        }
+    }
+
+    /**
+     * 接受银行卡图片并生成订单
+     * @param bankImage
+     * @return
+     */
+    public Long uploadContractBankImage(MultipartFile bankImage) {
+        //银行卡图片不为空
+        if(bankImage==null)
+        {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_BANK0_LOST);
+        }
+        //新建订单
+        Order order=new Order();
+        //上传对应的银行卡照片
+        String bankImageLocal=upload(bankImage,orderBankJPGPatch);
+        String bankImageOss=uploadOss.uploadOss(bankImageLocal);
+        order.setBankImagePath(bankImageOss);
+        //设置状态
+        order.setStatus(10);
+        //插入数据
+        orderMapper.insert(order);
+
+        //获得刚刚插入的主键
+        OrderExample example=new OrderExample();
+        example.createCriteria().andBankImagePathEqualTo(bankImageOss);
+        List<Order> orders =orderMapper.selectByExample(example);
+        if(orders.size()!=1)
+        {
+            throw new CustomizeException(CustomizeErrorCode.ODER_WRONG);
+        }
+        else
+        {
+            return orders.get(0).getId();
         }
     }
 }
