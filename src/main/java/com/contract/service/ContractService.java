@@ -428,11 +428,11 @@ public class ContractService {
         {
             map.put("status","checking");
         }
-        else if(order.getStatus()==1)
+        else if(order.getStatus()==10)
         {
             map.put("status","checkPass");
         }
-        else if(order.getStatus()==2)
+        else if(order.getStatus()==20)
         {
             map.put("status","checkFail");
         }
