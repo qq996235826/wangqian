@@ -10,6 +10,8 @@ import com.contract.model.SupplierExample;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sun.awt.windows.ThemeReader;
+
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.Date;
@@ -218,6 +220,33 @@ public class SupplierService {
             return true;
         }
         else {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
+        }
+    }
+
+    /**
+     * 登录接口
+     * @param idNum
+     * @param password
+     * @return
+     */
+    public Boolean logIn(String idNum, String password) {
+        SupplierExample example=new SupplierExample();
+        example.createCriteria().andIdNumEqualTo(idNum);
+        List<Supplier> supplierList=supplierMapper.selectByExample(example);
+        if(supplierList.size()==1)
+        {
+            if(supplierList.get(0).getPassword().equals(password))
+            {
+                return true;
+            }
+            else
+            {
+                throw  new CustomizeException(CustomizeErrorCode.PASS_WRONG);
+            }
+        }
+        else
+        {
             throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
         }
     }

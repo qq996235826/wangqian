@@ -11,6 +11,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     SYSTEM_ERROR(1000, "其他错误"),
     HAVE_ID_NUM(200, "该身份已经注册"),
     HAVEN_PHONE(2000,"该号码未注册"),
+    PASS_WRONG(2001,"密码错误"),
     SUPPLIER_INFO_WRONG(2000,"该号码在后台的数据出现错误,联系管理员解决"),
     SUPPLIER_WRONG(2000,"供货人信息有误"),
     NOT_SUPPLIER(2000,"没有该供货人"),

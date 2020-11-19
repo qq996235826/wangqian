@@ -30,6 +30,17 @@ public class SupplierController {
         return ResultDTO.okOf(supplierService.createSupplier(supplierDTO));
     }
 
+
+    /**
+     * 登录借接口
+     * @return 成功与否
+     */
+    @ResponseBody
+    @PostMapping("/logIn")
+    public ResultDTO logIn(String idNum,String password) {
+        return ResultDTO.okOf(supplierService.logIn(idNum,password));
+    }
+
     /**
      * 完善供货人信息
      * @return 是否成功

@@ -161,7 +161,7 @@ public class ContractController {
      */
     @ResponseBody
     @RequestMapping("/onlyOne")
-    public ResultDTO deleteOrder(String item,String company,String idNum)
+    public ResultDTO onlyOne(String item,String company,String idNum)
     {
         return ResultDTO.okOf(contractService.onlyOne(item,company,idNum));
     }
