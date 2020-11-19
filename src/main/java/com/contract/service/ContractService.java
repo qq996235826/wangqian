@@ -177,14 +177,13 @@ public class ContractService {
             order.setPath(path);
 
             //银行卡图片不为空
-            if(bankImage==null)
+            if(bankImage!=null)
             {
-                throw new CustomizeException(CustomizeErrorCode.SUPPLIER_BANK0_LOST);
+                //上传对应的银行卡照片
+                String bankImageLocal=upload(bankImage,orderBankJPGPatch);
+                String bankImageOss=uploadOss.uploadOss(bankImageLocal);
+                order.setBankImagePath(bankImageOss);
             }
-            //上传对应的银行卡照片
-            String bankImageLocal=upload(bankImage,orderBankJPGPatch);
-            String bankImageOss=uploadOss.uploadOss(bankImageLocal);
-            order.setBankImagePath(bankImageOss);
 
             //上传文件到云端并且保存他的下载链接
             String ossUrl=uploadOss.uploadOss(path);
