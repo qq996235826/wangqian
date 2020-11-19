@@ -125,7 +125,7 @@ public class ContractController {
     @RequestMapping("/passOrder")
     public ResultDTO passOrder(HttpServletRequest request)
     {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),90));
+        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),10));
     }
 
 

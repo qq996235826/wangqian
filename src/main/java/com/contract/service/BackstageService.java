@@ -50,15 +50,19 @@ public class BackstageService {
             //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
             if(orders.get(a).getStatus()==0)
             {
-                map.put("status","审核中");
+                map.put("status","草拟");
             }
-            else if(orders.get(a).getStatus()==1)
+            else if(orders.get(a).getStatus()==10)
             {
-                map.put("status","审核通过");
+                map.put("status","待盖章");
             }
-            else if(orders.get(a).getStatus()==2)
+            else if(orders.get(a).getStatus()==20)
             {
                 map.put("status","审核未通过");
+            }
+            else if(orders.get(a).getStatus()==90)
+            {
+                map.put("status","已盖章");
             }
 
             map.put("updateTime",orders.get(a).getUpdateTime());
