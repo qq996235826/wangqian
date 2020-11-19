@@ -40,7 +40,7 @@ public class OrderDTO {
             this.endTime=ft.format(order.getEndTime());
         }
         else {
-            this.endTime="null";
+            this.endTime="待定";
         }
     }
 }

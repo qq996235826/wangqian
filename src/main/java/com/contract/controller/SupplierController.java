@@ -64,5 +64,11 @@ public class SupplierController {
         return ResultDTO.okOf(supplierService.Registered(idNum));
     }
 
+    //提供供货人信息:姓名,身份号,住址,身份证有效期
+    @ResponseBody
+    @PostMapping("/getSupplierInfo")
+    public ResultDTO getSupplierInfo(String idNum) {
+        return ResultDTO.okOf(supplierService.getSupplierInfo(idNum));
+    }
 
 }

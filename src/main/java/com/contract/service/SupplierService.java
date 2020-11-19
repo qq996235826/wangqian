@@ -250,4 +250,33 @@ public class SupplierService {
             throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
         }
     }
+
+    /**
+     * 根据身份证号获得供货人信息
+     * @param idNum
+     * @return
+     */
+    public Supplier getSupplierInfo(String idNum) {
+        return getSupplierByIdNum(idNum);
+    }
+
+    /**
+     * 根据身份证号获得供货人
+     * @param idNum
+     * @return
+     */
+    private Supplier getSupplierByIdNum(String idNum)
+    {
+        SupplierExample example=new SupplierExample();
+        example.createCriteria().andIdNumEqualTo(idNum);
+        List<Supplier> supplierList=supplierMapper.selectByExample(example);
+        if(supplierList.size()==1)
+        {
+            return supplierList.get(0);
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
+        }
+    }
 }
