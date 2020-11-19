@@ -610,10 +610,14 @@ public class ContractService {
         {
             if(o.getItemName().equals("废纸"))
             {
+                o.setOssPath("");
+                o.setPath("");
                 papers.add(o);
             }
             else
             {
+                o.setOssPath("");
+                o.setPath("");
                 steels.add(o);
             }
         }
