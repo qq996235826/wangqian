@@ -71,7 +71,7 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(Long id,MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
@@ -152,7 +152,7 @@ public class ContractService {
             }
 
             //把新合同写入数据库
-            Order order=orderMapper.selectByPrimaryKey(id);
+            Order order=new Order();
             if(order==null)
             {
                 throw new CustomizeException(CustomizeErrorCode.ODER_ID_WRONG);
@@ -175,13 +175,24 @@ public class ContractService {
             order.setStatus(0);
             //设置合同存储路径
             order.setPath(path);
+
+            //银行卡图片不为空
+            if(bankImage==null)
+            {
+                throw new CustomizeException(CustomizeErrorCode.SUPPLIER_BANK0_LOST);
+            }
+            //上传对应的银行卡照片
+            String bankImageLocal=upload(bankImage,orderBankJPGPatch);
+            String bankImageOss=uploadOss.uploadOss(bankImageLocal);
+            order.setBankImagePath(bankImageOss);
+
             //上传文件到云端并且保存他的下载链接
             String ossUrl=uploadOss.uploadOss(path);
             order.setOssPath(ossUrl);
             //如果有签名
             if(file!=null)
             {
-                orderMapper.updateByPrimaryKey(order);
+                orderMapper.insert(order);
             }
             return ossUrl;
         }
@@ -586,7 +597,7 @@ public class ContractService {
         return true;
     }
 
-    public Map<String,List<Order>> getOrders(String idNum) {
+    public Map<String,Object> getOrders(String idNum) {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
         //获得该供货人下的所有合同
@@ -608,7 +619,23 @@ public class ContractService {
             }
         }
         //Map包含这两个List返回给前端
-        Map<String,List<Order>> map=new HashMap<>();
+        Map<String,Object> map=new HashMap<>();
+        if(steels.size()!=0)
+        {
+            map.put("hasSteel",true);
+        }
+        else
+        {
+            map.put("hasSteel",false);
+        }
+        if(papers.size()!=0)
+        {
+            map.put("hasPaper",true);
+        }
+        else
+        {
+            map.put("hasPaper",false);
+        }
         map.put("steel",steels);
         map.put("paper",papers);
 
