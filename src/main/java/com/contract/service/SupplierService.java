@@ -47,9 +47,14 @@ public class SupplierService {
         SupplierExample supplierExample=new SupplierExample();
         supplierExample.createCriteria().andIdNumEqualTo(supplierDTO.getIdNum());
         List<Supplier> supplierList=supplierMapper.selectByExample(supplierExample);
+        //已经存在,更新信息
         if(supplierList.size()!=0)
         {
-            throw new CustomizeException(CustomizeErrorCode.HAVE_ID_NUM);
+            Supplier supplier=supplierList.get(0);
+            supplier.setPassword(supplierDTO.getPassword());
+            supplier.setPhoneNum(supplierDTO.getPhoneNum());
+            supplierMapper.updateByPrimaryKey(supplier);
+            return supplier.getId();
         }
         //没有这个身份证,新建用户并插入
         Supplier supplier=new Supplier();
@@ -103,11 +108,8 @@ public class SupplierService {
         //先看看数据库里是否有这个用户
         if(haveIdNum(idNum))
         {
-            SupplierExample example=new SupplierExample();
-            example.createCriteria().andIdNumEqualTo(idNum);
-            List<Supplier>supplierList=supplierMapper.selectByExample(example);
             //获得用户
-            Supplier supplier=supplierList.get(0);
+            Supplier supplier=getSupplierByIdNum(idNum);
             //判断上传的是什么图片 0身份证正面,1身份证反面,2银行卡正面,3银行卡反面
             String Path="";
             if(role.equals("0"))
@@ -132,13 +134,12 @@ public class SupplierService {
         //没有这个用户
         else
         {
-
             throw new CustomizeException(CustomizeErrorCode.HAVEN_PHONE);
         }
     }
 
     /**
-     * 判断数据库里是否有这个手机号
+     * 判断数据库里是否有这个身份证号
      * @param idNum
      * @return true或者false
      */
