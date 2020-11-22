@@ -10,8 +10,6 @@ import com.contract.model.SupplierExample;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import sun.awt.windows.ThemeReader;
-
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.Date;
@@ -230,7 +228,7 @@ public class SupplierService {
      * @param password
      * @return
      */
-    public Boolean logIn(String idNum, String password) {
+    public Supplier logIn(String idNum, String password) {
         SupplierExample example=new SupplierExample();
         example.createCriteria().andIdNumEqualTo(idNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(example);
@@ -238,7 +236,7 @@ public class SupplierService {
         {
             if(supplierList.get(0).getPassword().equals(password))
             {
-                return true;
+                return supplierList.get(0);
             }
             else
             {
