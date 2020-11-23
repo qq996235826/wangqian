@@ -21,6 +21,7 @@ public class BackstageController {
     @Resource
     private BackstageService backstageService;
 
+
     /**
      * 负责页面跳转
      * @return String
@@ -52,6 +53,16 @@ public class BackstageController {
     }
 
     /**
+     * 负责页面跳转
+     * @return String
+     */
+    @GetMapping("/supplier")
+    public String supplier()
+    {
+        return "supplier";
+    }
+
+    /**
      * 负责给easyUI的审核页面表格返回数据
      * @return Map
      */
@@ -60,5 +71,16 @@ public class BackstageController {
     public Map getOrders()
     {
         return backstageService.getOrders();
+    }
+
+    /**
+     * 负责给easyUI的审核页面表格返回数据
+     * @return Map
+     */
+    @RequestMapping("/getSuppliers")
+    @ResponseBody
+    public Map getSuppliers()
+    {
+        return backstageService.getSuppliers();
     }
 }

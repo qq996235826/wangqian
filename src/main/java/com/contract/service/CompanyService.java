@@ -20,9 +20,6 @@ import java.io.IOException;
 @Service
 public class CompanyService {
 
-    private OkHttpClient client = new OkHttpClient();
-
-
     /**
      *
      * @return

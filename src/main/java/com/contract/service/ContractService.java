@@ -191,6 +191,7 @@ public class ContractService {
             //如果有签名
             if(file!=null)
             {
+                order.setUpdateTime(new Date());
                 orderMapper.insert(order);
             }
             return ossUrl;
@@ -553,6 +554,7 @@ public class ContractService {
         Order order=orderMapper.selectByPrimaryKey(orderId);
         //设置状态为通过
         order.setStatus(status);
+        order.setUpdateTime(new Date());
         if(orderMapper.updateByPrimaryKey(order)==1)
         {
             return "审核通过";
@@ -652,6 +654,7 @@ public class ContractService {
         order.setItemName(orderDTO.getItemName());
         order.setOrderNum(orderDTO.getOrderNum());
         order.setStatus(orderDTO.getStatus());
+        order.setUpdateTime(new Date());
         if(orderMapper.updateByPrimaryKey(order)==1)
         {
             return true;
@@ -680,6 +683,8 @@ public class ContractService {
         order.setBankImagePath(bankImageOss);
         //设置状态
         order.setStatus(10);
+        //设置更新时间
+        order.setUpdateTime(new Date());
         //插入数据
         orderMapper.insert(order);
 
