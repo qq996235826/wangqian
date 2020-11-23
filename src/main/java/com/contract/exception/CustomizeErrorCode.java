@@ -37,7 +37,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     IMAGE_WRONG(2000, "照片类别错误"),
     SQL_SEARCH_FAIL(4000, "数据库查询失败"),
     SQL_INSERT_FAIL(4000, "数据库插入失败"),
-    SQL_UPDATE_FAIL(4000, "数据库更新失败");
+    SQL_UPDATE_FAIL(4000, "数据库更新失败"),
+    COMPANY_WRONG(5000, "获取公司列表失败");
 
 
 

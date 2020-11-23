@@ -105,6 +105,7 @@ public class SupplierService {
      * @return 图片路径
      */
     public String uploadImage(MultipartFile upload,String idNum ,String role) {
+
         //先看看数据库里是否有这个用户
         if(haveIdNum(idNum))
         {
