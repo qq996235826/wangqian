@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -69,6 +70,8 @@ public class ContractService {
     @Value("${orderPatch}")
     String orderPatch;
 
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日 ");
+
 
     /**
      * 根据信息生成一份合同
@@ -86,7 +89,7 @@ public class ContractService {
             Map<String,Object> infoMap=new HashMap<>();
             //设置标记符和替换变量
             //签订时间
-            infoMap.put(KeyWord.CREATE_TIME.getValue(), DateFormat.getDateInstance().format(new Date()));
+            infoMap.put(KeyWord.CREATE_TIME.getValue(), sdf.format(new Date()));
             //乙方
             infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
             //身份证号
