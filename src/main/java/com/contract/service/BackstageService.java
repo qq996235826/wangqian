@@ -120,4 +120,57 @@ public class BackstageService {
         result.put("rows",rows);
         return result;
     }
+
+    public Map getOrdersInfo() {
+        //创建map用于返回
+        Map result=new HashMap<>();
+        //List放在result里
+        List<Map> rows=new ArrayList<>();
+        //从数据获得数据
+        OrderExample example=new OrderExample();
+        example.createCriteria().andIdIsNotNull();
+        List<Order> orders=orderMapper.selectByExample(example);
+        //把数据填入map,每个Order都是一个map,把每个map存入list中
+        for (int a=0;a<orders.size();a++)
+        {
+            Map map=new HashMap();
+            map.put("id",orders.get(a).getId());
+            map.put("templateId",orders.get(a).getTemplateId());
+            map.put("supplierId",orders.get(a).getSupplierId());
+            map.put("createTime",orders.get(a).getCreateTime());
+            map.put("itemName",orders.get(a).getItemName());
+            map.put("companyName",orders.get(a).getCompanyName());
+            map.put("bankName",orders.get(a).getBankName());
+            map.put("bankNum",orders.get(a).getBankNum());
+            map.put("price",orders.get(a).getPrice());
+            map.put("orderNum",orders.get(a).getOrderNum());
+            //审核状态
+            //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
+            if(orders.get(a).getStatus()==0)
+            {
+                map.put("status","草拟");
+            }
+            else if(orders.get(a).getStatus()==10)
+            {
+                map.put("status","待盖章");
+            }
+            else if(orders.get(a).getStatus()==20)
+            {
+                map.put("status","审核未通过");
+            }
+            else if(orders.get(a).getStatus()==90)
+            {
+                map.put("status","已盖章");
+            }
+
+            map.put("updateTime",orders.get(a).getUpdateTime());
+            map.put("path",orders.get(a).getPath());
+            rows.add(map);
+        }
+        //设置数据行数
+        result.put("total",rows.size());
+        //把list放入Map中
+        result.put("rows",rows);
+        return result;
+    }
 }

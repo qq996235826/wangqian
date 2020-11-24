@@ -83,4 +83,15 @@ public class BackstageController {
     {
         return backstageService.getSuppliers();
     }
+
+    /**
+     * 负责给easyUI的审核页面表格返回数据
+     * @return Map
+     */
+    @RequestMapping("/getOrdersInfo")
+    @ResponseBody
+    public Map getOrdersInfo()
+    {
+        return backstageService.getOrdersInfo();
+    }
 }

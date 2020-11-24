@@ -176,8 +176,17 @@ public class ContractService {
             //设置货物名称
             order.setItemName(s);
             //设置合同需方
-
             order.setCompanyName(company.getName());
+            //设置银行卡号
+            order.setBankNum(bankNum);
+            //设置开户行
+            order.setBankName(bankName);
+            //设置价格
+            if(!StringUtils.isNullOrEmpty(price))
+            {
+                order.setPrice(Double.valueOf(price));
+            }
+
             //设置审核状态
             // 0---草拟
             //10----待盖章
@@ -195,7 +204,6 @@ public class ContractService {
                 String bankImageOss=uploadOss.uploadOss(bankImageLocal);
                 order.setBankImagePath(bankImageOss);
             }
-
             //上传文件到云端并且保存他的下载链接
             String ossUrl=uploadOss.uploadOss(path);
             order.setOssPath(ossUrl);
