@@ -65,8 +65,8 @@ public class ContractController {
      */
     @ResponseBody
     @PostMapping("/getContract")
-    public ResultDTO getContract(MultipartFile file, String idNum,String item,String price,String companyId,String bankNum,String bankName,MultipartFile bankImage) {
-        return ResultDTO.okOf(contractService.getContract(file,idNum,item,price,companyId,bankNum,bankName,bankImage));
+    public ResultDTO getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,MultipartFile bankImage) {
+        return ResultDTO.okOf(contractService.getContract(file,idNum,item,price,companyCode,bankNum,bankName,bankImage));
     }
 
 //    /**

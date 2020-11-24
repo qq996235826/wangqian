@@ -75,12 +75,12 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String companyId,String bankNum,String bankName,MultipartFile bankImage)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,MultipartFile bankImage)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
         //获得甲方
-        Company company=getCompanyByCode(companyId);
+        Company company=getCompanyByCode(companyCode);
         if(SupplierUtils.infoComplete(supplier))
         {
             Map<String,Object> infoMap=new HashMap<>();
@@ -720,14 +720,16 @@ public class ContractService {
      */
     private Company getCompanyByCode(String companyId)
     {
-        Company company=companyMapper.selectByPrimaryKey(Integer.valueOf(companyId));
-        if(company==null)
+        CompanyExample example=new CompanyExample();
+        example.createCriteria().andCodeEqualTo(companyId);
+        List<Company> companys=companyMapper.selectByExample(example);
+        if(companys.size()!=1)
         {
-            throw new CustomizeException(CustomizeErrorCode.NOT_COMPANY);
+            throw new CustomizeException(CustomizeErrorCode.COMPANY_INFO_WRONG);
         }
         else
         {
-            return company;
+            return companys.get(0);
         }
     }
 }

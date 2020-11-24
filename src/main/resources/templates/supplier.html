@@ -15,6 +15,7 @@
 
 <body>
 <table id="dg" title="供货人列表" class="easyui-datagrid" style="width:100%;height:800px"
+       toolbar="#toolbar"
        url="/web/getSuppliers"
        rownumbers="true"
        fitColumns="true"
@@ -37,90 +38,58 @@
     </tr>
     </thead>
 </table>
+<div id="toolbar">
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新</a>
+</div>
 </body>
 <script type="text/javascript">
-
     //刷新
     function reload() {
         $('#dg').datagrid('reload');
     }
-
-    //更新数据
-    function update() {
-        var row = $('#dg').datagrid('getSelected');
-        if (row){
-            var id=row.id;
-            var templateId=row.templateId;
-            var supplierId=row.supplierId;
-            var itemName=row.itemName;
-            var orderNum=row.orderNum;
-            var status=row.status;
-            $.ajax({
-                url:"https://just.guohe3.cn/contract/update",
-                type:"post",
-                data:JSON.stringify(
-                    {
-                        id:id,
-                        templateId:templateId,
-                        supplierId:supplierId,
-                        itemName:itemName,
-                        orderNum:orderNum,
-                        status:status
-                    }
-                ),
-                datatype:"josn",
-                contentType:"application/json",
-                success:function(result){
-                    $('#dg').datagrid('reload');
-                }
-            });
-        }
-    }
-
-
 </script>
 
 
 <!--表格可编辑-->
-<script type="text/javascript">
-    $.extend($.fn.datagrid.methods, {
-        editCell: function (jq, param) {
-            return jq.each(function () {
-                var opts = $(this).datagrid('options');
-                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
-                for (var i = 0; i < fields.length; i++) {
-                    var col = $(this).datagrid('getColumnOption', fields[i]);
-                    col.editor1 = col.editor;
-                    if (fields[i] != param.field) {
-                        col.editor = null;
-                    }
-                }
-                $(this).datagrid('beginEdit', param.index);
-                for (var i = 0; i < fields.length; i++) {
-                    var col = $(this).datagrid('getColumnOption', fields[i]);
-                    col.editor = col.editor1;
-                }
-            });
-        }
-    });
+<!--<script type="text/javascript">-->
+<!--    $.extend($.fn.datagrid.methods, {-->
+<!--        editCell: function (jq, param) {-->
+<!--            return jq.each(function () {-->
+<!--                var opts = $(this).datagrid('options');-->
+<!--                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));-->
+<!--                for (var i = 0; i < fields.length; i++) {-->
+<!--                    var col = $(this).datagrid('getColumnOption', fields[i]);-->
+<!--                    col.editor1 = col.editor;-->
+<!--                    if (fields[i] != param.field) {-->
+<!--                        col.editor = null;-->
+<!--                    }-->
+<!--                }-->
+<!--                $(this).datagrid('beginEdit', param.index);-->
+<!--                for (var i = 0; i < fields.length; i++) {-->
+<!--                    var col = $(this).datagrid('getColumnOption', fields[i]);-->
+<!--                    col.editor = col.editor1;-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+<!--    });-->
 
-    var editIndex = undefined;
-    function endEditing() {
-        if (editIndex == undefined) { return true }
-        if ($('#dg').datagrid('validateRow', editIndex)) {
-            $('#dg').datagrid('endEdit', editIndex);
-            editIndex = undefined;
-            return true;
-        } else {
-            return false;
-        }
-    }
-    function onClickCell(index, field) {
-        if (endEditing()) {
-            $('#dg').datagrid('selectRow', index)
-                .datagrid('editCell', { index: index, field: field });
-            editIndex = index;
-        }
-    }
-</script>
+<!--    var editIndex = undefined;-->
+<!--    function endEditing() {-->
+<!--        if (editIndex == undefined) { return true }-->
+<!--        if ($('#dg').datagrid('validateRow', editIndex)) {-->
+<!--            $('#dg').datagrid('endEdit', editIndex);-->
+<!--            editIndex = undefined;-->
+<!--            return true;-->
+<!--        } else {-->
+<!--            return false;-->
+<!--        }-->
+<!--    }-->
+<!--    function onClickCell(index, field) {-->
+<!--        if (endEditing()) {-->
+<!--            $('#dg').datagrid('selectRow', index)-->
+<!--                .datagrid('editCell', { index: index, field: field });-->
+<!--            editIndex = index;-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
 </html>
