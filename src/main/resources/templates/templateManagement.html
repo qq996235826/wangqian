@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <title>模板管理</title>
+        <link rel="stylesheet" type="text/css" href="/easyui/themes/default/easyui.css">
+        <link rel="stylesheet" type="text/css" href="/easyui/themes/icon.css">
+        <link rel="stylesheet" type="text/css" href="/easyui/themes/color.css">
+        <link rel="stylesheet" type="text/css" href="/easyui/demo/demo.css">
+        <script type="text/javascript" src="/easyui/jquery.min.js"></script>
+        <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
+        <link type="text/css" rel="stylesheet" charset="UTF-8" href="/easyui/locale/easyui-lang-zh_CN.js">
+    </head>
+</head>
+<body>
+<table id="dg" title="模板列表" class="easyui-datagrid" style="width:100%;height:800px"
+       toolbar="#toolbar"
+       url="/web/getTemplates"
+       rownumbers="true"
+       fitColumns="true"
+       singleSelect="true"
+       loadMsg="正在查询...">
+    <thead>
+    <tr>
+        <th field="id" width="5%" >模板号</th>
+        <th field="path" width="10%" data-options="editor:'text'">模板存储路径</th>
+        <th field="createTime" width="10%" data-options="editor:'text'">模板上传时间</th>
+        <th field="isUsing" width="5%" data-options="editor:'text'">是否正在使用</th>
+        <th field="versionNum" width="10%" data-options="editor:'text'">版本号</th>
+        <th field="updateTime" width="10%" data-options="editor:'text'">更新时间</th>
+        <th field="note" width="10%" data-options="editor:'text'">说明</th>
+        <th field="ossUrl" width="20%" data-options="editor:'text'">下载链接</th>
+        <th field="jpgOssUrl" width="20%" data-options="editor:'text'">模板图片下载链接</th>
+    </tr>
+    </thead>
+</table>
+<div id="toolbar">
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadTemplate()">上传模板</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadTemplateJPG()">上传模板图片</a>
+</div>
+</body>
+<script type="text/javascript">
+    function uploadTemplate() {
+        alert("上传模板");
+    }
+
+    function uploadTemplateJPG() {
+        alert("上传模板图片");
+    }
+</script>
+</html>

@@ -36,10 +36,10 @@ public class BackstageController {
      * 负责页面跳转
      * @return String
      */
-    @GetMapping("/database")
-    public String database()
+    @GetMapping("/templateManagement")
+    public String templateManagement()
     {
-        return "database";
+        return "templateManagement";
     }
 
     /**
@@ -84,7 +84,7 @@ public class BackstageController {
     }
 
     /**
-     * 负责给easyUI的审核页面表格返回数据
+     * 负责给easyUI的供货人页面表格返回数据
      * @return Map
      */
     @RequestMapping("/getSuppliers")
@@ -95,7 +95,7 @@ public class BackstageController {
     }
 
     /**
-     * 负责给easyUI的审核页面表格返回数据
+     * 负责给easyUI的合同清单页面表格返回数据
      * @return Map
      */
     @RequestMapping("/getOrdersInfo")
@@ -103,5 +103,16 @@ public class BackstageController {
     public Map getOrdersInfo()
     {
         return backstageService.getOrdersInfo();
+    }
+
+    /**
+     * 负责给easyUI的模板管理页面表格返回数据
+     * @return Map
+     */
+    @RequestMapping("/getTemplates")
+    @ResponseBody
+    public Map getTemplates()
+    {
+        return backstageService.getTemplates();
     }
 }

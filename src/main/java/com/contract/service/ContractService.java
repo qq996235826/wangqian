@@ -70,7 +70,7 @@ public class ContractService {
     @Value("${orderPatch}")
     String orderPatch;
 
-    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日 ");
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
 
 
     /**

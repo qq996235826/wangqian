@@ -1,11 +1,9 @@
 package com.contract.service;
 
+import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.mapper.SupplierMapper;
-import com.contract.model.Order;
-import com.contract.model.OrderExample;
-import com.contract.model.Supplier;
-import com.contract.model.SupplierExample;
+import com.contract.model.*;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -28,6 +26,9 @@ public class BackstageService {
 
     @Resource
     private SupplierMapper supplierMapper;
+
+    @Resource
+    private ContractTemplateMapper contractTemplateMapper;
 
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -167,6 +168,37 @@ public class BackstageService {
             }
 
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
+            rows.add(map);
+        }
+        //设置数据行数
+        result.put("total",rows.size());
+        //把list放入Map中
+        result.put("rows",rows);
+        return result;
+    }
+
+    public Map getTemplates() {
+        //创建map用于返回
+        Map result=new HashMap<>();
+        //List放在result里
+        List<Map> rows=new ArrayList<>();
+        //从数据获得数据
+        ContractTemplateExample example=new ContractTemplateExample();
+        example.createCriteria().andIdIsNotNull();
+        List<ContractTemplate> templates= contractTemplateMapper.selectByExample(example);
+        //把数据填入map,每个Order都是一个map,把每个map存入list中
+        for (int a=0;a<templates.size();a++)
+        {
+            Map map=new HashMap();
+            map.put("id",templates.get(a).getId());
+            map.put("path",templates.get(a).getPath());
+            map.put("createTime",sdf.format(templates.get(a).getCreateTime()));
+            map.put("updateTime",sdf.format(templates.get(a).getUpdateTime()));
+            map.put("isUsing",templates.get(a).getIsUsing()?"是":"否");
+            map.put("versionNum",templates.get(a).getVersionNum());
+            map.put("note",templates.get(a).getNote());
+            map.put("ossUrl",templates.get(a).getOssUrl());
+            map.put("jpgOssUrl",templates.get(a).getJpgOssUrl());
             rows.add(map);
         }
         //设置数据行数
