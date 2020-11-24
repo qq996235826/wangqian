@@ -28,7 +28,6 @@ public class CompanyController {
     @PostMapping("/getCompany")
     public ResultDTO getCompany()
     {
-        System.out.println("获得公司列表");
         return ResultDTO.okOf(companyService.getCompany());
     }
 
