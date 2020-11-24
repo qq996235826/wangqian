@@ -42,9 +42,29 @@
     <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="deleteOrder()">删除记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">提交修改</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="stamp()">盖章</a>
 </div>
 </body>
 <script type="text/javascript">
+    //盖章
+    function stamp() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            var id=row.id;
+            $.ajax({
+                url:"https://just.guohe3.cn/contract/stamp",
+                type:"post",
+                data:{
+                    id:id,
+                },
+                datatype:"josn",
+                success:function(result){
+                    $('#dg').datagrid('reload');
+                }
+            });
+        }
+    }
+
     //通过审核
     function pass() {
         var row = $('#dg').datagrid('getSelected');

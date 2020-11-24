@@ -179,11 +179,29 @@ public class ContractController {
     }
 
 
+    /**
+     * 更新合同
+     * @param orderDTO
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/update")
     public ResultDTO update(@RequestBody OrderDTO orderDTO)
     {
         return ResultDTO.okOf(contractService.update(orderDTO));
+    }
+
+
+    /**
+     * 给合同盖章
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/stamp")
+    public ResultDTO stamp(String id)
+    {
+        return ResultDTO.okOf(contractService.stamp(id));
     }
 
 

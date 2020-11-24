@@ -173,6 +173,8 @@ public class ContractService {
             order.setSupplierId(supplier.getId());
             //设置创建时间
             order.setCreateTime(new Date());
+            //更新日期
+            order.setUpdateTime(new Date());
             //设置货物名称
             order.setItemName(s);
             //设置合同需方
@@ -181,6 +183,7 @@ public class ContractService {
             order.setBankNum(bankNum);
             //设置开户行
             order.setBankName(bankName);
+
             //设置价格
             if(!StringUtils.isNullOrEmpty(price))
             {
@@ -210,7 +213,6 @@ public class ContractService {
             //如果有签名
             if(file!=null)
             {
-                order.setUpdateTime(new Date());
                 orderMapper.insert(order);
             }
             return ossUrl;
@@ -313,6 +315,7 @@ public class ContractService {
         contractTemplate.setIsUsing(true);
         contractTemplate.setPath(path);
         contractTemplate.setCreateTime(new Date());
+        contractTemplate.setUpdateTime(new Date());
         contractTemplate.setOssUrl(ossUrl);
         contractTemplateMapper.insert(contractTemplate);
 
@@ -738,6 +741,24 @@ public class ContractService {
         else
         {
             return companys.get(0);
+        }
+    }
+
+    /**
+     * 给合同盖章
+     * @param id
+     * @return
+     */
+    public Boolean stamp(String id) {
+        Order order=orderMapper.selectByPrimaryKey(Long.valueOf(id));
+        if(order!=null)
+        {
+            order.setStatus(90);
+            orderMapper.updateByPrimaryKey(order);
+            return true;
+        }
+        else {
+            throw new CustomizeException(CustomizeErrorCode.ODER_ID_WRONG);
         }
     }
 }

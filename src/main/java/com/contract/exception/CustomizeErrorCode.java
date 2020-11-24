@@ -29,7 +29,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     WRITE_FILE_WRONG(3000,"新文件写入错误"),
     CONTRACT_TEMPLATE_WRONG(3000,"后台生效合同模板数出错,请联系管理员"),
     NOT_CONTRACT_TEMPLATE(3000,"没有模板合同"),
-    CONTRACT_TEMPLATE_IMAGE_WRONG(3000,"后台生效合同模板图片缺失,请联系管理员"),
+    CONTRACT_TEMPLATE_IMAGE_WRONG(3000,"没有模板图片,请联系管理员上传"),
     NOT_ODER(3001,"没有合同"),
     NOT_OSS_ODER(3002,"合同未上传到云端"),
     ODER_WRONG(3003,"合同订单数目出错"),

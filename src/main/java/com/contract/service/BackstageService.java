@@ -8,6 +8,7 @@ import com.contract.model.Supplier;
 import com.contract.model.SupplierExample;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,8 @@ public class BackstageService {
 
     @Resource
     private SupplierMapper supplierMapper;
+
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 负责给审核页面的表格返回数据
@@ -49,11 +52,11 @@ public class BackstageService {
             map.put("id",orders.get(a).getId());
             map.put("templateId",orders.get(a).getTemplateId());
             map.put("supplierId",orders.get(a).getSupplierId());
-            map.put("createTime",orders.get(a).getCreateTime());
+            map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
             map.put("itemName",orders.get(a).getItemName());
             map.put("orderNum",orders.get(a).getOrderNum());
             //审核状态
-            //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
+            //状态,  0--草拟,10--待盖章,20--打回，需用户修改,90--已盖章
             if(orders.get(a).getStatus()==0)
             {
                 map.put("status","草拟");
@@ -71,7 +74,7 @@ public class BackstageService {
                 map.put("status","已盖章");
             }
 
-            map.put("updateTime",orders.get(a).getUpdateTime());
+            map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
             map.put("path",orders.get(a).getPath());
             rows.add(map);
         }
@@ -111,7 +114,7 @@ public class BackstageService {
             map.put("agencies",supplierList.get(a).getAgencies());
             map.put("sex",supplierList.get(a).getSex());
             map.put("ethnic",supplierList.get(a).getEthnic());
-            map.put("updateTime",supplierList.get(a).getUpdateTime());
+            map.put("updateTime",sdf.format(supplierList.get(a).getUpdateTime()));
             rows.add(map);
         }
         //设置数据行数
@@ -137,7 +140,7 @@ public class BackstageService {
             map.put("id",orders.get(a).getId());
             map.put("templateId",orders.get(a).getTemplateId());
             map.put("supplierId",orders.get(a).getSupplierId());
-            map.put("createTime",orders.get(a).getCreateTime());
+            map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
             map.put("itemName",orders.get(a).getItemName());
             map.put("companyName",orders.get(a).getCompanyName());
             map.put("bankName",orders.get(a).getBankName());
@@ -163,7 +166,7 @@ public class BackstageService {
                 map.put("status","已盖章");
             }
 
-            map.put("updateTime",orders.get(a).getUpdateTime());
+            map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
             rows.add(map);
         }
         //设置数据行数
