@@ -5,6 +5,7 @@
     <id column="ID" jdbcType="INTEGER" property="ID" />
     <result column="code" jdbcType="CHAR" property="code" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, code, name
+    ID, code, name, address
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.CompanyExample" resultMap="BaseResultMap">
     select
@@ -98,8 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.contract.model.Company">
-    insert into company (ID, code, name)
-    values (#{ID,jdbcType=INTEGER}, #{code,jdbcType=CHAR}, #{name,jdbcType=VARCHAR})
+    insert into company (ID, code, name, 
+      address)
+    values (#{ID,jdbcType=INTEGER}, #{code,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Company">
     insert into company
@@ -113,6 +116,9 @@
       <if test="name != null">
         name,
       </if>
+      <if test="address != null">
+        address,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ID != null">
@@ -123,6 +129,9 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -144,6 +153,9 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -153,7 +165,8 @@
     update company
     set ID = #{record.ID,jdbcType=INTEGER},
       code = #{record.code,jdbcType=CHAR},
-      name = #{record.name,jdbcType=VARCHAR}
+      name = #{record.name,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -167,13 +180,17 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
     </set>
     where ID = #{ID,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.contract.model.Company">
     update company
     set code = #{code,jdbcType=CHAR},
-      name = #{name,jdbcType=VARCHAR}
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
     where ID = #{ID,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.CompanyExample" resultMap="BaseResultMap">

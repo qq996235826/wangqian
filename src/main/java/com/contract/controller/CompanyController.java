@@ -18,14 +18,14 @@ import javax.annotation.Resource;
 @RequestMapping("/company")
 public class CompanyController {
     @Resource
-    CompanyService companyService;
+    private CompanyService companyService;
 
     /**
      * 获得公司列表
      * @return
      */
-    @PostMapping("/getCompany")
     @ResponseBody
+    @PostMapping("/getCompany")
     public ResultDTO getCompany()
     {
         System.out.println("获得公司列表");

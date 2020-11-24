@@ -7,6 +7,8 @@ public class Company {
 
     private String name;
 
+    private String address;
+
     public Integer getID() {
         return ID;
     }
@@ -29,5 +31,13 @@ public class Company {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 }

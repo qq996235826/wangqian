@@ -7,6 +7,7 @@ import com.contract.contractEnumerate.KeyWord;
 import com.contract.dto.OrderDTO;
 import com.contract.exception.CustomizeErrorCode;
 import com.contract.exception.CustomizeException;
+import com.contract.mapper.CompanyMapper;
 import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.mapper.SupplierMapper;
@@ -43,6 +44,9 @@ public class ContractService {
     private SupplierMapper supplierMapper;
 
     @Resource
+    private CompanyMapper companyMapper;
+
+    @Resource
     private OrderMapper orderMapper;
 
     @Resource
@@ -71,10 +75,12 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String company,String bankNum,String bankName,MultipartFile bankImage)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String companyId,String bankNum,String bankName,MultipartFile bankImage)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
+        //获得甲方
+        Company company=getCompanyByCode(companyId);
         if(SupplierUtils.infoComplete(supplier))
         {
             Map<String,Object> infoMap=new HashMap<>();
@@ -91,6 +97,10 @@ public class ContractService {
             infoMap.put(KeyWord.BANK_ID.getValue(),bankNum);
             //开户行
             infoMap.put(KeyWord.BANK_NAME.getValue(),bankName);
+            //设置甲方
+            infoMap.put(KeyWord.COMPANY.getValue(),company.getName());
+            //设置甲方地址
+            infoMap.put(KeyWord.PLACE.getValue(),company.getAddress());
             //物品名
             String s;
             if(item.equals("paper"))
@@ -166,7 +176,8 @@ public class ContractService {
             //设置货物名称
             order.setItemName(s);
             //设置合同需方
-            order.setCompanyName(company);
+
+            order.setCompanyName(company.getName());
             //设置审核状态
             // 0---草拟
             //10----待盖章
@@ -699,6 +710,24 @@ public class ContractService {
         else
         {
             return orders.get(0).getId();
+        }
+    }
+
+
+    /**
+     * 获得公司
+     * @return
+     */
+    private Company getCompanyByCode(String companyId)
+    {
+        Company company=companyMapper.selectByPrimaryKey(Integer.valueOf(companyId));
+        if(company==null)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_COMPANY);
+        }
+        else
+        {
+            return company;
         }
     }
 }

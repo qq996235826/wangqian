@@ -11,7 +11,9 @@ public enum KeyWord {
     ITEM_NAM("item"),
     PRICE("price"),
     END_TIME("endtime"),
-    PartyB_NAMEPAGE("picture");
+    PartyB_NAMEPAGE("picture"),
+    COMPANY("company"),
+    PLACE("place");
 
 
 
