@@ -63,6 +63,16 @@ public class BackstageController {
     }
 
     /**
+     * 负责页面跳转
+     * @return String
+     */
+    @GetMapping("/contractList")
+    public String contractList()
+    {
+        return "contractList";
+    }
+
+    /**
      * 负责给easyUI的审核页面表格返回数据
      * @return Map
      */

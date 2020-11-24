@@ -164,7 +164,6 @@ public class BackstageService {
             }
 
             map.put("updateTime",orders.get(a).getUpdateTime());
-            map.put("path",orders.get(a).getPath());
             rows.add(map);
         }
         //设置数据行数
