@@ -72,6 +72,8 @@ public class ContractService {
 
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
 
+    private String[] formart={"年","月","日"};
+
 
     /**
      * 根据信息生成一份合同
@@ -81,6 +83,17 @@ public class ContractService {
     public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,
                               MultipartFile bankImage,String startDate,String endDate,String phoneNum)
     {
+        //格式化时间
+        String[] starts=startDate.split("-");
+        String[] ends=endDate.split("-");
+        startDate="";
+        endDate="";
+        for(int a=0;a<3;a++)
+        {
+            startDate=starts[a]+formart[a];
+            endDate=ends[a]+formart[a];
+        }
+
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
         supplier.setPhoneNum(phoneNum);
@@ -183,6 +196,10 @@ public class ContractService {
             order.setCreateTime(new Date());
             //更新日期
             order.setUpdateTime(new Date());
+            //设置合同生效日期
+            order.setStartDate(startDate);
+            //设置合同终止日期
+            order.setEndDate(endDate);
             //设置货物名称
             order.setItemName(s);
             //设置合同需方
