@@ -7,6 +7,7 @@ import com.contract.exception.CustomizeException;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.Supplier;
 import com.contract.model.SupplierExample;
+import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -46,7 +46,7 @@ public class SupplierDTO {
      */
     public Boolean registeredReady()
     {
-        if(StringUtils.isNullOrEmpty(idNum)||StringUtils.isNullOrEmpty(password)||StringUtils.isNullOrEmpty(phoneNum))
+        if(StringUtils.isNullOrEmpty(idNum)||StringUtils.isNullOrEmpty(password))
         {
             return false;
         }
