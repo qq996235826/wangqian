@@ -90,8 +90,8 @@ public class ContractService {
         endDate="";
         for(int a=0;a<3;a++)
         {
-            startDate=starts[a]+formart[a];
-            endDate=ends[a]+formart[a];
+            startDate=startDate+starts[a]+formart[a];
+            endDate=endDate+ends[a]+formart[a];
         }
 
         //获得供货人
