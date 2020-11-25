@@ -78,10 +78,13 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,MultipartFile bankImage,String startDate,String endDate)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,
+                              MultipartFile bankImage,String startDate,String endDate,String phoneNum)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
+        supplier.setPhoneNum(phoneNum);
+        supplierMapper.updateByPrimaryKey(supplier);
         //获得甲方
         Company company=getCompanyByCode(companyCode);
         if(SupplierUtils.infoComplete(supplier))
