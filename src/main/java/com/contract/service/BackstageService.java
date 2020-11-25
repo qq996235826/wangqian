@@ -56,6 +56,7 @@ public class BackstageService {
             map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
             map.put("itemName",orders.get(a).getItemName());
             map.put("orderNum",orders.get(a).getOrderNum());
+
             //审核状态
             //状态,  0--草拟,10--待盖章,20--打回，需用户修改,90--已盖章
             if(orders.get(a).getStatus()==0)
@@ -76,7 +77,7 @@ public class BackstageService {
             }
 
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
-            map.put("path",orders.get(a).getPath());
+            map.put("ossUrl",orders.get(a).getOssPath());
             rows.add(map);
         }
         //设置数据行数
@@ -137,17 +138,36 @@ public class BackstageService {
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
         {
+            //获得供货人信息
+            Supplier supplier=supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
+
             Map map=new HashMap();
+            //合同id
             map.put("id",orders.get(a).getId());
+            //使用模板id
             map.put("templateId",orders.get(a).getTemplateId());
-            map.put("supplierId",orders.get(a).getSupplierId());
+            //合同创建时间
             map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
+            //货物名称
             map.put("itemName",orders.get(a).getItemName());
-            map.put("companyName",orders.get(a).getCompanyName());
-            map.put("bankName",orders.get(a).getBankName());
-            map.put("bankNum",orders.get(a).getBankNum());
+            //价格
             map.put("price",orders.get(a).getPrice());
+            //业务编码
             map.put("orderNum",orders.get(a).getOrderNum());
+            //甲方名字
+            map.put("companyName",orders.get(a).getCompanyName());
+            //供货人id
+            map.put("supplierId",orders.get(a).getSupplierId());
+            //供货人名字
+            map.put("supplierName",supplier.getName());
+            //供货人身份证号
+            map.put("supplierIdNum",supplier.getIdNum());
+            //开户行
+            map.put("bankName",orders.get(a).getBankName());
+            //支行
+            map.put("branchBankName",orders.get(a).getBranchBankName());
+            //银行卡号
+            map.put("bankNum",orders.get(a).getBankNum());
             //审核状态
             //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
             if(orders.get(a).getStatus()==0)

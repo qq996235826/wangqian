@@ -78,7 +78,7 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,MultipartFile bankImage)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,MultipartFile bankImage)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
@@ -186,6 +186,8 @@ public class ContractService {
             order.setBankNum(bankNum);
             //设置开户行
             order.setBankName(bankName);
+            //设置支行
+            order.setBranchBankName(branchBankName);
 
             //设置价格
             if(!StringUtils.isNullOrEmpty(price))

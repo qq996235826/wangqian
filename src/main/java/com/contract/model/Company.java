@@ -1,29 +1,9 @@
 package com.contract.model;
 
-public class Company {
-    private Integer ID;
-
-    private String code;
-
+public class Company extends CompanyKey {
     private String name;
 
     private String address;
-
-    public Integer getID() {
-        return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
-    }
 
     public String getName() {
         return name;

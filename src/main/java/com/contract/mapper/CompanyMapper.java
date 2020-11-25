@@ -2,6 +2,7 @@ package com.contract.mapper;
 
 import com.contract.model.Company;
 import com.contract.model.CompanyExample;
+import com.contract.model.CompanyKey;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -11,7 +12,7 @@ public interface CompanyMapper {
 
     int deleteByExample(CompanyExample example);
 
-    int deleteByPrimaryKey(Integer ID);
+    int deleteByPrimaryKey(CompanyKey key);
 
     int insert(Company record);
 
@@ -21,7 +22,7 @@ public interface CompanyMapper {
 
     List<Company> selectByExample(CompanyExample example);
 
-    Company selectByPrimaryKey(Integer ID);
+    Company selectByPrimaryKey(CompanyKey key);
 
     int updateByExampleSelective(@Param("record") Company record, @Param("example") CompanyExample example);
 

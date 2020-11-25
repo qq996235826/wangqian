@@ -17,6 +17,8 @@ public class Order {
 
     private String bankName;
 
+    private String branchBankName;
+
     private String bankNum;
 
     private String bankImagePath;
@@ -107,6 +109,14 @@ public class Order {
 
     public void setBankName(String bankName) {
         this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBranchBankName() {
+        return branchBankName;
+    }
+
+    public void setBranchBankName(String branchBankName) {
+        this.branchBankName = branchBankName == null ? null : branchBankName.trim();
     }
 
     public String getBankNum() {

@@ -3,7 +3,7 @@
 <mapper namespace="com.contract.mapper.CompanyMapper">
   <resultMap id="BaseResultMap" type="com.contract.model.Company">
     <id column="ID" jdbcType="INTEGER" property="ID" />
-    <result column="code" jdbcType="CHAR" property="code" />
+    <id column="code" jdbcType="CHAR" property="code" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
   </resultMap>
@@ -74,7 +74,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from company
+    from mycompany
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,30 +82,32 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="com.contract.model.CompanyKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from company
+    from mycompany
     where ID = #{ID,jdbcType=INTEGER}
+      and code = #{code,jdbcType=CHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from company
+  <delete id="deleteByPrimaryKey" parameterType="com.contract.model.CompanyKey">
+    delete from mycompany
     where ID = #{ID,jdbcType=INTEGER}
+      and code = #{code,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.contract.model.CompanyExample">
-    delete from company
+    delete from mycompany
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.contract.model.Company">
-    insert into company (ID, code, name, 
+    insert into mycompany (ID, code, name, 
       address)
     values (#{ID,jdbcType=INTEGER}, #{code,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Company">
-    insert into company
+    insert into mycompany
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="ID != null">
         ID,
@@ -136,13 +138,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.contract.model.CompanyExample" resultType="java.lang.Long">
-    select count(*) from company
+    select count(*) from mycompany
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update company
+    update mycompany
     <set>
       <if test="record.ID != null">
         ID = #{record.ID,jdbcType=INTEGER},
@@ -162,7 +164,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update company
+    update mycompany
     set ID = #{record.ID,jdbcType=INTEGER},
       code = #{record.code,jdbcType=CHAR},
       name = #{record.name,jdbcType=VARCHAR},
@@ -172,11 +174,8 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.Company">
-    update company
+    update mycompany
     <set>
-      <if test="code != null">
-        code = #{code,jdbcType=CHAR},
-      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -185,13 +184,14 @@
       </if>
     </set>
     where ID = #{ID,jdbcType=INTEGER}
+      and code = #{code,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.contract.model.Company">
-    update company
-    set code = #{code,jdbcType=CHAR},
-      name = #{name,jdbcType=VARCHAR},
+    update mycompany
+    set name = #{name,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR}
     where ID = #{ID,jdbcType=INTEGER}
+      and code = #{code,jdbcType=CHAR}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.CompanyExample" resultMap="BaseResultMap">
     select
@@ -199,7 +199,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from company
+    from mycompany
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
