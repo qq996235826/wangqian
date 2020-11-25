@@ -78,7 +78,7 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,MultipartFile bankImage)
+    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,MultipartFile bankImage,String startDate,String endDate)
     {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
@@ -89,7 +89,9 @@ public class ContractService {
             Map<String,Object> infoMap=new HashMap<>();
             //设置标记符和替换变量
             //签订时间
-            infoMap.put(KeyWord.CREATE_TIME.getValue(), sdf.format(new Date()));
+            infoMap.put(KeyWord.CREATE_TIME.getValue(), startDate);
+            //终止日期
+            infoMap.put(KeyWord.END_TIME.getValue(), endDate);
             //乙方
             infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
             //身份证号

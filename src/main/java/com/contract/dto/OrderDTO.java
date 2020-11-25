@@ -34,13 +34,6 @@ public class OrderDTO {
         this.orderNum=order.getOrderNum();
         this.status=order.getStatus();
         this.companyName=order.getCompanyName();
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        if(order.getEndTime()!=null)
-        {
-            this.endTime=ft.format(order.getEndTime());
-        }
-        else {
-            this.endTime="待定";
-        }
+        this.endTime=order.getEndDate();
     }
 }

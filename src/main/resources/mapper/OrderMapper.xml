@@ -15,7 +15,6 @@
     <result column="weight" jdbcType="DOUBLE" property="weight" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="amount" jdbcType="DOUBLE" property="amount" />
-    <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
     <result column="orderNum" jdbcType="VARCHAR" property="orderNum" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
@@ -28,6 +27,8 @@
     <result column="check2Note" jdbcType="VARCHAR" property="check2Note" />
     <result column="path" jdbcType="VARCHAR" property="path" />
     <result column="ossPath" jdbcType="VARCHAR" property="ossPath" />
+    <result column="startDate" jdbcType="VARCHAR" property="startDate" />
+    <result column="endDate" jdbcType="VARCHAR" property="endDate" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -89,9 +90,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, templateId, supplierId, createTime, itemName, companyName, bankName, branchBankName, 
-    bankNum, bankImagePath, weight, price, amount, endTime, orderNum, status, updateTime, 
-    updateBy, check1Time, chech1By, check1Note, check2Time, chech2Bby, check2Note, path, 
-    ossPath
+    bankNum, bankImagePath, weight, price, amount, orderNum, status, updateTime, updateBy, 
+    check1Time, chech1By, check1Note, check2Time, chech2Bby, check2Note, path, ossPath, 
+    startDate, endDate
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -128,20 +129,20 @@
       itemName, companyName, bankName, 
       branchBankName, bankNum, bankImagePath, 
       weight, price, amount, 
-      endTime, orderNum, status, 
-      updateTime, updateBy, check1Time, 
-      chech1By, check1Note, check2Time, 
-      chech2Bby, check2Note, path, 
-      ossPath)
+      orderNum, status, updateTime, 
+      updateBy, check1Time, chech1By, 
+      check1Note, check2Time, chech2Bby, 
+      check2Note, path, ossPath, 
+      startDate, endDate)
     values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{itemName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
       #{branchBankName,jdbcType=VARCHAR}, #{bankNum,jdbcType=VARCHAR}, #{bankImagePath,jdbcType=VARCHAR}, 
       #{weight,jdbcType=DOUBLE}, #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
-      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
-      #{chech2Bby,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
-      #{ossPath,jdbcType=VARCHAR})
+      #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
+      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
+      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{ossPath,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
     insert into businessorder
@@ -182,9 +183,6 @@
       <if test="amount != null">
         amount,
       </if>
-      <if test="endTime != null">
-        endTime,
-      </if>
       <if test="orderNum != null">
         orderNum,
       </if>
@@ -220,6 +218,12 @@
       </if>
       <if test="ossPath != null">
         ossPath,
+      </if>
+      <if test="startDate != null">
+        startDate,
+      </if>
+      <if test="endDate != null">
+        endDate,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -259,9 +263,6 @@
       <if test="amount != null">
         #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderNum != null">
         #{orderNum,jdbcType=VARCHAR},
       </if>
@@ -297,6 +298,12 @@
       </if>
       <if test="ossPath != null">
         #{ossPath,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -348,9 +355,6 @@
       <if test="record.amount != null">
         amount = #{record.amount,jdbcType=DOUBLE},
       </if>
-      <if test="record.endTime != null">
-        endTime = #{record.endTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.orderNum != null">
         orderNum = #{record.orderNum,jdbcType=VARCHAR},
       </if>
@@ -387,6 +391,12 @@
       <if test="record.ossPath != null">
         ossPath = #{record.ossPath,jdbcType=VARCHAR},
       </if>
+      <if test="record.startDate != null">
+        startDate = #{record.startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endDate != null">
+        endDate = #{record.endDate,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -407,7 +417,6 @@
       weight = #{record.weight,jdbcType=DOUBLE},
       price = #{record.price,jdbcType=DOUBLE},
       amount = #{record.amount,jdbcType=DOUBLE},
-      endTime = #{record.endTime,jdbcType=TIMESTAMP},
       orderNum = #{record.orderNum,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -419,7 +428,9 @@
       chech2Bby = #{record.chech2Bby,jdbcType=BIGINT},
       check2Note = #{record.check2Note,jdbcType=VARCHAR},
       path = #{record.path,jdbcType=VARCHAR},
-      ossPath = #{record.ossPath,jdbcType=VARCHAR}
+      ossPath = #{record.ossPath,jdbcType=VARCHAR},
+      startDate = #{record.startDate,jdbcType=VARCHAR},
+      endDate = #{record.endDate,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -463,9 +474,6 @@
       <if test="amount != null">
         amount = #{amount,jdbcType=DOUBLE},
       </if>
-      <if test="endTime != null">
-        endTime = #{endTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderNum != null">
         orderNum = #{orderNum,jdbcType=VARCHAR},
       </if>
@@ -502,6 +510,12 @@
       <if test="ossPath != null">
         ossPath = #{ossPath,jdbcType=VARCHAR},
       </if>
+      <if test="startDate != null">
+        startDate = #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        endDate = #{endDate,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -519,7 +533,6 @@
       weight = #{weight,jdbcType=DOUBLE},
       price = #{price,jdbcType=DOUBLE},
       amount = #{amount,jdbcType=DOUBLE},
-      endTime = #{endTime,jdbcType=TIMESTAMP},
       orderNum = #{orderNum,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
@@ -531,7 +544,9 @@
       chech2Bby = #{chech2Bby,jdbcType=BIGINT},
       check2Note = #{check2Note,jdbcType=VARCHAR},
       path = #{path,jdbcType=VARCHAR},
-      ossPath = #{ossPath,jdbcType=VARCHAR}
+      ossPath = #{ossPath,jdbcType=VARCHAR},
+      startDate = #{startDate,jdbcType=VARCHAR},
+      endDate = #{endDate,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">

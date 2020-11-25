@@ -29,8 +29,6 @@ public class Order {
 
     private Double amount;
 
-    private Date endTime;
-
     private String orderNum;
 
     private Integer status;
@@ -54,6 +52,10 @@ public class Order {
     private String path;
 
     private String ossPath;
+
+    private String startDate;
+
+    private String endDate;
 
     public Long getId() {
         return id;
@@ -159,14 +161,6 @@ public class Order {
         this.amount = amount;
     }
 
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
     public String getOrderNum() {
         return orderNum;
     }
@@ -261,5 +255,21 @@ public class Order {
 
     public void setOssPath(String ossPath) {
         this.ossPath = ossPath == null ? null : ossPath.trim();
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate == null ? null : startDate.trim();
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate == null ? null : endDate.trim();
     }
 }

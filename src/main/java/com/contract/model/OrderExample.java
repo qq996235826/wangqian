@@ -945,66 +945,6 @@ public class OrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andEndTimeIsNull() {
-            addCriterion("endTime is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeIsNotNull() {
-            addCriterion("endTime is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeEqualTo(Date value) {
-            addCriterion("endTime =", value, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeNotEqualTo(Date value) {
-            addCriterion("endTime <>", value, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeGreaterThan(Date value) {
-            addCriterion("endTime >", value, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("endTime >=", value, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeLessThan(Date value) {
-            addCriterion("endTime <", value, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeLessThanOrEqualTo(Date value) {
-            addCriterion("endTime <=", value, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeIn(List<Date> values) {
-            addCriterion("endTime in", values, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeNotIn(List<Date> values) {
-            addCriterion("endTime not in", values, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeBetween(Date value1, Date value2) {
-            addCriterion("endTime between", value1, value2, "endTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andEndTimeNotBetween(Date value1, Date value2) {
-            addCriterion("endTime not between", value1, value2, "endTime");
-            return (Criteria) this;
-        }
-
         public Criteria andOrderNumIsNull() {
             addCriterion("orderNum is null");
             return (Criteria) this;
@@ -1772,6 +1712,146 @@ public class OrderExample {
 
         public Criteria andOssPathNotBetween(String value1, String value2) {
             addCriterion("ossPath not between", value1, value2, "ossPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateIsNull() {
+            addCriterion("startDate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateIsNotNull() {
+            addCriterion("startDate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateEqualTo(String value) {
+            addCriterion("startDate =", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateNotEqualTo(String value) {
+            addCriterion("startDate <>", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateGreaterThan(String value) {
+            addCriterion("startDate >", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateGreaterThanOrEqualTo(String value) {
+            addCriterion("startDate >=", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateLessThan(String value) {
+            addCriterion("startDate <", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateLessThanOrEqualTo(String value) {
+            addCriterion("startDate <=", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateLike(String value) {
+            addCriterion("startDate like", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateNotLike(String value) {
+            addCriterion("startDate not like", value, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateIn(List<String> values) {
+            addCriterion("startDate in", values, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateNotIn(List<String> values) {
+            addCriterion("startDate not in", values, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateBetween(String value1, String value2) {
+            addCriterion("startDate between", value1, value2, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartDateNotBetween(String value1, String value2) {
+            addCriterion("startDate not between", value1, value2, "startDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateIsNull() {
+            addCriterion("endDate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateIsNotNull() {
+            addCriterion("endDate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateEqualTo(String value) {
+            addCriterion("endDate =", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateNotEqualTo(String value) {
+            addCriterion("endDate <>", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateGreaterThan(String value) {
+            addCriterion("endDate >", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateGreaterThanOrEqualTo(String value) {
+            addCriterion("endDate >=", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateLessThan(String value) {
+            addCriterion("endDate <", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateLessThanOrEqualTo(String value) {
+            addCriterion("endDate <=", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateLike(String value) {
+            addCriterion("endDate like", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateNotLike(String value) {
+            addCriterion("endDate not like", value, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateIn(List<String> values) {
+            addCriterion("endDate in", values, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateNotIn(List<String> values) {
+            addCriterion("endDate not in", values, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateBetween(String value1, String value2) {
+            addCriterion("endDate between", value1, value2, "endDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndDateNotBetween(String value1, String value2) {
+            addCriterion("endDate not between", value1, value2, "endDate");
             return (Criteria) this;
         }
     }
