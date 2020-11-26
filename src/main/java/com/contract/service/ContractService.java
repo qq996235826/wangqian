@@ -117,7 +117,7 @@ public class ContractService {
             //银行卡号
             infoMap.put(KeyWord.BANK_ID.getValue(),bankNum);
             //开户行
-            infoMap.put(KeyWord.BANK_NAME.getValue(),bankName);
+            infoMap.put(KeyWord.BANK_NAME.getValue(),bankName+branchBankName);
             //设置甲方
             infoMap.put(KeyWord.COMPANY.getValue(),company.getName());
             //设置甲方地址
