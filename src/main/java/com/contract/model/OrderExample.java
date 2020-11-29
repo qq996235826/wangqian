@@ -1645,73 +1645,73 @@ public class OrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andOssPathIsNull() {
-            addCriterion("ossPath is null");
+        public Criteria andPdfPathIsNull() {
+            addCriterion("pdfPath is null");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathIsNotNull() {
-            addCriterion("ossPath is not null");
+        public Criteria andPdfPathIsNotNull() {
+            addCriterion("pdfPath is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathEqualTo(String value) {
-            addCriterion("ossPath =", value, "ossPath");
+        public Criteria andPdfPathEqualTo(String value) {
+            addCriterion("pdfPath =", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathNotEqualTo(String value) {
-            addCriterion("ossPath <>", value, "ossPath");
+        public Criteria andPdfPathNotEqualTo(String value) {
+            addCriterion("pdfPath <>", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathGreaterThan(String value) {
-            addCriterion("ossPath >", value, "ossPath");
+        public Criteria andPdfPathGreaterThan(String value) {
+            addCriterion("pdfPath >", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathGreaterThanOrEqualTo(String value) {
-            addCriterion("ossPath >=", value, "ossPath");
+        public Criteria andPdfPathGreaterThanOrEqualTo(String value) {
+            addCriterion("pdfPath >=", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathLessThan(String value) {
-            addCriterion("ossPath <", value, "ossPath");
+        public Criteria andPdfPathLessThan(String value) {
+            addCriterion("pdfPath <", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathLessThanOrEqualTo(String value) {
-            addCriterion("ossPath <=", value, "ossPath");
+        public Criteria andPdfPathLessThanOrEqualTo(String value) {
+            addCriterion("pdfPath <=", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathLike(String value) {
-            addCriterion("ossPath like", value, "ossPath");
+        public Criteria andPdfPathLike(String value) {
+            addCriterion("pdfPath like", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathNotLike(String value) {
-            addCriterion("ossPath not like", value, "ossPath");
+        public Criteria andPdfPathNotLike(String value) {
+            addCriterion("pdfPath not like", value, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathIn(List<String> values) {
-            addCriterion("ossPath in", values, "ossPath");
+        public Criteria andPdfPathIn(List<String> values) {
+            addCriterion("pdfPath in", values, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathNotIn(List<String> values) {
-            addCriterion("ossPath not in", values, "ossPath");
+        public Criteria andPdfPathNotIn(List<String> values) {
+            addCriterion("pdfPath not in", values, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathBetween(String value1, String value2) {
-            addCriterion("ossPath between", value1, value2, "ossPath");
+        public Criteria andPdfPathBetween(String value1, String value2) {
+            addCriterion("pdfPath between", value1, value2, "pdfPath");
             return (Criteria) this;
         }
 
-        public Criteria andOssPathNotBetween(String value1, String value2) {
-            addCriterion("ossPath not between", value1, value2, "ossPath");
+        public Criteria andPdfPathNotBetween(String value1, String value2) {
+            addCriterion("pdfPath not between", value1, value2, "pdfPath");
             return (Criteria) this;
         }
 

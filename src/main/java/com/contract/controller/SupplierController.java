@@ -71,4 +71,11 @@ public class SupplierController {
         return ResultDTO.okOf(supplierService.getSupplierInfo(idNum));
     }
 
+    @ResponseBody
+    @PostMapping("/changePassword")
+    public ResultDTO changePassword(String idNum,String oldPassword,String newPassword)
+    {
+        return ResultDTO.okOf(supplierService.changePassword(idNum,oldPassword,newPassword));
+    }
+
 }

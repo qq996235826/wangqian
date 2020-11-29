@@ -29,6 +29,9 @@ public class SupplierService {
     @Resource
     SupplierMapper supplierMapper;
 
+    @Value("${rootPatch}")
+    String rootPatch;
+
     @Value("${signaturePatch}")
     String signaturePatch;
 
@@ -51,11 +54,7 @@ public class SupplierService {
         //已经存在,更新信息
         if(supplierList.size()!=0)
         {
-            Supplier supplier=supplierList.get(0);
-            supplier.setPassword(supplierDTO.getPassword());
-            supplier.setPhoneNum(supplierDTO.getPhoneNum());
-            supplierMapper.updateByPrimaryKey(supplier);
-            return supplier.getId();
+            throw new CustomizeException(CustomizeErrorCode.CREATE_WRONG);
         }
         //没有这个身份证,新建用户并插入
         Supplier supplier=new Supplier();
@@ -116,14 +115,14 @@ public class SupplierService {
             String Path="";
             if(role.equals("0"))
             {
-                Path=upload(upload,signaturePatch+idNum+"/");
+                Path=upload(upload,rootPatch+signaturePatch+idNum+"/");
                 supplier.setId0Path(Path);
                 supplierMapper.updateByPrimaryKey(supplier);
                 return Path;
             }
             else if(role.equals("1"))
             {
-                Path=upload(upload,signaturePatch+idNum+"/");
+                Path=upload(upload,rootPatch+signaturePatch+idNum+"/");
                 supplier.setId1Path(Path);
                 supplierMapper.updateByPrimaryKey(supplier);
                 return Path;
@@ -278,6 +277,28 @@ public class SupplierService {
         else
         {
             throw new CustomizeException(CustomizeErrorCode.SUPPLIER_INFO_WRONG);
+        }
+    }
+
+    /**
+     *
+     * @param idNum
+     * @param oldPassword
+     * @param newPassword
+     * @return
+     */
+    public Boolean changePassword(String idNum, String oldPassword, String newPassword) {
+
+        Supplier supplier=getSupplierByIdNum(idNum);
+        if(supplier.getPassword().equals(oldPassword))
+        {
+            supplier.setPassword(newPassword);
+            supplierMapper.updateByPrimaryKey(supplier);
+            return true;
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.PASS_WRONG);
         }
     }
 }

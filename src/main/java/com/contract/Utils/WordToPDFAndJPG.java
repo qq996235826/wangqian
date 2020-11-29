@@ -1,58 +1,91 @@
 package com.contract.Utils;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.*;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
+import com.contract.exception.CustomizeErrorCode;
+import com.contract.exception.CustomizeException;
 import org.apache.poi.xwpf.converter.pdf.PdfConverter;
 import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import javax.imageio.ImageIO;
+import java.io.*;
+import java.util.UUID;
+
 
 @Configuration
 public class WordToPDFAndJPG {
 
+    @Value("${rootPatch}")
+    String rootPatch;
+
     @Value("${contractPDFPatch}")
-    static String contractPDFPatch;
+    String contractPDFPatch;
+
 
     /**
-     * 把docx文件转化为PDF
-     * @param filepath
-     * @return PDF的文件路径
+     * docx转PDF
+     * @param docx
+     * @return PDF路径
      */
-    public static String wordToPDF(String filepath) {
-
-        //设置新的名字
-        String newFileName = UUID.randomUUID()+".pdf";
-        //生成文件路径
-        String outpath = contractPDFPatch+newFileName;
-        //判断文件夹是否存在,不存在则创建
-        File file=new File(outpath);
-        if(!file.exists()){
-            file.mkdirs();
-        }
-
-        InputStream source;
-        OutputStream target;
+    public String docxToPDF(String docx)
+    {
         try {
-            source = new FileInputStream(filepath);
-            target = new FileOutputStream(outpath);
-
-            PdfOptions options = PdfOptions.create();
-
-            XWPFDocument docx = new XWPFDocument(source);
-            PdfConverter.getInstance().convert(docx, target, options);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            String pdfPath = rootPatch+contractPDFPatch+ UUID.randomUUID()+".pdf";
+            XWPFDocument document=new XWPFDocument(new FileInputStream(new File(docx)));
+            File outFile=new File(pdfPath);
+            outFile.getParentFile().mkdirs();
+            OutputStream out=new FileOutputStream(outFile);
+            PdfOptions options= PdfOptions.create();
+            PdfConverter.getInstance().convert(document,out,options);
+            return pdfPath;
         }
-        return outpath;
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.DOCX_TO_PDF_WRONG);
+        }
+
     }
+
+
+//    /**
+//     * 把docx文件转化为PDF
+//     * @param filepath
+//     * @return PDF的文件路径
+//     */
+//    public static String wordToPDF(String filepath) {
+//
+//        //设置新的名字
+//        String newFileName = UUID.randomUUID()+".pdf";
+//        //生成文件路径
+//        String outpath = contractPDFPatch+newFileName;
+//        //判断文件夹是否存在,不存在则创建
+//        File file=new File(outpath);
+//        if(!file.exists()){
+//            file.getParentFile().mkdirs();
+//            try {
+//                file.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        InputStream source;
+//        OutputStream target;
+//        try {
+//            source = new FileInputStream(filepath);
+//            target = new FileOutputStream(file);
+//
+//            PdfOptions options = PdfOptions.create();
+//
+//            XWPFDocument docx = new XWPFDocument(source);
+//            PdfConverter.getInstance().convert(docx, target, options);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return outpath;
+//    }
 
 
 

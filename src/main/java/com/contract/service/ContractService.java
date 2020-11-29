@@ -2,6 +2,7 @@ package com.contract.service;
 
 import com.contract.Utils.PdfUtils;
 import com.contract.Utils.SupplierUtils;
+import com.contract.Utils.WordToPDFAndJPG;
 import com.contract.Utils.WordUtils;
 import com.contract.contractEnumerate.KeyWord;
 import com.contract.dto.OrderDTO;
@@ -12,7 +13,6 @@ import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.*;
-import com.contract.oss.UploadOss;
 import com.mysql.cj.util.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,6 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -51,7 +50,10 @@ public class ContractService {
     private OrderMapper orderMapper;
 
     @Resource
-    private UploadOss uploadOss;
+    private WordToPDFAndJPG wordToPDFAndJPG;
+
+    @Value("${rootPatch}")
+    private String rootPatch;
 
     @Value("${contractJPGPatch}")
     private String contractJPGPatch;
@@ -230,19 +232,21 @@ public class ContractService {
             if(bankImage!=null)
             {
                 //上传对应的银行卡照片
-                String bankImageLocal=upload(bankImage,orderBankJPGPatch);
-                String bankImageOss=uploadOss.uploadOss(bankImageLocal);
-                order.setBankImagePath(bankImageOss);
+                String bankImageLocal=upload(bankImage,rootPatch+orderBankJPGPatch);
+//                String bankImageOss=uploadOss.uploadOss(bankImageLocal);
+                order.setBankImagePath(bankImageLocal);
             }
             //上传文件到云端并且保存他的下载链接
-            String ossUrl=uploadOss.uploadOss(path);
-            order.setOssPath(ossUrl);
+//            String ossUrl=uploadOss.uploadOss(path);
+//            order.setOssPath(ossUrl);
             //如果有签名
             if(file!=null)
             {
+                String pdfPath=wordToPDFAndJPG.docxToPDF(path);
+                order.setPdfPath(pdfPath);
                 orderMapper.insert(order);
             }
-            return ossUrl;
+            return path;
         }
         else
         {
@@ -272,7 +276,7 @@ public class ContractService {
         //设置新的名字
         String newFileName = UUID.randomUUID()+typename;
         //新文件的路径
-        String newFilePath=orderPatch+phoneNum+"/"+newFileName;
+        String newFilePath=rootPatch+orderPatch+phoneNum+"/"+newFileName;
 
         //将传来的文件写入新建的文件
         try {
@@ -325,7 +329,7 @@ public class ContractService {
      */
     public String uploadContractTemplate(MultipartFile upload) {
         //上传模板文件
-        String path=upload(upload,filePath);
+        String path=upload(upload,rootPatch+filePath);
         //把以前的模板全部失效
         ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
         contractTemplateExample.createCriteria().andIsUsingEqualTo(true);
@@ -336,14 +340,14 @@ public class ContractService {
             contractTemplateMapper.updateByPrimaryKey(con);
         }
         //合同模板上传至七牛云
-        String ossUrl=uploadOss.uploadOss(path);
+//        String ossUrl=uploadOss.uploadOss(path);
         //把模板文件数据写入数据库
         ContractTemplate contractTemplate=new ContractTemplate();
         contractTemplate.setIsUsing(true);
         contractTemplate.setPath(path);
         contractTemplate.setCreateTime(new Date());
         contractTemplate.setUpdateTime(new Date());
-        contractTemplate.setOssUrl(ossUrl);
+//        contractTemplate.setOssUrl(ossUrl);
         contractTemplateMapper.insert(contractTemplate);
 
         return path;
@@ -424,9 +428,9 @@ public class ContractService {
      */
     public String uploadContractTemplateImage(MultipartFile file) {
         //上传到本地文件夹
-        String localJPGPath=upload(file,contractJPGPatch);
+        String localJPGPath=upload(file,rootPatch+contractJPGPatch);
         //上传到云端
-        String ossUrl=uploadOss.uploadOss(localJPGPath);
+//        String ossUrl=uploadOss.uploadOss(localJPGPath);
         //更新数据
         ContractTemplateExample example=new ContractTemplateExample();
         example.createCriteria().andIsUsingEqualTo(true);
@@ -434,11 +438,11 @@ public class ContractService {
         //应该只有一个合同在用的
         if(templates.size()==1)
         {
-            templates.get(0).setJpgOssUrl(ossUrl);
+//            templates.get(0).setJpgOssUrl(ossUrl);
             templates.get(0).setJpgPath(localJPGPath);
             templates.get(0).setUpdateTime(new Date());
             contractTemplateMapper.updateByPrimaryKey(templates.get(0));
-            return ossUrl;
+            return localJPGPath;
         }
         else {
             throw new CustomizeException(CustomizeErrorCode.CONTRACT_TEMPLATE_WRONG);
@@ -577,19 +581,19 @@ public class ContractService {
         return orders.get(orders.size()-1);
     }
 
-    /**
-     * 返回订单合同的下载链接
-     * @param orderId
-     * @return
-     */
-    public String getOrderUrl(Long orderId) {
-        Order order=orderMapper.selectByPrimaryKey(orderId);
-        if(StringUtils.isNullOrEmpty(order.getOssPath()))
-        {
-            throw new CustomizeException(CustomizeErrorCode.NOT_OSS_ODER);
-        }
-        return order.getOssPath();
-    }
+//    /**
+//     * 返回订单合同的下载链接
+//     * @param orderId
+//     * @return
+//     */
+//    public String getOrderUrl(Long orderId) {
+//        Order order=orderMapper.selectByPrimaryKey(orderId);
+//        if(StringUtils.isNullOrEmpty(order.getOssPath()))
+//        {
+//            throw new CustomizeException(CustomizeErrorCode.NOT_OSS_ODER);
+//        }
+//        return order.getOssPath();
+//    }
 
     /**
      * 通过审核的接口
@@ -661,13 +665,13 @@ public class ContractService {
         {
             if(o.getItemName().equals("废纸"))
             {
-                o.setOssPath("");
+                o.setPdfPath("");
                 o.setPath("");
                 papers.add(new OrderDTO(o));
             }
             else
             {
-                o.setOssPath("");
+                o.setPdfPath("");
                 o.setPath("");
                 steels.add(new OrderDTO(o));
             }
@@ -727,9 +731,9 @@ public class ContractService {
         //新建订单
         Order order=new Order();
         //上传对应的银行卡照片
-        String bankImageLocal=upload(bankImage,orderBankJPGPatch);
-        String bankImageOss=uploadOss.uploadOss(bankImageLocal);
-        order.setBankImagePath(bankImageOss);
+        String bankImageLocal=upload(bankImage,rootPatch+orderBankJPGPatch);
+//        String bankImageOss=uploadOss.uploadOss(bankImageLocal);
+        order.setBankImagePath(bankImageLocal);
         //设置状态
         order.setStatus(10);
         //设置更新时间
@@ -739,7 +743,7 @@ public class ContractService {
 
         //获得刚刚插入的主键
         OrderExample example=new OrderExample();
-        example.createCriteria().andBankImagePathEqualTo(bankImageOss);
+        example.createCriteria().andBankImagePathEqualTo(bankImageLocal);
         List<Order> orders =orderMapper.selectByExample(example);
         if(orders.size()!=1)
         {

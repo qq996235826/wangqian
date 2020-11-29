@@ -77,7 +77,7 @@ public class BackstageService {
             }
 
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
-            map.put("ossUrl",orders.get(a).getOssPath());
+            map.put("pdfUrl",orders.get(a).getPdfPath());
             rows.add(map);
         }
         //设置数据行数

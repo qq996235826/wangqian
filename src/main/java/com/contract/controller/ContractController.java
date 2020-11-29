@@ -106,16 +106,17 @@ public class ContractController {
         return ResultDTO.okOf(contractService.getOrderStatus(phoneNum));
     }
 
-    /**
-     * 根据orderId获得下载地址
-     * @return 状态
-     */
-    @ResponseBody
-    @PostMapping("/getOrderUrl")
-    public ResultDTO getOrderUrl(Long orderId)
-    {
-        return ResultDTO.okOf(contractService.getOrderUrl(orderId));
-    }
+//    /**
+//     * 根据orderId获得下载地址
+//     * @return 状态
+//     */
+//    @ResponseBody
+//    @PostMapping("/getOrderUrl")
+//    public ResultDTO getOrderUrl(Long orderId)
+//    {
+//        return ResultDTO.okOf(contractService.getOrderUrl(orderId));
+//    }
+
 
 
     /**

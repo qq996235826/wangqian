@@ -26,7 +26,7 @@
     <result column="chech2Bby" jdbcType="BIGINT" property="chech2Bby" />
     <result column="check2Note" jdbcType="VARCHAR" property="check2Note" />
     <result column="path" jdbcType="VARCHAR" property="path" />
-    <result column="ossPath" jdbcType="VARCHAR" property="ossPath" />
+    <result column="pdfPath" jdbcType="VARCHAR" property="pdfPath" />
     <result column="startDate" jdbcType="VARCHAR" property="startDate" />
     <result column="endDate" jdbcType="VARCHAR" property="endDate" />
   </resultMap>
@@ -91,7 +91,7 @@
   <sql id="Base_Column_List">
     id, templateId, supplierId, createTime, itemName, companyName, bankName, branchBankName, 
     bankNum, bankImagePath, weight, price, amount, orderNum, status, updateTime, updateBy, 
-    check1Time, chech1By, check1Note, check2Time, chech2Bby, check2Note, path, ossPath, 
+    check1Time, chech1By, check1Note, check2Time, chech2Bby, check2Note, path, pdfPath, 
     startDate, endDate
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
@@ -132,7 +132,7 @@
       orderNum, status, updateTime, 
       updateBy, check1Time, chech1By, 
       check1Note, check2Time, chech2Bby, 
-      check2Note, path, ossPath, 
+      check2Note, path, pdfPath, 
       startDate, endDate)
     values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{itemName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
@@ -141,7 +141,7 @@
       #{orderNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
       #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
-      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{ossPath,jdbcType=VARCHAR}, 
+      #{check2Note,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{pdfPath,jdbcType=VARCHAR}, 
       #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
@@ -216,8 +216,8 @@
       <if test="path != null">
         path,
       </if>
-      <if test="ossPath != null">
-        ossPath,
+      <if test="pdfPath != null">
+        pdfPath,
       </if>
       <if test="startDate != null">
         startDate,
@@ -296,8 +296,8 @@
       <if test="path != null">
         #{path,jdbcType=VARCHAR},
       </if>
-      <if test="ossPath != null">
-        #{ossPath,jdbcType=VARCHAR},
+      <if test="pdfPath != null">
+        #{pdfPath,jdbcType=VARCHAR},
       </if>
       <if test="startDate != null">
         #{startDate,jdbcType=VARCHAR},
@@ -388,8 +388,8 @@
       <if test="record.path != null">
         path = #{record.path,jdbcType=VARCHAR},
       </if>
-      <if test="record.ossPath != null">
-        ossPath = #{record.ossPath,jdbcType=VARCHAR},
+      <if test="record.pdfPath != null">
+        pdfPath = #{record.pdfPath,jdbcType=VARCHAR},
       </if>
       <if test="record.startDate != null">
         startDate = #{record.startDate,jdbcType=VARCHAR},
@@ -428,7 +428,7 @@
       chech2Bby = #{record.chech2Bby,jdbcType=BIGINT},
       check2Note = #{record.check2Note,jdbcType=VARCHAR},
       path = #{record.path,jdbcType=VARCHAR},
-      ossPath = #{record.ossPath,jdbcType=VARCHAR},
+      pdfPath = #{record.pdfPath,jdbcType=VARCHAR},
       startDate = #{record.startDate,jdbcType=VARCHAR},
       endDate = #{record.endDate,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -507,8 +507,8 @@
       <if test="path != null">
         path = #{path,jdbcType=VARCHAR},
       </if>
-      <if test="ossPath != null">
-        ossPath = #{ossPath,jdbcType=VARCHAR},
+      <if test="pdfPath != null">
+        pdfPath = #{pdfPath,jdbcType=VARCHAR},
       </if>
       <if test="startDate != null">
         startDate = #{startDate,jdbcType=VARCHAR},
@@ -544,7 +544,7 @@
       chech2Bby = #{chech2Bby,jdbcType=BIGINT},
       check2Note = #{check2Note,jdbcType=VARCHAR},
       path = #{path,jdbcType=VARCHAR},
-      ossPath = #{ossPath,jdbcType=VARCHAR},
+      pdfPath = #{pdfPath,jdbcType=VARCHAR},
       startDate = #{startDate,jdbcType=VARCHAR},
       endDate = #{endDate,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

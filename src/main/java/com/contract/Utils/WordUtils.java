@@ -1,8 +1,6 @@
 package com.contract.Utils;
 
 import org.apache.poi.POIXMLDocument;
-import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
@@ -11,10 +9,10 @@ import org.apache.xmlbeans.XmlToken;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTNonVisualDrawingProps;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTPositiveSize2D;
 import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,185 +30,181 @@ public class WordUtils {
     private static FileInputStream in;
     private static FileOutputStream out;
 
-    /**替换word中的字符串
-     *
-     * @param filePath 文件路径
-     * @param map    其中，key--替换的标记    value--替换的值
-     */
-    public  static void replaceAll(String filePath,Map<String,String> map){
 
-        try {
-            in = new FileInputStream(filePath);
-            XWPFDocument doc = new XWPFDocument(in);
-
-            //处理段落
-            //------------------------------------------------------------------
-            List<XWPFParagraph> paragraphs = doc.getParagraphs();
-            for (XWPFParagraph paragraph : paragraphs) {
-                List<XWPFRun> runs = paragraph.getRuns();
-                for (XWPFRun run : runs) {
-                    String text = run.getText(0);
-                    if(text!=null){
-                        boolean isSetText = false;
-                        for (Entry<String, String> entry : map.entrySet()) {
-                            String key = entry.getKey();
-                            String value = entry.getValue();
-                            if(text.indexOf(key)!=-1){
-                                isSetText = true;
-                                text = text.replaceAll(key, value);
-                            }
-                            if (isSetText) {
-                                run.setText(text, 0);
-                            }
-                        }
-
-                    }
-
-                }
-            }
-
-            //------------------------------------------------------------------
-
-            //处理表格
-            //------------------------------------------------------------------
-            List<XWPFTable> tables = doc.getTables();
-            for (XWPFTable table : tables) {
-                List<XWPFTableRow> rows = table.getRows();
-                for (XWPFTableRow row : rows) {
-                    List<XWPFTableCell> cells = row.getTableCells();
-                    for (XWPFTableCell cell : cells) {
-
-                        String text = cell.getText();
-                        if(text!=null){
-                            for(Entry<String,String> entry:map.entrySet()){
-                                String key = entry.getKey();
-                                String value = entry.getValue();
-                                if(text.equals(key)){
-                                    //删除原单元格值
-                                    cell.removeParagraph(0);
-                                    //设置新单元格的值
-                                    cell.setText(value);
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-            //------------------------------------------------------------------
-
-            out = new FileOutputStream(filePath);
-            doc.write(out);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally{
-            try {
-                in.close();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
+//    public  static void replaceAll(String filePath,Map<String,String> map){
+//
+//        try {
+//            in = new FileInputStream(filePath);
+//            XWPFDocument doc = new XWPFDocument(in);
+//
+//            //处理段落
+//            //------------------------------------------------------------------
+//            List<XWPFParagraph> paragraphs = doc.getParagraphs();
+//            for (XWPFParagraph paragraph : paragraphs) {
+//                List<XWPFRun> runs = paragraph.getRuns();
+//                for (XWPFRun run : runs) {
+//                    String text = run.getText(0);
+//                    if(text!=null){
+//                        boolean isSetText = false;
+//                        for (Entry<String, String> entry : map.entrySet()) {
+//                            String key = entry.getKey();
+//                            String value = entry.getValue();
+//                            if(text.indexOf(key)!=-1){
+//                                isSetText = true;
+//                                text = text.replaceAll(key, value);
+//                            }
+//                            if (isSetText) {
+//                                run.setText(text, 0);
+//                            }
+//                        }
+//
+//                    }
+//
+//                }
+//            }
+//
+//            //------------------------------------------------------------------
+//
+//            //处理表格
+//            //------------------------------------------------------------------
+//            List<XWPFTable> tables = doc.getTables();
+//            for (XWPFTable table : tables) {
+//                List<XWPFTableRow> rows = table.getRows();
+//                for (XWPFTableRow row : rows) {
+//                    List<XWPFTableCell> cells = row.getTableCells();
+//                    for (XWPFTableCell cell : cells) {
+//
+//                        String text = cell.getText();
+//                        if(text!=null){
+//                            for(Entry<String,String> entry:map.entrySet()){
+//                                String key = entry.getKey();
+//                                String value = entry.getValue();
+//                                if(text.equals(key)){
+//                                    //删除原单元格值
+//                                    cell.removeParagraph(0);
+//                                    //设置新单元格的值
+//                                    cell.setText(value);
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//            //------------------------------------------------------------------
+//
+//            out = new FileOutputStream(filePath);
+//            doc.write(out);
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//        finally{
+//            try {
+//                in.close();
+//                out.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
 
 
     // 替换word中需要替换的特殊字符
-    public static boolean replaceAndGenerateWord(String srcPath, String destPath, Map<String, String> map) {
-        String[] sp = srcPath.split("\\.");
-        String[] dp = destPath.split("\\.");
-        if ((sp.length > 0) && (dp.length > 0)) {// 判断文件有无扩展名
-            // 比较文件扩展名
-            if (sp[sp.length - 1].equalsIgnoreCase("docx")) {
-                try {
-                    XWPFDocument document = new XWPFDocument(
-                            POIXMLDocument.openPackage(srcPath));
-                    // 替换段落中的指定文字
-                    Iterator<XWPFParagraph> itPara = document
-                            .getParagraphsIterator();
-                    while (itPara.hasNext()) {
-                        XWPFParagraph paragraph = (XWPFParagraph) itPara.next();
-                        List<XWPFRun> runs = paragraph.getRuns();
-                        for (int i = 0; i < runs.size(); i++) {
-                            String oneparaString = runs.get(i).getText(
-                                    runs.get(i).getTextPosition());
-                            for (Map.Entry<String, String> entry : map
-                                    .entrySet()) {
-                                oneparaString = oneparaString.replace(
-                                        entry.getKey(), entry.getValue());
-                            }
-                            runs.get(i).setText(oneparaString, 0);
-                        }
-                    }
-
-                    // 替换表格中的指定文字
-                    Iterator<XWPFTable> itTable = document.getTablesIterator();
-                    while (itTable.hasNext()) {
-                        XWPFTable table = (XWPFTable) itTable.next();
-                        int rcount = table.getNumberOfRows();
-                        for (int i = 0; i < rcount; i++) {
-                            XWPFTableRow row = table.getRow(i);
-                            List<XWPFTableCell> cells = row.getTableCells();
-                            for (XWPFTableCell cell : cells) {
-                                String cellTextString = cell.getText();
-                                for (Entry<String, String> e : map.entrySet()) {
-                                    if (cellTextString.contains(e.getKey()))
-                                        cellTextString = cellTextString
-                                                .replace(e.getKey(),
-                                                        e.getValue());
-                                }
-                                cell.removeParagraph(0);
-                                cell.setText(cellTextString);
-                            }
-                        }
-                    }
-                    FileOutputStream outStream = null;
-                    outStream = new FileOutputStream(destPath);
-                    document.write(outStream);
-                    outStream.close();
-                    return true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
-                }
-
-            } else
-                // doc只能生成doc，如果生成docx会出错
-                if ((sp[sp.length - 1].equalsIgnoreCase("doc"))
-                        && (dp[dp.length - 1].equalsIgnoreCase("doc"))) {
-                    HWPFDocument document = null;
-                    try {
-                        document = new HWPFDocument(new FileInputStream(srcPath));
-                        Range range = document.getRange();
-                        for (Map.Entry<String, String> entry : map.entrySet()) {
-                            range.replaceText(entry.getKey(), entry.getValue());
-                        }
-                        FileOutputStream outStream = null;
-                        outStream = new FileOutputStream(destPath);
-                        document.write(outStream);
-                        outStream.close();
-                        return true;
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        return false;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-        } else {
-            return false;
-        }
-    }
+//    public static boolean replaceAndGenerateWord(String srcPath, String destPath, Map<String, String> map) {
+//        String[] sp = srcPath.split("\\.");
+//        String[] dp = destPath.split("\\.");
+//        if ((sp.length > 0) && (dp.length > 0)) {// 判断文件有无扩展名
+//            // 比较文件扩展名
+//            if (sp[sp.length - 1].equalsIgnoreCase("docx")) {
+//                try {
+//                    XWPFDocument document = new XWPFDocument(
+//                            POIXMLDocument.openPackage(srcPath));
+//                    // 替换段落中的指定文字
+//                    Iterator<XWPFParagraph> itPara = document
+//                            .getParagraphsIterator();
+//                    while (itPara.hasNext()) {
+//                        XWPFParagraph paragraph = (XWPFParagraph) itPara.next();
+//                        List<XWPFRun> runs = paragraph.getRuns();
+//                        for (int i = 0; i < runs.size(); i++) {
+//                            String oneparaString = runs.get(i).getText(
+//                                    runs.get(i).getTextPosition());
+//                            for (Map.Entry<String, String> entry : map
+//                                    .entrySet()) {
+//                                oneparaString = oneparaString.replace(
+//                                        entry.getKey(), entry.getValue());
+//                            }
+//                            runs.get(i).setText(oneparaString, 0);
+//                        }
+//                    }
+//
+//                    // 替换表格中的指定文字
+//                    Iterator<XWPFTable> itTable = document.getTablesIterator();
+//                    while (itTable.hasNext()) {
+//                        XWPFTable table = (XWPFTable) itTable.next();
+//                        int rcount = table.getNumberOfRows();
+//                        for (int i = 0; i < rcount; i++) {
+//                            XWPFTableRow row = table.getRow(i);
+//                            List<XWPFTableCell> cells = row.getTableCells();
+//                            for (XWPFTableCell cell : cells) {
+//                                String cellTextString = cell.getText();
+//                                for (Entry<String, String> e : map.entrySet()) {
+//                                    if (cellTextString.contains(e.getKey()))
+//                                        cellTextString = cellTextString
+//                                                .replace(e.getKey(),
+//                                                        e.getValue());
+//                                }
+//                                cell.removeParagraph(0);
+//                                cell.setText(cellTextString);
+//                            }
+//                        }
+//                    }
+//                    FileOutputStream outStream = null;
+//                    outStream = new FileOutputStream(destPath);
+//                    document.write(outStream);
+//                    outStream.close();
+//                    return true;
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    return false;
+//                }
+//
+//            } else
+//                // doc只能生成doc，如果生成docx会出错
+//                if ((sp[sp.length - 1].equalsIgnoreCase("doc"))
+//                        && (dp[dp.length - 1].equalsIgnoreCase("doc"))) {
+//                    HWPFDocument document = null;
+//                    try {
+//                        document = new HWPFDocument(new FileInputStream(srcPath));
+//                        Range range = document.getRange();
+//                        for (Map.Entry<String, String> entry : map.entrySet()) {
+//                            range.replaceText(entry.getKey(), entry.getValue());
+//                        }
+//                        FileOutputStream outStream = null;
+//                        outStream = new FileOutputStream(destPath);
+//                        document.write(outStream);
+//                        outStream.close();
+//                        return true;
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                        return false;
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                        return false;
+//                    }
+//                } else {
+//                    return false;
+//                }
+//        } else {
+//            return false;
+//        }
+//    }
 
 
 
@@ -278,7 +272,6 @@ public class WordUtils {
                                     String byteArray = (String) pic.get("content");
                                     CTInline inline = run.getCTR().addNewDrawing().addNewInline();
                                     insertPicture(doc, byteArray, inline, width, height,picType);
-
                                 }
                             }
                         }

@@ -11,6 +11,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     SYSTEM_ERROR(1000, "其他错误"),
     HAVE_ID_NUM(200, "该身份已经注册"),
     HAVEN_PHONE(2000,"该号码未注册"),
+    CREATE_WRONG(2000,"注册失败,请联系管理员解决"),
     PASS_WRONG(2001,"密码错误"),
     SUPPLIER_INFO_WRONG(2000,"该号码在后台的数据出现错误,联系管理员解决"),
     SUPPLIER_WRONG(2000,"供货人信息有误"),
@@ -39,7 +40,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     SQL_INSERT_FAIL(4000, "数据库插入失败"),
     SQL_UPDATE_FAIL(4000, "数据库更新失败"),
     COMPANY_INFO_WRONG(5001, "没有这家公司或者这家公司的信息数目有误"),
-    COMPANY_WRONG(5000, "获取公司列表失败");
+    COMPANY_WRONG(5000, "获取公司列表失败"),
+    DOCX_TO_PDF_WRONG(6000,"docx转pdf失败");
 
 
 

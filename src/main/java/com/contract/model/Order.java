@@ -51,7 +51,7 @@ public class Order {
 
     private String path;
 
-    private String ossPath;
+    private String pdfPath;
 
     private String startDate;
 
@@ -249,12 +249,12 @@ public class Order {
         this.path = path == null ? null : path.trim();
     }
 
-    public String getOssPath() {
-        return ossPath;
+    public String getPdfPath() {
+        return pdfPath;
     }
 
-    public void setOssPath(String ossPath) {
-        this.ossPath = ossPath == null ? null : ossPath.trim();
+    public void setPdfPath(String pdfPath) {
+        this.pdfPath = pdfPath == null ? null : pdfPath.trim();
     }
 
     public String getStartDate() {
