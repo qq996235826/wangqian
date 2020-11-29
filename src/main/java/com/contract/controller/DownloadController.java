@@ -64,6 +64,7 @@ public class DownloadController {
                 bodyBuilder.header("Content-Disposition","inline;filename*=UTF-8''"+encodeFileName);
             }else {
                 // 直接下载
+                bodyBuilder.header("Content-Type","application/pdf");
                 bodyBuilder.header("Content-Disposition","attachment;filename*=UTF-8''"+encodeFileName);
             }
 
