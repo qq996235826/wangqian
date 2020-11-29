@@ -57,17 +57,17 @@ public class DownloadController {
 //
 //            }
             // 其他浏览器
-            if (model!=null&&model.equals("0")){
-                // 在浏览器中打开
-                URL url = new URL("file:///" + file);
-                bodyBuilder.header("Content-Type",url.openConnection().getContentType());
-                bodyBuilder.header("Content-Disposition","inline;filename*=UTF-8''"+encodeFileName);
-            }else {
-                // 直接下载
-                bodyBuilder.header("Content-Type","application/pdf");
-                bodyBuilder.header("Content-Disposition","attachment;filename*=UTF-8''"+encodeFileName);
-            }
+//            if (model!=null&&model.equals("0")){
+//
+//            }else {
+//                // 直接下载
+//                bodyBuilder.header("Content-Disposition","attachment;filename*=UTF-8''"+encodeFileName);
+//            }
 
+            // 在浏览器中打开
+            URL url = new URL("file:///" + file);
+            bodyBuilder.header("Content-Type",url.openConnection().getContentType());
+            bodyBuilder.header("Content-Disposition","inline;filename*=UTF-8''"+encodeFileName);
             // 下载成功返回二进制流
             return bodyBuilder.body(FileUtils.readFileToByteArray(file));
         } catch (UnsupportedEncodingException e) {
