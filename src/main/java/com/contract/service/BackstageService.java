@@ -44,7 +44,7 @@ public class BackstageService {
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         OrderExample example=new OrderExample();
-        example.createCriteria().andIdIsNotNull();
+        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(0);
         List<Order> orders=orderMapper.selectByExample(example);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
@@ -133,7 +133,7 @@ public class BackstageService {
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         OrderExample example=new OrderExample();
-        example.createCriteria().andIdIsNotNull();
+        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(0);
         List<Order> orders=orderMapper.selectByExample(example);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)

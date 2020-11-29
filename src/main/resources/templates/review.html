@@ -61,7 +61,7 @@
         if (row){
             var id=row.id;
             $.ajax({
-                url:"https://just.guohe3.cn/contract/stamp",
+                url:"/contract/stamp",
                 type:"post",
                 data:{
                     id:id,
@@ -80,7 +80,7 @@
         if (row){
             var id=row.id;
             $.ajax({
-                url:"https://just.guohe3.cn/contract/passOrder",
+                url:"/contract/passOrder",
                 type:"post",
                 data:{
                     id:id,
@@ -99,7 +99,7 @@
         if (row){
             var id=row.id;
             $.ajax({
-                url:"https://just.guohe3.cn/contract/notPassOrder",
+                url:"/contract/notPassOrder",
                 type:"post",
                 data:{
                     id:id,
@@ -118,7 +118,7 @@
         if (row){
             var id=row.id;
             $.ajax({
-                url:"https://just.guohe3.cn/contract/deleteOrder",
+                url:"/contract/deleteOrder",
                 type:"post",
                 data:{
                     id:id,
@@ -146,7 +146,7 @@
             var orderNum=row.orderNum;
             var status=row.status;
             $.ajax({
-                url:"https://just.guohe3.cn/contract/update",
+                url:"/contract/update",
                 type:"post",
                 data:JSON.stringify(
                     {

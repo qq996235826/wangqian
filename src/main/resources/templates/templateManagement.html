@@ -36,17 +36,87 @@
     </thead>
 </table>
 <div id="toolbar">
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadTemplate()">上传模板</a>
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadTemplateJPG()">上传模板图片</a>
+    <a href="#button" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadidalogonline();">上传模板文件</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadimage(1)">上传模板图片</a>
 </div>
+
+<div id="uploadonlineinfo" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
+    <form id="fam" method="post" enctype="multipart/form-data">
+        <table border="0" style="margin-top:4px;" width="100%" align="center">
+            <tr>
+                <td>
+                    <input class="easyui-filebox" name="upload" data-options="prompt:'文件上传'" style="width:100%"></input>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="uploadonline(0,'#fam');" style="width:80px">上传</a>
+    </div>
+</div>
+
+<div id="uploadimage" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
+    <form id="image" method="post" enctype="multipart/form-data">
+        <table border="0" style="margin-top:4px;" width="100%" align="center">
+            <tr>
+                <td>
+                    <input class="easyui-filebox" name="upload" data-options="prompt:'文件上传'" style="width:100%"></input>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="uploadonline(1,'#image');" style="width:80px">上传</a>
+    </div>
+</div>
+
+
 </body>
 <script type="text/javascript">
-    function uploadTemplate() {
-        alert("上传模板");
+    function uploadidalogonline() {
+        $('#uploadonlineinfo').window('open').dialog('setTitle','模板文件上传');
     }
 
-    function uploadTemplateJPG() {
-        alert("上传模板图片");
+    function uploadonline(model,id) {
+        if(model==1)
+        {
+            var add="/contract/uploadContractTemplateImage";
+        }
+        else
+        {
+            var add="/contract/uploadContractTemplate";
+        }
+        $(id).form('submit',{
+            url: add,
+            onSubmit: function(){
+
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.status==200){
+                    $('#uploadonlineinfo').window('close');
+                    $('#dg2').datagrid('reload');
+                    $.messager.show({
+                        title: 'Success',
+                        msg: '上传成功'
+                    });
+                } else {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.message
+                    });
+                }
+            }
+        });
     }
+
+
+
+    function uploadimage() {
+        $('#uploadimage').window('open').dialog('setTitle','模板图片上传');
+    }
+
 </script>
 </html>

@@ -38,13 +38,13 @@ public class ContractController {
 
     /**
      * 上传模板合同图片给前端客户浏览
-     * @param file
+     * @param upload
      * @return 图片下载链接
      */
     @ResponseBody
     @PostMapping("/uploadContractTemplateImage")
-    public ResultDTO uploadContractTemplateImage(MultipartFile file) {
-        return ResultDTO.okOf(contractService.uploadContractTemplateImage(file));
+    public ResultDTO uploadContractTemplateImage(MultipartFile upload) {
+        return ResultDTO.okOf(contractService.uploadContractTemplateImage(upload));
     }
 
     /**
