@@ -231,7 +231,14 @@ public class ContractService {
             //10----待盖章
             //20----打回，需用户修改
             //90----已盖章
-            order.setStatus(0);
+            if(StringUtils.isNullOrEmpty(orderId))
+            {
+                order.setStatus(0);
+            }
+            else
+            {
+                order.setStatus(10);
+            }
             //设置合同存储路径
             order.setPath(path);
 
@@ -667,7 +674,7 @@ public class ContractService {
         Supplier supplier=getSupplierByIdNum(idNum);
         //获得该供货人下的所有合同
         OrderExample example=new OrderExample();
-        example.createCriteria().andSupplierIdEqualTo(supplier.getId());
+        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusNotEqualTo(0);
         List<Order> orders=orderMapper.selectByExample(example);
         //两个列表分别存放废纸和废钢
         List<OrderDTO> steels=new ArrayList<>();
