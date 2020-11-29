@@ -82,8 +82,8 @@ public class ContractService {
      * @return 合同路径
      * @param  file,  phoneNum, item, price
      */
-    public String getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,
-                              MultipartFile bankImage,String startDate,String endDate,String phoneNum)
+    public Long getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,String bankName,String branchBankName,
+                              MultipartFile bankImage,String startDate,String endDate,String phoneNum,String orderId)
     {
         //格式化时间
         String[] starts=startDate.split("-");
@@ -183,9 +183,16 @@ public class ContractService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            Order order;
             //把新合同写入数据库
-            Order order=new Order();
+            if(StringUtils.isNullOrEmpty(orderId))
+            {
+                order=new Order();
+            }
+            else
+            {
+                order=orderMapper.selectByPrimaryKey(Long.valueOf(orderId));
+            }
             if(order==null)
             {
                 throw new CustomizeException(CustomizeErrorCode.ODER_ID_WRONG);
@@ -237,16 +244,20 @@ public class ContractService {
                 order.setBankImagePath(bankImageLocal);
             }
             //上传文件到云端并且保存他的下载链接
+            String pdfPath=wordToPDFAndJPG.docxToPDF(path);
+            order.setPdfPath(pdfPath);
 //            String ossUrl=uploadOss.uploadOss(path);
 //            order.setOssPath(ossUrl);
-            //如果有签名
-            if(file!=null)
+            //如果有订单
+            if(StringUtils.isNullOrEmpty(orderId))
             {
-                String pdfPath=wordToPDFAndJPG.docxToPDF(path);
-                order.setPdfPath(pdfPath);
                 orderMapper.insert(order);
             }
-            return path;
+            else
+            {
+                orderMapper.updateByPrimaryKey(order);
+            }
+            return order.getId();
         }
         else
         {

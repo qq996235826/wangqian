@@ -61,13 +61,13 @@ public class ContractController {
     /**
      * 获得新的合成好的合同
      * @param  file,  phoneNum, item, price
-     * @return 合同存储路径
+     * @return 合同ID
      */
     @ResponseBody
     @PostMapping("/getContract")
     public ResultDTO getContract(MultipartFile file, String idNum,String item,String price,String companyCode,String bankNum,
-                                 String bankName,String branchBankName,MultipartFile bankImage,String startDate,String endDate,String phoneNum) {
-        return ResultDTO.okOf(contractService.getContract(file,idNum,item,price,companyCode,bankNum,bankName,branchBankName,bankImage,startDate,endDate,phoneNum));
+                                 String bankName,String branchBankName,MultipartFile bankImage,String startDate,String endDate,String phoneNum,String orderId) {
+        return ResultDTO.okOf(contractService.getContract(file,idNum,item,price,companyCode,bankNum,bankName,branchBankName,bankImage,startDate,endDate,phoneNum,orderId));
     }
 
 //    /**
