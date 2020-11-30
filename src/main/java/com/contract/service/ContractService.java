@@ -670,7 +670,7 @@ public class ContractService {
         Supplier supplier=getSupplierByIdNum(idNum);
         //获得订单
         OrderExample example=new OrderExample();
-        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusNotEqualTo(0);
+        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusNotEqualTo(-1);
         List<Order> orders=orderMapper.selectByExample(example);
         for(int a=0;a<orders.size();a++)
         {
