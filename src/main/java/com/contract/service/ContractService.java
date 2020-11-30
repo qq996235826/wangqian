@@ -195,7 +195,7 @@ public class ContractService {
             }
             if(order==null)
             {
-                throw new CustomizeException(CustomizeErrorCode.ODER_ID_WRONG);
+                throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
             }
             //设置所使用模板id
             order.setTemplateId(contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getId());
@@ -227,17 +227,14 @@ public class ContractService {
             }
 
             //设置审核状态
-            // 0---草拟
-            //10----待盖章
-            //20----打回，需用户修改
-            //90----已盖章
+            // -1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
             if(StringUtils.isNullOrEmpty(orderId))
             {
-                order.setStatus(0);
+                order.setStatus(-1);
             }
             else
             {
-                order.setStatus(10);
+                order.setStatus(0);
             }
             //设置合同存储路径
             order.setPath(path);
@@ -594,7 +591,7 @@ public class ContractService {
         List<Order> orders=orderMapper.selectByExample(example);
         if(orders.size()<1)
         {
-            throw new CustomizeException(CustomizeErrorCode.NOT_ODER);
+            throw new CustomizeException(CustomizeErrorCode.NOT_ORDER);
         }
         return orders.get(orders.size()-1);
     }
@@ -608,7 +605,7 @@ public class ContractService {
 //        Order order=orderMapper.selectByPrimaryKey(orderId);
 //        if(StringUtils.isNullOrEmpty(order.getOssPath()))
 //        {
-//            throw new CustomizeException(CustomizeErrorCode.NOT_OSS_ODER);
+//            throw new CustomizeException(CustomizeErrorCode.NOT_OSS_ORDER);
 //        }
 //        return order.getOssPath();
 //    }
@@ -618,24 +615,40 @@ public class ContractService {
      * @param id
      * @return 信息
      */
+    //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
     public String changeOrderStatus(String id,int status) {
+
         //获得订单ID
         Long orderId=Long.valueOf(id);
         //获得order
         Order order=orderMapper.selectByPrimaryKey(orderId);
-        //设置状态为通过
-        order.setStatus(status);
-        order.setUpdateTime(new Date());
-        if(orderMapper.updateByPrimaryKey(order)==1)
+        if(status==90&&order.getStatus()!=10)
         {
-            return "审核通过";
+            throw new CustomizeException(CustomizeErrorCode.ORDER_STATUS_WRONG);
+        }
+        if(order!=null)
+        {
+            //设置状态
+            order.setStatus(status);
+            order.setUpdateTime(new Date());
+            if(orderMapper.updateByPrimaryKey(order)==1)
+            {
+                return "成功";
+            }
+            else
+            {
+                return "出错";
+            }
         }
         else
         {
-            return "审核出错";
+            throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
         }
 
+
     }
+
+
 
 
     public String deleteOrder(String id) {
@@ -765,7 +778,7 @@ public class ContractService {
         List<Order> orders =orderMapper.selectByExample(example);
         if(orders.size()!=1)
         {
-            throw new CustomizeException(CustomizeErrorCode.ODER_WRONG);
+            throw new CustomizeException(CustomizeErrorCode.ORDER_WRONG);
         }
         else
         {
@@ -793,21 +806,5 @@ public class ContractService {
         }
     }
 
-    /**
-     * 给合同盖章
-     * @param id
-     * @return
-     */
-    public Boolean stamp(String id) {
-        Order order=orderMapper.selectByPrimaryKey(Long.valueOf(id));
-        if(order!=null)
-        {
-            order.setStatus(90);
-            orderMapper.updateByPrimaryKey(order);
-            return true;
-        }
-        else {
-            throw new CustomizeException(CustomizeErrorCode.ODER_ID_WRONG);
-        }
-    }
+
 }

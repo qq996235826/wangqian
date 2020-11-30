@@ -31,10 +31,11 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     CONTRACT_TEMPLATE_WRONG(3000,"后台生效合同模板数出错,请联系管理员"),
     NOT_CONTRACT_TEMPLATE(3000,"没有模板合同"),
     CONTRACT_TEMPLATE_IMAGE_WRONG(3000,"没有模板图片,请联系管理员上传"),
-    NOT_ODER(3001,"没有合同"),
-    NOT_OSS_ODER(3002,"合同未上传到云端"),
-    ODER_WRONG(3003,"合同订单数目出错"),
-    ODER_ID_WRONG(3004,"订单ID出错,数据库里查不到该订单"),
+    NOT_ORDER(3001,"没有合同"),
+    NOT_OSS_ORDER(3002,"合同未上传到云端"),
+    ORDER_WRONG(3003,"合同订单数目出错"),
+    ORDER_ID_WRONG(3004,"订单ID出错,数据库里查不到该订单"),
+    ORDER_STATUS_WRONG(3005,"订单状态错误,只有待审核的订单才可以盖章"),
     IMAGE_WRONG(2000, "照片类别错误"),
     SQL_SEARCH_FAIL(4000, "数据库查询失败"),
     SQL_INSERT_FAIL(4000, "数据库插入失败"),
@@ -69,6 +70,5 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     public Integer getCode() {
         return code;
     }
-
 
 }

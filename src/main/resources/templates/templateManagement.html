@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="/easyui/demo/demo.css">
         <script type="text/javascript" src="/easyui/jquery.min.js"></script>
         <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
-        <link type="text/css" rel="stylesheet" charset="UTF-8" href="/easyui/locale/easyui-lang-zh_CN.js">
+        <script type="text/javascript" src="/easyui/locale/easyui-lang-zh_CN.js"></script>
     </head>
 </head>
 <body style="padding: 0px">
@@ -45,7 +45,7 @@
         <table border="0" style="margin-top:4px;" width="100%" align="center">
             <tr>
                 <td>
-                    <input class="easyui-filebox" name="upload" data-options="prompt:'文件上传'" style="width:100%"></input>
+                    <input class="easyui-filebox" name="upload" data-options="buttonText:'选择文件',prompt:'文件上传'" style="width:100%"></input>
                 </td>
             </tr>
         </table>
@@ -61,7 +61,7 @@
         <table border="0" style="margin-top:4px;" width="100%" align="center">
             <tr>
                 <td>
-                    <input class="easyui-filebox" name="upload" data-options="prompt:'文件上传'" style="width:100%"></input>
+                    <input class="easyui-filebox" name="upload" data-options="buttonText:'选择文件',prompt:'文件上传'" style="width:100%"></input>
                 </td>
             </tr>
         </table>
@@ -75,6 +75,7 @@
 
 </body>
 <script type="text/javascript">
+
     function uploadidalogonline() {
         $('#uploadonlineinfo').window('open').dialog('setTitle','模板文件上传');
     }

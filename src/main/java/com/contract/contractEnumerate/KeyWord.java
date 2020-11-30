@@ -1,19 +1,19 @@
 package com.contract.contractEnumerate;
 
 public enum KeyWord {
-    NUM("num"),
-    CREATE_TIME("createtime"),
-    PartyB("name"),
-    ID_NUM("idnum"),
-    PHONE_NUM("phone"),
-    BANK_ID("banknum"),
-    BANK_NAME("nban"),
-    ITEM_NAM("item"),
-    PRICE("price"),
-    END_TIME("endtime"),
-    PartyB_NAMEPAGE("picture"),
-    COMPANY("company"),
-    PLACE("place");
+    NUM("[num]"),
+    CREATE_TIME("[createtime]"),
+    PartyB("[name]"),
+    ID_NUM("[idnum]"),
+    PHONE_NUM("[phone]"),
+    BANK_ID("[banknum]"),
+    BANK_NAME("[nban]"),
+    ITEM_NAM("[item]"),
+    PRICE("[price]"),
+    END_TIME("[endtime]"),
+    PartyB_NAMEPAGE("[picture]"),
+    COMPANY("[company]"),
+    PLACE("[place]");
 
 
 
