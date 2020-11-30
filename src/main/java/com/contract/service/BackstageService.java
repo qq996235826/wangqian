@@ -44,7 +44,7 @@ public class BackstageService {
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         OrderExample example=new OrderExample();
-        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(0);
+        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(-1);
         List<Order> orders=orderMapper.selectByExample(example);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
@@ -58,22 +58,22 @@ public class BackstageService {
             map.put("orderNum",orders.get(a).getOrderNum());
 
             //审核状态
-            //状态,  0--草拟,10--待盖章,20--打回，需用户修改,90--已盖章
+            //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
             if(orders.get(a).getStatus()==0)
             {
-                map.put("status","草拟");
+                map.put("status","已提交");
             }
             else if(orders.get(a).getStatus()==10)
             {
-                map.put("status","待盖章");
+                map.put("status","审核通过");
             }
             else if(orders.get(a).getStatus()==20)
             {
-                map.put("status","审核未通过");
+                map.put("status","已失效");
             }
             else if(orders.get(a).getStatus()==90)
             {
-                map.put("status","已盖章");
+                map.put("status","已生效");
             }
 
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));

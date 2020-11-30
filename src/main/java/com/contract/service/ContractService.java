@@ -492,7 +492,7 @@ public class ContractService {
         Supplier supplier=getSupplier(phoneNum);
         Order order=getLastOrderBySupplierId(supplier.getId());
         map.put("id",order.getId().toString());
-        //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
+        //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
         if(order.getStatus()==0)
         {
             map.put("status","checking");
@@ -687,7 +687,7 @@ public class ContractService {
         Supplier supplier=getSupplierByIdNum(idNum);
         //获得该供货人下的所有合同
         OrderExample example=new OrderExample();
-        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusNotEqualTo(0);
+        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusNotEqualTo(-1);
         List<Order> orders=orderMapper.selectByExample(example);
         //两个列表分别存放废纸和废钢
         List<OrderDTO> steels=new ArrayList<>();
