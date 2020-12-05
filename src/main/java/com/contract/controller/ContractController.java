@@ -6,7 +6,6 @@ import com.contract.dto.ResultDTO;
 import com.contract.service.ContractService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -123,7 +122,7 @@ public class ContractController {
      * 通过指定合同审核
      * @return 信息
      */
-    //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
+    //-1--未签名 0--已提交(签名,没审核),10--待盖章(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
     @ResponseBody
     @RequestMapping("/passOrder")
     public ResultDTO passOrder(HttpServletRequest request)
@@ -208,6 +207,18 @@ public class ContractController {
         return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),90));
     }
 
+
+    /**
+     * 上传盖章文件
+     * @param upload
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/uploadContractFile")
+    public ResultDTO uploadContractFile(MultipartFile upload,String id) {
+        return ResultDTO.okOf(contractService.uploadContractFile(upload,id));
+    }
 
 
 }

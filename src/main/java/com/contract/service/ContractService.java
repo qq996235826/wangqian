@@ -60,6 +60,13 @@ public class ContractService {
 
     @Value("${orderBankJPGPatch}")
     private String orderBankJPGPatch;
+
+    @Value("${contractPDFPatch}")
+    private String contractPDFPatch;
+
+    @Value("${signaturePatch}")
+    String signaturePatch;
+
     /**
      *  @filePath 合同模板文件存放路径,在配置文件中规定
      */
@@ -95,7 +102,6 @@ public class ContractService {
             startDate=startDate+starts[a]+formart[a];
             endDate=endDate+ends[a]+formart[a];
         }
-
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
         supplier.setPhoneNum(phoneNum);
@@ -162,9 +168,10 @@ public class ContractService {
             //WordUtils.replaceAndGenerateWord(path,path,infoMap);
             //上传签名照片
             //如果上传了图片就合成
+            String signature=" ";
             if(file!=null)
             {
-                String signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
+                signature=upload(file,path.substring(0,path.lastIndexOf("/")+1));
                 //图片插入
                 Map<String,Object> header = new HashMap<>();
                 header.put("width",150);
@@ -173,7 +180,6 @@ public class ContractService {
                 header.put("content", signature);//图片路径
                 infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
             }
-
             //替换关键字和图片
             XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
             try {
@@ -197,6 +203,8 @@ public class ContractService {
             {
                 throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
             }
+            //保存签名图片
+            order.setSignaturePath(signature);
             //设置所使用模板id
             order.setTemplateId(contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getId());
             //设置供货人id
@@ -212,13 +220,16 @@ public class ContractService {
             //设置货物名称
             order.setItemName(s);
             //设置合同需方
+            order.setCompanyCode(companyCode);
             order.setCompanyName(company.getName());
+            order.setCompanyAddress(company.getAddress());
             //设置银行卡号
             order.setBankNum(bankNum);
             //设置开户行
             order.setBankName(bankName);
             //设置支行
             order.setBranchBankName(branchBankName);
+
 
             //设置价格
             if(!StringUtils.isNullOrEmpty(price))
@@ -247,7 +258,7 @@ public class ContractService {
 //                String bankImageOss=uploadOss.uploadOss(bankImageLocal);
                 order.setBankImagePath(bankImageLocal);
             }
-            //上传文件到云端并且保存他的下载链接
+            //docx转PDF
             String pdfPath=wordToPDFAndJPG.docxToPDF(path);
             order.setPdfPath(pdfPath);
 //            String ossUrl=uploadOss.uploadOss(path);
@@ -302,7 +313,6 @@ public class ContractService {
             {
                 file1.getParentFile().mkdirs();
             }
-
             //写入新文件
             Files.copy(file.toPath(), file1.toPath());
             //成功返回文件路径
@@ -345,6 +355,7 @@ public class ContractService {
     public String uploadContractTemplate(MultipartFile upload) {
         //上传模板文件
         String path=upload(upload,rootPatch+filePath);
+        String pdfPath=wordToPDFAndJPG.docxToPDF(path,rootPatch+contractPDFPatch);
         //把以前的模板全部失效
         ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
         contractTemplateExample.createCriteria().andIsUsingEqualTo(true);
@@ -360,6 +371,7 @@ public class ContractService {
         ContractTemplate contractTemplate=new ContractTemplate();
         contractTemplate.setIsUsing(true);
         contractTemplate.setPath(path);
+        contractTemplate.setPdfPath(pdfPath);
         contractTemplate.setCreateTime(new Date());
         contractTemplate.setUpdateTime(new Date());
 //        contractTemplate.setOssUrl(ossUrl);
@@ -376,7 +388,6 @@ public class ContractService {
      * @return
      */
     public String upload(MultipartFile upload,String patch) {
-
         //获取原始文件名
         String originalFileName = upload.getOriginalFilename();
         //找到最后一个.的位置
@@ -408,6 +419,7 @@ public class ContractService {
             return newFilePath;
         }catch (Exception e ) {
             //处理异常
+            e.printStackTrace();
             throw new CustomizeException(CustomizeErrorCode.WRITE_FILE_WRONG);
         }
     }
@@ -615,7 +627,7 @@ public class ContractService {
      * @param id
      * @return 信息
      */
-    //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
+    //-1--未签名 0--已提交(签名,没审核),10--待盖章(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
     public String changeOrderStatus(String id,int status) {
 
         //获得订单ID
@@ -657,11 +669,11 @@ public class ContractService {
         //删除order
         if(orderMapper.deleteByPrimaryKey(orderId)==1)
         {
-            return "审核通过";
+            return "删除成功";
         }
         else
         {
-            return "审核出错";
+            return "删除出错";
         }
     }
 
@@ -731,13 +743,75 @@ public class ContractService {
         return map;
     }
 
+    /**
+     * 更改银行信息接口
+     * @param orderDTO
+     * @return
+     */
     public Boolean update(OrderDTO orderDTO) {
+        //获得合同订单
         Order order=orderMapper.selectByPrimaryKey(orderDTO.getId());
-        order.setTemplateId(orderDTO.getTemplateId());
-        order.setSupplierId(orderDTO.getSupplierId());
-        order.setItemName(orderDTO.getItemName());
-        order.setOrderNum(orderDTO.getOrderNum());
-        order.setStatus(orderDTO.getStatus());
+        order.setBankName(orderDTO.getBankName());
+        order.setBranchBankName(orderDTO.getBranchBankName());
+        //获得供货人
+        Supplier supplier=supplierMapper.selectByPrimaryKey(orderDTO.getSupplierId());
+        //设置更新后的合同信息
+        Map<String,Object> infoMap=new HashMap<>();
+        //设置标记符和替换变量
+        //签订时间
+        infoMap.put(KeyWord.CREATE_TIME.getValue(), order.getStartDate());
+        //终止日期
+        infoMap.put(KeyWord.END_TIME.getValue(), order.getEndDate());
+        //乙方
+        infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
+        //身份证号
+        infoMap.put(KeyWord.ID_NUM.getValue(),supplier.getIdNum());
+        //电话号
+        infoMap.put(KeyWord.PHONE_NUM.getValue(),supplier.getPhoneNum());
+        //银行卡号
+        infoMap.put(KeyWord.BANK_ID.getValue(),order.getBankNum());
+        //开户行
+        infoMap.put(KeyWord.BANK_NAME.getValue(),orderDTO.getBankName()+orderDTO.getBranchBankName());
+        //设置甲方
+        infoMap.put(KeyWord.COMPANY.getValue(),order.getCompanyName());
+        //设置甲方地址
+        infoMap.put(KeyWord.PLACE.getValue(),order.getCompanyAddress());
+        //物品名
+        infoMap.put(KeyWord.ITEM_NAM.getValue(),order.getItemName());
+        //价格
+        infoMap.put(KeyWord.PRICE.getValue(),order.getPrice());
+
+        //合成新的合同
+        ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
+        contractTemplateExample.createCriteria().andIdEqualTo(orderDTO.getTemplateId());
+        String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
+        //新合同路径
+        String path=getNewOrderContract(new File(temPath),supplier.getIdNum());
+        //WordUtils.replaceAll(path,infoMap);
+
+        //后台替换关键字
+        //WordUtils.replaceAndGenerateWord(path,path,infoMap);
+        //图片插入
+        Map<String,Object> header = new HashMap<>();
+        header.put("width",150);
+        header.put("height",75);
+        header.put("type", "png");
+        header.put("content", order.getSignaturePath());//图片路径
+        infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
+        //替换关键字和图片
+        XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
+        try {
+            FileOutputStream fopts = new FileOutputStream(path);
+            doc.write(fopts);
+            fopts.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //docx转PDF
+        String pdfPath=wordToPDFAndJPG.docxToPDF(path);
+        //设置合同存储路径
+        order.setPath(path);
+        order.setPdfPath(pdfPath);
         order.setUpdateTime(new Date());
         if(orderMapper.updateByPrimaryKey(order)==1)
         {
@@ -807,4 +881,30 @@ public class ContractService {
     }
 
 
+    /**
+     * 上传已盖章文件
+     * @param upload
+     * @param id
+     * @return
+     */
+    public String uploadContractFile(MultipartFile upload, String id) {
+        Order order=orderMapper.selectByPrimaryKey(Long.valueOf(id));
+        if(order!=null)
+        {
+            if(order.getStatus()!=10)
+            {
+                throw new CustomizeException(CustomizeErrorCode.ORDER_STATUS_WRONG);
+            }
+            //上传PDF
+            String pdfPath=upload(upload,rootPatch+contractPDFPatch);
+            order.setPdfPath(pdfPath);
+            //设置状态为已生效
+            order.setStatus(90);
+            orderMapper.updateByPrimaryKey(order);
+            return "成功";
+        }
+        else {
+            throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
+        }
+    }
 }

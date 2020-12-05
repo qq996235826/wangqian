@@ -365,62 +365,52 @@ public class ContractTemplateExample {
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumEqualTo(String value) {
+        public Criteria andVersionNumEqualTo(Integer value) {
             addCriterion("versionNum =", value, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumNotEqualTo(String value) {
+        public Criteria andVersionNumNotEqualTo(Integer value) {
             addCriterion("versionNum <>", value, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumGreaterThan(String value) {
+        public Criteria andVersionNumGreaterThan(Integer value) {
             addCriterion("versionNum >", value, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumGreaterThanOrEqualTo(String value) {
+        public Criteria andVersionNumGreaterThanOrEqualTo(Integer value) {
             addCriterion("versionNum >=", value, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumLessThan(String value) {
+        public Criteria andVersionNumLessThan(Integer value) {
             addCriterion("versionNum <", value, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumLessThanOrEqualTo(String value) {
+        public Criteria andVersionNumLessThanOrEqualTo(Integer value) {
             addCriterion("versionNum <=", value, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumLike(String value) {
-            addCriterion("versionNum like", value, "versionNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andVersionNumNotLike(String value) {
-            addCriterion("versionNum not like", value, "versionNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andVersionNumIn(List<String> values) {
+        public Criteria andVersionNumIn(List<Integer> values) {
             addCriterion("versionNum in", values, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumNotIn(List<String> values) {
+        public Criteria andVersionNumNotIn(List<Integer> values) {
             addCriterion("versionNum not in", values, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumBetween(String value1, String value2) {
+        public Criteria andVersionNumBetween(Integer value1, Integer value2) {
             addCriterion("versionNum between", value1, value2, "versionNum");
             return (Criteria) this;
         }
 
-        public Criteria andVersionNumNotBetween(String value1, String value2) {
+        public Criteria andVersionNumNotBetween(Integer value1, Integer value2) {
             addCriterion("versionNum not between", value1, value2, "versionNum");
             return (Criteria) this;
         }

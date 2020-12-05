@@ -13,7 +13,11 @@ public class Order {
 
     private String itemName;
 
+    private String companyCode;
+
     private String companyName;
+
+    private String companyAddress;
 
     private String bankName;
 
@@ -48,6 +52,8 @@ public class Order {
     private Long chech2Bby;
 
     private String check2Note;
+
+    private String signaturePath;
 
     private String path;
 
@@ -97,12 +103,28 @@ public class Order {
         this.itemName = itemName == null ? null : itemName.trim();
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode == null ? null : companyCode.trim();
+    }
+
     public String getCompanyName() {
         return companyName;
     }
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName == null ? null : companyName.trim();
+    }
+
+    public String getCompanyAddress() {
+        return companyAddress;
+    }
+
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress == null ? null : companyAddress.trim();
     }
 
     public String getBankName() {
@@ -239,6 +261,14 @@ public class Order {
 
     public void setCheck2Note(String check2Note) {
         this.check2Note = check2Note == null ? null : check2Note.trim();
+    }
+
+    public String getSignaturePath() {
+        return signaturePath;
+    }
+
+    public void setSignaturePath(String signaturePath) {
+        this.signaturePath = signaturePath == null ? null : signaturePath.trim();
     }
 
     public String getPath() {

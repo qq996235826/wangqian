@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>网签后台系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=Utf-8">
@@ -7,19 +7,32 @@
 </head>
 <body>
     <div>
-        <a href="/web/templateManagement">
+        <a th:href="@{/web/templateManagement}">
             <button >模板管理</button>
         </a>
-        <a href="/web/review">
+        <a th:href="@{/web/review}">
             <button >进入审核管理系统</button>
         </a>
-        <a href="/web/contractList">
+        <a th:href="@{/web/contractList}">
             <button >合同列表</button>
         </a>
-        <a href="/web/supplier">
+        <a th:href="@{/web/supplier}">
             <button >供货人信息查看</button>
         </a>
 
+        <!--测试环境-->
+<!--        <a href="/web/templateManagement">-->
+<!--            <button >模板管理</button>-->
+<!--        </a>-->
+<!--        <a href="/web/review">-->
+<!--            <button >进入审核管理系统</button>-->
+<!--        </a>-->
+<!--        <a href="/web/contractList">-->
+<!--            <button >合同列表</button>-->
+<!--        </a>-->
+<!--        <a href="/web/supplier">-->
+<!--            <button >供货人信息查看</button>-->
+<!--        </a>-->
     </div>
 </body>
 

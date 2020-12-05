@@ -49,14 +49,35 @@ public class BackstageService {
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
         {
+            //获得供货人信息
+            Supplier supplier=supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
             Map map=new HashMap();
+            //合同id
             map.put("id",orders.get(a).getId());
+            //使用模板id
             map.put("templateId",orders.get(a).getTemplateId());
-            map.put("supplierId",orders.get(a).getSupplierId());
+            //合同创建时间
             map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
+            //货物名称
             map.put("itemName",orders.get(a).getItemName());
+            //价格
+            map.put("price",orders.get(a).getPrice());
+            //业务编码
             map.put("orderNum",orders.get(a).getOrderNum());
-
+            //甲方名字
+            map.put("companyName",orders.get(a).getCompanyName());
+            //供货人id
+            map.put("supplierId",orders.get(a).getSupplierId());
+            //供货人名字
+            map.put("supplierName",supplier.getName());
+            //供货人身份证号
+            map.put("supplierIdNum",supplier.getIdNum());
+            //开户行
+            map.put("bankName",orders.get(a).getBankName());
+            //支行
+            map.put("branchBankName",orders.get(a).getBranchBankName());
+            //银行卡号
+            map.put("bankNum",orders.get(a).getBankNum());
             //审核状态
             //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
             if(orders.get(a).getStatus()==0)
@@ -65,7 +86,7 @@ public class BackstageService {
             }
             else if(orders.get(a).getStatus()==10)
             {
-                map.put("status","审核通过");
+                map.put("status","待盖章");
             }
             else if(orders.get(a).getStatus()==20)
             {
@@ -75,8 +96,13 @@ public class BackstageService {
             {
                 map.put("status","已生效");
             }
-
+            //生效日期
+            map.put("startDate",orders.get(a).getStartDate());
+            //截止日期
+            map.put("endDate",orders.get(a).getEndDate());
+            //记录更新日期
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
+            //pdf路径
             map.put("pdfUrl",orders.get(a).getPdfPath());
             rows.add(map);
         }
@@ -133,7 +159,7 @@ public class BackstageService {
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         OrderExample example=new OrderExample();
-        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(0);
+        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(-1);
         List<Order> orders=orderMapper.selectByExample(example);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
@@ -215,7 +241,7 @@ public class BackstageService {
             map.put("createTime",sdf.format(templates.get(a).getCreateTime()));
             map.put("updateTime",sdf.format(templates.get(a).getUpdateTime()));
             map.put("isUsing",templates.get(a).getIsUsing()?"是":"否");
-            map.put("versionNum",templates.get(a).getVersionNum());
+            map.put("versionNum",templates.get(a).getId());
             map.put("note",templates.get(a).getNote());
             map.put("ossUrl",templates.get(a).getOssUrl());
             map.put("jpgOssUrl",templates.get(a).getJpgOssUrl());
@@ -227,4 +253,17 @@ public class BackstageService {
         result.put("rows",rows);
         return result;
     }
+
+    /**
+     * 获得合同的数量
+     * @return
+     */
+    public Long getCountOfOrders() {
+        OrderExample example=new OrderExample();
+        example.createCriteria().andIdIsNotNull();
+        return orderMapper.countByExample(example);
+    }
+
+
+
 }

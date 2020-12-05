@@ -4,10 +4,12 @@ import com.contract.Utils.SupplierUtils;
 import com.contract.dto.SupplierDTO;
 import com.contract.exception.CustomizeErrorCode;
 import com.contract.exception.CustomizeException;
+import com.contract.mapper.SupplierAccountMapper;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.Supplier;
+import com.contract.model.SupplierAccount;
+import com.contract.model.SupplierAccountExample;
 import com.contract.model.SupplierExample;
-import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,9 @@ public class SupplierService {
 
     @Resource
     SupplierMapper supplierMapper;
+
+    @Resource
+    SupplierAccountMapper supplierAccountMapper;
 
     @Value("${rootPatch}")
     String rootPatch;
@@ -61,10 +66,14 @@ public class SupplierService {
         supplier.setPhoneNum(supplierDTO.getPhoneNum());
         supplier.setIdNum(supplierDTO.getIdNum());
         supplier.setPassword(supplierDTO.getPassword());
+
         if(supplierMapper.insert(supplier)!=1)
         {
             throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
         }
+        SupplierAccount supplierAccount=new SupplierAccount();
+        supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
+        supplierAccountMapper.insert(supplierAccount);
         //返回供货人id
         return supplierMapper.selectByExample(supplierExample).get(0).getId();
     }
@@ -87,6 +96,17 @@ public class SupplierService {
             SupplierUtils.update(supplier,supplierDTO);
             supplier.setUpdateTime(new Date());
             supplierMapper.updateByPrimaryKey(supplier);
+
+            SupplierAccountExample supplierAccountExample=new SupplierAccountExample();
+            supplierAccountExample.createCriteria().andSupplierIDNumEqualTo(supplierDTO.getIdNum());
+            List<SupplierAccount> supplierAccounts=supplierAccountMapper.selectByExample(supplierAccountExample);
+            if(supplierAccounts.size()==1)
+            {
+                SupplierAccount supplierAccount=supplierAccounts.get(0);
+                supplierAccount.setName(supplierDTO.getName());
+                supplierAccountMapper.updateByPrimaryKey(supplierAccount);
+            }
+
             return supplier.getId();
         }
         //没有这个用户

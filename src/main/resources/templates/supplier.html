@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title>网签审核系统</title>
-    <link rel="stylesheet" type="text/css" href="/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="/easyui/themes/color.css">
-    <link rel="stylesheet" type="text/css" href="/easyui/demo/demo.css">
-    <script type="text/javascript" src="/easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
-    <link type="text/css" rel="stylesheet" charset="UTF-8" href="/easyui/locale/easyui-lang-zh_CN.js">
+    <title>查看供货人</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/color.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
 </head>
 
 <body style="padding: 0px">
 <table id="dg" title="供货人列表" class="easyui-datagrid" style="width:100%;height:800px"
        toolbar="#toolbar"
-       url="/web/getSuppliers"
+       pagination="true"
+       url="getSuppliers"
        rownumbers="true"
        fitColumns="true"
        singleSelect="true"
@@ -25,15 +26,15 @@
     <tr>
         <th field="id" width="5%" >供货人序号</th>
         <th field="idNum" width="10%" >身份证号</th>
-        <th field="password" width="10%" data-options="editor:'text'">密码</th>
-        <th field="phoneNum" width="10%" data-options="editor:'text'">手机号</th>
-        <th field="name" width="5%" data-options="editor:'text'">姓名</th>
-        <th field="homeAddress" width="10%" data-options="editor:'text'">住址</th>
+        <th field="password" width="10%" >密码</th>
+        <th field="phoneNum" width="10%" >手机号</th>
+        <th field="name" width="5%" >姓名</th>
+        <th field="homeAddress" width="10%" >住址</th>
         <th field="birth" width="10%" >出生日期</th>
-        <th field="agencies" width="10%" data-options="editor:'text'">发证机关</th>
-        <th field="sex" width="5%" data-options="editor:'text'">性别</th>
-        <th field="ethnic" width="5%" data-options="editor:'text'">民族</th>
-        <th field="updateTime" width="20%" data-options="editor:'text'">信息更新日期</th>
+        <th field="agencies" width="10%" >发证机关</th>
+        <th field="sex" width="5%" >性别</th>
+        <th field="ethnic" width="5%" >民族</th>
+        <th field="updateTime" width="20%" >信息更新日期</th>
     </tr>
     </thead>
 </table>
@@ -42,10 +43,12 @@
 </div>
 </body>
 <script type="text/javascript">
+
     //刷新
     function reload() {
         $('#dg').datagrid('reload');
     }
+
 </script>
 
 

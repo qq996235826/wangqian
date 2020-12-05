@@ -46,6 +46,31 @@ public class WordToPDFAndJPG {
 
     }
 
+    /**
+     * docx转PDF
+     * @param docx
+     * @return PDF路径
+     */
+    public String docxToPDF(String docx,String path)
+    {
+        try {
+            String pdfPath = path+ UUID.randomUUID()+".pdf";
+            XWPFDocument document=new XWPFDocument(new FileInputStream(new File(docx)));
+            File outFile=new File(pdfPath);
+            outFile.getParentFile().mkdirs();
+            OutputStream out=new FileOutputStream(outFile);
+            PdfOptions options= PdfOptions.create();
+            PdfConverter.getInstance().convert(document,out,options);
+            return pdfPath;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.DOCX_TO_PDF_WRONG);
+        }
+
+    }
+
 
 //    /**
 //     * 把docx文件转化为PDF

@@ -415,6 +415,76 @@ public class OrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andCompanyCodeIsNull() {
+            addCriterion("companyCode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeIsNotNull() {
+            addCriterion("companyCode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeEqualTo(String value) {
+            addCriterion("companyCode =", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeNotEqualTo(String value) {
+            addCriterion("companyCode <>", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeGreaterThan(String value) {
+            addCriterion("companyCode >", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("companyCode >=", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeLessThan(String value) {
+            addCriterion("companyCode <", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeLessThanOrEqualTo(String value) {
+            addCriterion("companyCode <=", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeLike(String value) {
+            addCriterion("companyCode like", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeNotLike(String value) {
+            addCriterion("companyCode not like", value, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeIn(List<String> values) {
+            addCriterion("companyCode in", values, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeNotIn(List<String> values) {
+            addCriterion("companyCode not in", values, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeBetween(String value1, String value2) {
+            addCriterion("companyCode between", value1, value2, "companyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyCodeNotBetween(String value1, String value2) {
+            addCriterion("companyCode not between", value1, value2, "companyCode");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyNameIsNull() {
             addCriterion("companyName is null");
             return (Criteria) this;
@@ -482,6 +552,76 @@ public class OrderExample {
 
         public Criteria andCompanyNameNotBetween(String value1, String value2) {
             addCriterion("companyName not between", value1, value2, "companyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressIsNull() {
+            addCriterion("companyAddress is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressIsNotNull() {
+            addCriterion("companyAddress is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressEqualTo(String value) {
+            addCriterion("companyAddress =", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressNotEqualTo(String value) {
+            addCriterion("companyAddress <>", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressGreaterThan(String value) {
+            addCriterion("companyAddress >", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("companyAddress >=", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressLessThan(String value) {
+            addCriterion("companyAddress <", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressLessThanOrEqualTo(String value) {
+            addCriterion("companyAddress <=", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressLike(String value) {
+            addCriterion("companyAddress like", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressNotLike(String value) {
+            addCriterion("companyAddress not like", value, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressIn(List<String> values) {
+            addCriterion("companyAddress in", values, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressNotIn(List<String> values) {
+            addCriterion("companyAddress not in", values, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressBetween(String value1, String value2) {
+            addCriterion("companyAddress between", value1, value2, "companyAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyAddressNotBetween(String value1, String value2) {
+            addCriterion("companyAddress not between", value1, value2, "companyAddress");
             return (Criteria) this;
         }
 
@@ -1572,6 +1712,76 @@ public class OrderExample {
 
         public Criteria andCheck2NoteNotBetween(String value1, String value2) {
             addCriterion("check2Note not between", value1, value2, "check2Note");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathIsNull() {
+            addCriterion("signaturePath is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathIsNotNull() {
+            addCriterion("signaturePath is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathEqualTo(String value) {
+            addCriterion("signaturePath =", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathNotEqualTo(String value) {
+            addCriterion("signaturePath <>", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathGreaterThan(String value) {
+            addCriterion("signaturePath >", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathGreaterThanOrEqualTo(String value) {
+            addCriterion("signaturePath >=", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathLessThan(String value) {
+            addCriterion("signaturePath <", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathLessThanOrEqualTo(String value) {
+            addCriterion("signaturePath <=", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathLike(String value) {
+            addCriterion("signaturePath like", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathNotLike(String value) {
+            addCriterion("signaturePath not like", value, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathIn(List<String> values) {
+            addCriterion("signaturePath in", values, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathNotIn(List<String> values) {
+            addCriterion("signaturePath not in", values, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathBetween(String value1, String value2) {
+            addCriterion("signaturePath between", value1, value2, "signaturePath");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignaturePathNotBetween(String value1, String value2) {
+            addCriterion("signaturePath not between", value1, value2, "signaturePath");
             return (Criteria) this;
         }
 

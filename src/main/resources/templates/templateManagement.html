@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <head>
         <meta charset="UTF-8">
         <title>模板管理</title>
-        <link rel="stylesheet" type="text/css" href="/easyui/themes/default/easyui.css">
-        <link rel="stylesheet" type="text/css" href="/easyui/themes/icon.css">
-        <link rel="stylesheet" type="text/css" href="/easyui/themes/color.css">
-        <link rel="stylesheet" type="text/css" href="/easyui/demo/demo.css">
-        <script type="text/javascript" src="/easyui/jquery.min.js"></script>
-        <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
-        <script type="text/javascript" src="/easyui/locale/easyui-lang-zh_CN.js"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/color.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/easyui/demo/demo.css}">
+        <script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+        <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
     </head>
 </head>
 <body style="padding: 0px">
 <table id="dg" title="模板列表" class="easyui-datagrid" style="width:100%;height:800px"
        toolbar="#toolbar"
-       url="/web/getTemplates"
+       pagination="true"
+       url="getTemplates"
        rownumbers="true"
        fitColumns="true"
        singleSelect="true"
@@ -38,6 +39,7 @@
 <div id="toolbar">
     <a href="#button" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadidalogonline();">上传模板文件</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadimage(1)">上传模板图片</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="openPDF()">预览模板</a>
 </div>
 
 <div id="uploadonlineinfo" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
@@ -83,11 +85,11 @@
     function uploadonline(model,id) {
         if(model==1)
         {
-            var add="/contract/uploadContractTemplateImage";
+            var add="/hetong/contract/uploadContractTemplateImage";
         }
         else
         {
-            var add="/contract/uploadContractTemplate";
+            var add="/hetong/contract/uploadContractTemplate";
         }
         $(id).form('submit',{
             url: add,
@@ -117,6 +119,17 @@
 
     function uploadimage() {
         $('#uploadimage').window('open').dialog('setTitle','模板图片上传');
+    }
+
+    //查看模板
+    function openPDF()
+    {
+        var row = $('#dg').datagrid('getSelected');
+        var templateId=row.id;
+        if (row){
+            var url="/hetong/watchTemplate?templateId="+templateId;
+            window.open(url);
+        }
     }
 
 </script>

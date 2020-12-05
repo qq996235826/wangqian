@@ -3,8 +3,6 @@ package com.contract.dto;
 import com.contract.model.Order;
 import lombok.Data;
 
-import java.text.SimpleDateFormat;
-
 /**
  * @author deng
  * @version 1.0
@@ -13,12 +11,16 @@ import java.text.SimpleDateFormat;
  */
 @Data
 public class OrderDTO {
+    //合同id
     Long id;
     Long templateId;
     Long supplierId;
     //品名
     String itemName;
     String orderNum;
+    //银行名字
+    String bankName;
+    String branchBankName;
     //合同状态
     int status;
     //供应商
@@ -35,5 +37,8 @@ public class OrderDTO {
         this.status=order.getStatus();
         this.companyName=order.getCompanyName();
         this.endTime=order.getEndDate();
+    }
+
+    public OrderDTO() {
     }
 }

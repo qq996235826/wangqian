@@ -6,7 +6,7 @@
     <result column="path" jdbcType="VARCHAR" property="path" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="isUsing" jdbcType="BIT" property="isUsing" />
-    <result column="versionNum" jdbcType="VARCHAR" property="versionNum" />
+    <result column="versionNum" jdbcType="INTEGER" property="versionNum" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="updateBy" jdbcType="BIGINT" property="updateBy" />
     <result column="note" jdbcType="VARCHAR" property="note" />
@@ -114,7 +114,7 @@
       pdfPath, jpgPath, jpgOssUrl
       )
     values (#{id,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{isUsing,jdbcType=BIT}, #{versionNum,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isUsing,jdbcType=BIT}, #{versionNum,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, #{ossUrl,jdbcType=VARCHAR}, 
       #{pdfPath,jdbcType=VARCHAR}, #{jpgPath,jdbcType=VARCHAR}, #{jpgOssUrl,jdbcType=VARCHAR}
       )
@@ -173,7 +173,7 @@
         #{isUsing,jdbcType=BIT},
       </if>
       <if test="versionNum != null">
-        #{versionNum,jdbcType=VARCHAR},
+        #{versionNum,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
@@ -220,7 +220,7 @@
         isUsing = #{record.isUsing,jdbcType=BIT},
       </if>
       <if test="record.versionNum != null">
-        versionNum = #{record.versionNum,jdbcType=VARCHAR},
+        versionNum = #{record.versionNum,jdbcType=INTEGER},
       </if>
       <if test="record.updateTime != null">
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -254,7 +254,7 @@
       path = #{record.path,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       isUsing = #{record.isUsing,jdbcType=BIT},
-      versionNum = #{record.versionNum,jdbcType=VARCHAR},
+      versionNum = #{record.versionNum,jdbcType=INTEGER},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       updateBy = #{record.updateBy,jdbcType=BIGINT},
       note = #{record.note,jdbcType=VARCHAR},
@@ -279,7 +279,7 @@
         isUsing = #{isUsing,jdbcType=BIT},
       </if>
       <if test="versionNum != null">
-        versionNum = #{versionNum,jdbcType=VARCHAR},
+        versionNum = #{versionNum,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
@@ -310,7 +310,7 @@
     set path = #{path,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       isUsing = #{isUsing,jdbcType=BIT},
-      versionNum = #{versionNum,jdbcType=VARCHAR},
+      versionNum = #{versionNum,jdbcType=INTEGER},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       updateBy = #{updateBy,jdbcType=BIGINT},
       note = #{note,jdbcType=VARCHAR},

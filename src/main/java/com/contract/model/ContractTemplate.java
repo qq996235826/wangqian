@@ -11,7 +11,7 @@ public class ContractTemplate {
 
     private Boolean isUsing;
 
-    private String versionNum;
+    private Integer versionNum;
 
     private Date updateTime;
 
@@ -59,12 +59,12 @@ public class ContractTemplate {
         this.isUsing = isUsing;
     }
 
-    public String getVersionNum() {
+    public Integer getVersionNum() {
         return versionNum;
     }
 
-    public void setVersionNum(String versionNum) {
-        this.versionNum = versionNum == null ? null : versionNum.trim();
+    public void setVersionNum(Integer versionNum) {
+        this.versionNum = versionNum;
     }
 
     public Date getUpdateTime() {
