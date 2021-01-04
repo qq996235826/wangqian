@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -52,6 +53,8 @@ public class ContractService {
     @Resource
     private WordToPDFAndJPG wordToPDFAndJPG;
 
+
+
     @Value("${rootPatch}")
     private String rootPatch;
 
@@ -80,6 +83,8 @@ public class ContractService {
     String orderPatch;
 
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+
+    private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy");
 
     private String[] formart={"年","月","日"};
 
@@ -623,7 +628,7 @@ public class ContractService {
 //    }
 
     /**
-     * 通过审核的接口
+     * 通过审核的接口,通过的话还会生成业务编码
      * @param id
      * @return 信息
      */
@@ -634,12 +639,62 @@ public class ContractService {
         Long orderId=Long.valueOf(id);
         //获得order
         Order order=orderMapper.selectByPrimaryKey(orderId);
+        //只有待盖章的才能上传盖章文件
         if(status==90&&order.getStatus()!=10)
         {
             throw new CustomizeException(CustomizeErrorCode.ORDER_STATUS_WRONG);
         }
+
         if(order!=null)
         {
+            //如果是通过审核操作,生成合同业务编码
+            String code;
+            if(status==10)
+            {
+                OrderExample example=new OrderExample();
+                try
+                {
+                    //获得当年的所有记录
+                    example.createCriteria().andOrderNumIsNotNull().andOrderNumTimeGreaterThanOrEqualTo(sdf1.parse(sdf1.format(new Date())));
+                }
+                catch (ParseException e)
+                {
+                    e.printStackTrace();
+                    throw new CustomizeException(CustomizeErrorCode.SYSTEM_ERROR);
+                }
+
+                //最后的编号
+                Long num=orderMapper.countByExample(example)+1;
+                StringBuilder num1= new StringBuilder(num.toString());
+                int numSize=num1.length();
+                for(int a=numSize;a<5;a++)
+                {
+                    num1.insert(0, '0');
+                }
+
+                //获得供应商缩写
+                CompanyExample companyExample=new CompanyExample();
+                companyExample.createCriteria().andCodeEqualTo(order.getCompanyCode());
+                List<Company> companies=companyMapper.selectByExample(companyExample);
+                String companyCode=companies.get(0).getCodeName();
+                //获得编号
+                code="W-"+companyCode+sdf1.format(new Date())+'-'+num1;
+                //设置状态
+                order.setStatus(status);
+                order.setUpdateTime(new Date());
+                order.setOrderNum(code);
+                order.setOrderNumTime(new Date());
+                if(orderMapper.updateByPrimaryKey(order)==1)
+                {
+                    return "成功";
+                }
+                else
+                {
+                    return "出错";
+                }
+
+
+            }
             //设置状态
             order.setStatus(status);
             order.setUpdateTime(new Date());
@@ -663,6 +718,7 @@ public class ContractService {
 
 
 
+    //弃用
     public String deleteOrder(String id) {
         //获得订单ID
         Long orderId=Long.valueOf(id);
@@ -699,7 +755,10 @@ public class ContractService {
         Supplier supplier=getSupplierByIdNum(idNum);
         //获得该供货人下的所有合同
         OrderExample example=new OrderExample();
-        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusNotEqualTo(-1);
+        List<Integer> statusList=new ArrayList<>();
+        statusList.add(0);
+        statusList.add(90);
+        example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusIn(statusList);
         List<Order> orders=orderMapper.selectByExample(example);
         //两个列表分别存放废纸和废钢
         List<OrderDTO> steels=new ArrayList<>();
@@ -906,5 +965,23 @@ public class ContractService {
         else {
             throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
         }
+    }
+
+    public Map<String, String> getBankName(String bankNum) {
+        OrderExample example=new OrderExample();
+        example.createCriteria().andBankNumEqualTo(bankNum);
+        example.setOrderByClause("createTime desc");
+        List<Order> orders=orderMapper.selectByExample(example);
+        Map<String,String> values=new HashMap<>();
+        if(orders.size()>0)
+        {
+            values.put("bankName",orders.get(0).getBankName());
+            values.put("branchBankName",orders.get(0).getBranchBankName());
+        }
+        else {
+            values.put("bankName","");
+            values.put("branchBankName","");
+        }
+        return values;
     }
 }

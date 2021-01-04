@@ -24,27 +24,27 @@ public class ContractController {
     private ContractService contractService;
 
 
-    /**
-     * 上传新的合同接口
-     * @param upload
-     * @return 合同模板存储路径
-     */
-    @ResponseBody
-    @PostMapping("/uploadContractTemplate")
-    public ResultDTO uploadContract(MultipartFile upload) {
-        return ResultDTO.okOf(contractService.uploadContractTemplate(upload));
-    }
+//    /**
+//     * 上传新的合同接口
+//     * @param upload
+//     * @return 合同模板存储路径
+//     */
+//    @ResponseBody
+//    @PostMapping("/uploadContractTemplate")
+//    public ResultDTO uploadContract(MultipartFile upload) {
+//        return ResultDTO.okOf(contractService.uploadContractTemplate(upload));
+//    }
 
-    /**
-     * 上传模板合同图片给前端客户浏览
-     * @param upload
-     * @return 图片下载链接
-     */
-    @ResponseBody
-    @PostMapping("/uploadContractTemplateImage")
-    public ResultDTO uploadContractTemplateImage(MultipartFile upload) {
-        return ResultDTO.okOf(contractService.uploadContractTemplateImage(upload));
-    }
+//    /**
+//     * 上传模板合同图片给前端客户浏览
+//     * @param upload
+//     * @return 图片下载链接
+//     */
+//    @ResponseBody
+//    @PostMapping("/uploadContractTemplateImage")
+//    public ResultDTO uploadContractTemplateImage(MultipartFile upload) {
+//        return ResultDTO.okOf(contractService.uploadContractTemplateImage(upload));
+//    }
 
     /**
      * 获得模板合同
@@ -83,16 +83,16 @@ public class ContractController {
 
 
 
-    /**
-     * 获得最新模板图片
-     * @return 图片下载链接
-     */
-    @ResponseBody
-    @PostMapping("/getContractTemplateImage")
-    public ResultDTO getContractTemplateImage()
-    {
-        return ResultDTO.okOf(contractService.getContractTemplateImage());
-    }
+//    /**
+//     * 获得最新模板图片
+//     * @return 图片下载链接
+//     */
+//    @ResponseBody
+//    @PostMapping("/getContractTemplateImage")
+//    public ResultDTO getContractTemplateImage()
+//    {
+//        return ResultDTO.okOf(contractService.getContractTemplateImage());
+//    }
 
     /**
      * 获得指定合同审核状态
@@ -117,41 +117,6 @@ public class ContractController {
 //    }
 
 
-
-    /**
-     * 通过指定合同审核
-     * @return 信息
-     */
-    //-1--未签名 0--已提交(签名,没审核),10--待盖章(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
-    @ResponseBody
-    @RequestMapping("/passOrder")
-    public ResultDTO passOrder(HttpServletRequest request)
-    {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),10));
-    }
-
-
-    /**
-     * 不通过指定合同审核
-     * @return 信息
-     */
-    @ResponseBody
-    @RequestMapping("/notPassOrder")
-    public ResultDTO notPassOrder(HttpServletRequest request)
-    {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),20));
-    }
-
-    /**
-     * 删除指定合同记录
-     * @return 信息
-     */
-    @ResponseBody
-    @RequestMapping("/deleteOrder")
-    public ResultDTO deleteOrder(HttpServletRequest request)
-    {
-        return ResultDTO.okOf(contractService.deleteOrder(request.getParameter("id")));
-    }
 
 
     /**
@@ -181,18 +146,6 @@ public class ContractController {
     }
 
 
-    /**
-     * 更新合同
-     * @param orderDTO
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/update")
-    public ResultDTO update(@RequestBody OrderDTO orderDTO)
-    {
-        return ResultDTO.okOf(contractService.update(orderDTO));
-    }
-
 
     /**
      * 给合同盖章
@@ -208,16 +161,18 @@ public class ContractController {
     }
 
 
+
+
+
     /**
-     * 上传盖章文件
-     * @param upload
-     * @param id
+     * 获得支行名字
+     * @param bankNum
      * @return
      */
     @ResponseBody
-    @PostMapping("/uploadContractFile")
-    public ResultDTO uploadContractFile(MultipartFile upload,String id) {
-        return ResultDTO.okOf(contractService.uploadContractFile(upload,id));
+    @PostMapping("/getBankName")
+    public ResultDTO getBankName(String bankNum) {
+        return ResultDTO.okOf(contractService.getBankName(bankNum));
     }
 
 

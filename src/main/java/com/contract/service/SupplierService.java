@@ -40,6 +40,7 @@ public class SupplierService {
     @Value("${signaturePatch}")
     String signaturePatch;
 
+
     /**
      * 通过身份证号注册供货人
      * @param supplierDTO
@@ -250,7 +251,7 @@ public class SupplierService {
      * @param password
      * @return
      */
-    public Supplier logIn(String idNum, String password) {
+    public String logIn(String idNum, String password) {
         SupplierExample example=new SupplierExample();
         example.createCriteria().andIdNumEqualTo(idNum);
         List<Supplier> supplierList=supplierMapper.selectByExample(example);
@@ -258,7 +259,7 @@ public class SupplierService {
         {
             if(supplierList.get(0).getPassword().equals(password))
             {
-                return supplierList.get(0);
+                return UUID.randomUUID().toString();
             }
             else
             {

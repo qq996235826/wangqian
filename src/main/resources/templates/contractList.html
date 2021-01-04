@@ -61,7 +61,7 @@
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
         if (row){
-            var url="/hetong/download?orderId="+orderId+"&model=0";
+            var url="/hetong/download/download?orderId="+orderId+"&model=0";
             window.open(url);
         }
     }

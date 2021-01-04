@@ -38,7 +38,7 @@
 </table>
 <div id="toolbar">
     <a href="#button" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadidalogonline();">上传模板文件</a>
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadimage(1)">上传模板图片</a>
+<!--    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadimage(1)">上传模板图片</a>-->
     <a  href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="openPDF()">预览模板</a>
 </div>
 
@@ -85,11 +85,11 @@
     function uploadonline(model,id) {
         if(model==1)
         {
-            var add="/hetong/contract/uploadContractTemplateImage";
+            var add="/hetong/web/uploadContractTemplateImage";
         }
         else
         {
-            var add="/hetong/contract/uploadContractTemplate";
+            var add="/hetong/web/uploadContractTemplate";
         }
         $(id).form('submit',{
             url: add,
@@ -127,7 +127,7 @@
         var row = $('#dg').datagrid('getSelected');
         var templateId=row.id;
         if (row){
-            var url="/hetong/watchTemplate?templateId="+templateId;
+            var url="/hetong/download/watchTemplate?templateId="+templateId;
             window.open(url);
         }
     }

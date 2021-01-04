@@ -1,9 +1,19 @@
 package com.contract.model;
 
 public class Company extends CompanyKey {
+    private String codeName;
+
     private String name;
 
     private String address;
+
+    public String getCodeName() {
+        return codeName;
+    }
+
+    public void setCodeName(String codeName) {
+        this.codeName = codeName == null ? null : codeName.trim();
+    }
 
     public String getName() {
         return name;

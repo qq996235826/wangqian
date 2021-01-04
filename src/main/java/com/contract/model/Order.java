@@ -35,6 +35,8 @@ public class Order {
 
     private String orderNum;
 
+    private Date orderNumTime;
+
     private Integer status;
 
     private Date updateTime;
@@ -189,6 +191,14 @@ public class Order {
 
     public void setOrderNum(String orderNum) {
         this.orderNum = orderNum == null ? null : orderNum.trim();
+    }
+
+    public Date getOrderNumTime() {
+        return orderNumTime;
+    }
+
+    public void setOrderNumTime(Date orderNumTime) {
+        this.orderNumTime = orderNumTime;
     }
 
     public Integer getStatus() {

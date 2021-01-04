@@ -1155,6 +1155,66 @@ public class OrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderNumTimeIsNull() {
+            addCriterion("orderNumTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeIsNotNull() {
+            addCriterion("orderNumTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeEqualTo(Date value) {
+            addCriterion("orderNumTime =", value, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeNotEqualTo(Date value) {
+            addCriterion("orderNumTime <>", value, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeGreaterThan(Date value) {
+            addCriterion("orderNumTime >", value, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("orderNumTime >=", value, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeLessThan(Date value) {
+            addCriterion("orderNumTime <", value, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeLessThanOrEqualTo(Date value) {
+            addCriterion("orderNumTime <=", value, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeIn(List<Date> values) {
+            addCriterion("orderNumTime in", values, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeNotIn(List<Date> values) {
+            addCriterion("orderNumTime not in", values, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeBetween(Date value1, Date value2) {
+            addCriterion("orderNumTime between", value1, value2, "orderNumTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumTimeNotBetween(Date value1, Date value2) {
+            addCriterion("orderNumTime not between", value1, value2, "orderNumTime");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

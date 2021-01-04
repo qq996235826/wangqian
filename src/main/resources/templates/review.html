@@ -108,7 +108,7 @@
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
         if (row){
-            var url="/hetong/download?orderId="+orderId;
+            var url="/hetong/download/download?orderId="+orderId;
             window.open(url);
         }
     }
@@ -142,7 +142,7 @@
         }
         else
         {
-            var add="/hetong/contract/uploadContractFile?id="+orderId;
+            var add="/hetong/web/uploadContractFile?id="+orderId;
             $(id).form('submit',{
                 url: add,
                 onSubmit: function(){
@@ -192,8 +192,12 @@
         var row = $('#dg').datagrid('getSelected');
         if (row){
             var id=row.id;
+            if(row.status!=="已提交")
+            {
+                alert("状态为已提交的才可以通过");
+            }
             $.ajax({
-                url:"/hetong/contract/passOrder",
+                url:"/hetong/web/passOrder",
                 type:"post",
                 data:{
                     id:id,
@@ -212,7 +216,7 @@
         if (row){
             var id=row.id;
             $.ajax({
-                url:"/hetong/contract/notPassOrder",
+                url:"/hetong/web/notPassOrder",
                 type:"post",
                 data:{
                     id:id,
@@ -231,7 +235,7 @@
         if (row){
             var id=row.id;
             $.ajax({
-                url:"/hetong/contract/deleteOrder",
+                url:"/hetong/web/deleteOrder",
                 type:"post",
                 data:{
                     id:id,
@@ -259,7 +263,7 @@
             var bankName=row.bankName;
             var branchBankName=row.branchBankName;
             $.ajax({
-                url:"/hetong/contract/update",
+                url:"/hetong/web/update",
                 type:"post",
                 data:JSON.stringify(
                     {
@@ -291,7 +295,7 @@
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
         if (row){
-            var url="/hetong/download?orderId="+orderId+"&model=0";
+            var url="/hetong/download/download?orderId="+orderId+"&model=0";
             window.open(url);
         }
     }

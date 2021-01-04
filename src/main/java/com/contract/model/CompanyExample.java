@@ -234,6 +234,76 @@ public class CompanyExample {
             return (Criteria) this;
         }
 
+        public Criteria andCodeNameIsNull() {
+            addCriterion("codeName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameIsNotNull() {
+            addCriterion("codeName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameEqualTo(String value) {
+            addCriterion("codeName =", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameNotEqualTo(String value) {
+            addCriterion("codeName <>", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameGreaterThan(String value) {
+            addCriterion("codeName >", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("codeName >=", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameLessThan(String value) {
+            addCriterion("codeName <", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameLessThanOrEqualTo(String value) {
+            addCriterion("codeName <=", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameLike(String value) {
+            addCriterion("codeName like", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameNotLike(String value) {
+            addCriterion("codeName not like", value, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameIn(List<String> values) {
+            addCriterion("codeName in", values, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameNotIn(List<String> values) {
+            addCriterion("codeName not in", values, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameBetween(String value1, String value2) {
+            addCriterion("codeName between", value1, value2, "codeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeNameNotBetween(String value1, String value2) {
+            addCriterion("codeName not between", value1, value2, "codeName");
+            return (Criteria) this;
+        }
+
         public Criteria andNameIsNull() {
             addCriterion("name is null");
             return (Criteria) this;

@@ -18,6 +18,7 @@
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="amount" jdbcType="DOUBLE" property="amount" />
     <result column="orderNum" jdbcType="VARCHAR" property="orderNum" />
+    <result column="orderNumTime" jdbcType="TIMESTAMP" property="orderNumTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="updateBy" jdbcType="BIGINT" property="updateBy" />
@@ -94,8 +95,8 @@
   <sql id="Base_Column_List">
     id, templateId, supplierId, createTime, itemName, companyCode, companyName, companyAddress, 
     bankName, branchBankName, bankNum, bankImagePath, weight, price, amount, orderNum, 
-    status, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, chech2Bby, 
-    check2Note, signaturePath, path, pdfPath, startDate, endDate
+    orderNumTime, status, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
+    chech2Bby, check2Note, signaturePath, path, pdfPath, startDate, endDate
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -133,21 +134,23 @@
       companyAddress, bankName, branchBankName, 
       bankNum, bankImagePath, weight, 
       price, amount, orderNum, 
-      status, updateTime, updateBy, 
-      check1Time, chech1By, check1Note, 
-      check2Time, chech2Bby, check2Note, 
-      signaturePath, path, pdfPath, 
-      startDate, endDate)
+      orderNumTime, status, updateTime, 
+      updateBy, check1Time, chech1By, 
+      check1Note, check2Time, chech2Bby, 
+      check2Note, signaturePath, path, 
+      pdfPath, startDate, endDate
+      )
     values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{itemName,jdbcType=VARCHAR}, #{companyCode,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{companyAddress,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, 
       #{bankNum,jdbcType=VARCHAR}, #{bankImagePath,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
       #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, #{orderNum,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, 
-      #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, 
-      #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR}, 
-      #{signaturePath,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{pdfPath,jdbcType=VARCHAR}, 
-      #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR})
+      #{orderNumTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
+      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
+      #{check2Note,jdbcType=VARCHAR}, #{signaturePath,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{pdfPath,jdbcType=VARCHAR}, #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
     insert into businessorder
@@ -196,6 +199,9 @@
       </if>
       <if test="orderNum != null">
         orderNum,
+      </if>
+      <if test="orderNumTime != null">
+        orderNumTime,
       </if>
       <if test="status != null">
         status,
@@ -285,6 +291,9 @@
       </if>
       <if test="orderNum != null">
         #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumTime != null">
+        #{orderNumTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -387,6 +396,9 @@
       <if test="record.orderNum != null">
         orderNum = #{record.orderNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.orderNumTime != null">
+        orderNumTime = #{record.orderNumTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -452,6 +464,7 @@
       price = #{record.price,jdbcType=DOUBLE},
       amount = #{record.amount,jdbcType=DOUBLE},
       orderNum = #{record.orderNum,jdbcType=VARCHAR},
+      orderNumTime = #{record.orderNumTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=INTEGER},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       updateBy = #{record.updateBy,jdbcType=BIGINT},
@@ -518,6 +531,9 @@
       <if test="orderNum != null">
         orderNum = #{orderNum,jdbcType=VARCHAR},
       </if>
+      <if test="orderNumTime != null">
+        orderNumTime = #{orderNumTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -580,6 +596,7 @@
       price = #{price,jdbcType=DOUBLE},
       amount = #{amount,jdbcType=DOUBLE},
       orderNum = #{orderNum,jdbcType=VARCHAR},
+      orderNumTime = #{orderNumTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       updateBy = #{updateBy,jdbcType=BIGINT},

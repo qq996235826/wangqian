@@ -24,6 +24,7 @@ import java.net.URLEncoder;
  * @date 2020/11/28 23:27
  */
 @Controller
+@RequestMapping("/download")
 public class DownloadController {
     @Value("${rootPatch}")
     String rootPatch;

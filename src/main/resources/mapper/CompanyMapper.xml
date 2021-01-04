@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.contract.model.Company">
     <id column="ID" jdbcType="INTEGER" property="ID" />
     <id column="code" jdbcType="CHAR" property="code" />
+    <result column="codeName" jdbcType="VARCHAR" property="codeName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
   </resultMap>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, code, name, address
+    ID, code, codeName, name, address
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.CompanyExample" resultMap="BaseResultMap">
     select
@@ -101,10 +102,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.contract.model.Company">
-    insert into mycompany (ID, code, name, 
-      address)
-    values (#{ID,jdbcType=INTEGER}, #{code,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR})
+    insert into mycompany (ID, code, codeName, 
+      name, address)
+    values (#{ID,jdbcType=INTEGER}, #{code,jdbcType=CHAR}, #{codeName,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.contract.model.Company">
     insert into mycompany
@@ -114,6 +115,9 @@
       </if>
       <if test="code != null">
         code,
+      </if>
+      <if test="codeName != null">
+        codeName,
       </if>
       <if test="name != null">
         name,
@@ -128,6 +132,9 @@
       </if>
       <if test="code != null">
         #{code,jdbcType=CHAR},
+      </if>
+      <if test="codeName != null">
+        #{codeName,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -152,6 +159,9 @@
       <if test="record.code != null">
         code = #{record.code,jdbcType=CHAR},
       </if>
+      <if test="record.codeName != null">
+        codeName = #{record.codeName,jdbcType=VARCHAR},
+      </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
@@ -167,6 +177,7 @@
     update mycompany
     set ID = #{record.ID,jdbcType=INTEGER},
       code = #{record.code,jdbcType=CHAR},
+      codeName = #{record.codeName,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -176,6 +187,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.contract.model.Company">
     update mycompany
     <set>
+      <if test="codeName != null">
+        codeName = #{codeName,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -188,7 +202,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.contract.model.Company">
     update mycompany
-    set name = #{name,jdbcType=VARCHAR},
+    set codeName = #{codeName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR}
     where ID = #{ID,jdbcType=INTEGER}
       and code = #{code,jdbcType=CHAR}
