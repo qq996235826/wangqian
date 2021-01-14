@@ -102,20 +102,17 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.contract.model.SupplierAccount">
-    insert into supplieraccount (ID, supplierIDNum, name, 
-      account, bank, bankImage, 
-      note, status)
-    values (#{ID,jdbcType=INTEGER}, #{supplierIDNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{account,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, #{bankImage,jdbcType=VARCHAR}, 
-      #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+  <insert id="insert" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.SupplierAccount" useGeneratedKeys="true">
+    insert into supplieraccount (supplierIDNum, name, account, 
+      bank, bankImage, note, 
+      status)
+    values (#{supplierIDNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{bank,jdbcType=VARCHAR}, #{bankImage,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.contract.model.SupplierAccount">
+  <insert id="insertSelective" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.SupplierAccount" useGeneratedKeys="true">
     insert into supplieraccount
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="ID != null">
-        ID,
-      </if>
       <if test="supplierIDNum != null">
         supplierIDNum,
       </if>
@@ -139,9 +136,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="ID != null">
-        #{ID,jdbcType=INTEGER},
-      </if>
       <if test="supplierIDNum != null">
         #{supplierIDNum,jdbcType=VARCHAR},
       </if>

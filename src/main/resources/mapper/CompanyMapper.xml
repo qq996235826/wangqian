@@ -101,18 +101,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.contract.model.Company">
-    insert into mycompany (ID, code, codeName, 
-      name, address)
-    values (#{ID,jdbcType=INTEGER}, #{code,jdbcType=CHAR}, #{codeName,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR})
+  <insert id="insert" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.Company" useGeneratedKeys="true">
+    insert into mycompany (code, codeName, name, 
+      address)
+    values (#{code,jdbcType=CHAR}, #{codeName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.contract.model.Company">
+  <insert id="insertSelective" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.Company" useGeneratedKeys="true">
     insert into mycompany
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="ID != null">
-        ID,
-      </if>
       <if test="code != null">
         code,
       </if>
@@ -127,9 +124,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="ID != null">
-        #{ID,jdbcType=INTEGER},
-      </if>
       <if test="code != null">
         #{code,jdbcType=CHAR},
       </if>

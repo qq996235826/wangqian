@@ -5,13 +5,11 @@ import com.contract.Utils.SupplierUtils;
 import com.contract.Utils.WordToPDFAndJPG;
 import com.contract.Utils.WordUtils;
 import com.contract.contractEnumerate.KeyWord;
+import com.contract.dto.AddByWebDTO;
 import com.contract.dto.OrderDTO;
 import com.contract.exception.CustomizeErrorCode;
 import com.contract.exception.CustomizeException;
-import com.contract.mapper.CompanyMapper;
-import com.contract.mapper.ContractTemplateMapper;
-import com.contract.mapper.OrderMapper;
-import com.contract.mapper.SupplierMapper;
+import com.contract.mapper.*;
 import com.contract.model.*;
 import com.mysql.cj.util.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -19,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -49,6 +48,9 @@ public class ContractService {
 
     @Resource
     private OrderMapper orderMapper;
+
+    @Resource
+    private SupplierAccountMapper supplierAccountMapper;
 
     @Resource
     private WordToPDFAndJPG wordToPDFAndJPG;
@@ -85,6 +87,9 @@ public class ContractService {
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
 
     private SimpleDateFormat sdf1=new SimpleDateFormat("yyyy");
+
+    private SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
+
 
     private String[] formart={"年","月","日"};
 
@@ -684,6 +689,42 @@ public class ContractService {
                 order.setUpdateTime(new Date());
                 order.setOrderNum(code);
                 order.setOrderNumTime(new Date());
+
+
+                //数据录入supplierAccount
+                SupplierAccount supplierAccount=new SupplierAccount();
+                //获得签订人
+                Supplier supplier=supplierMapper.selectByPrimaryKey(order.getSupplierId());
+                //身份证号
+                supplierAccount.setSupplierIDNum(supplier.getIdNum());
+                //姓名
+                supplierAccount.setName(supplier.getName());
+                //银行卡号
+                supplierAccount.setBank(order.getBankNum());
+                //银行卡照片
+                supplierAccount.setBankImage(order.getBankImagePath());
+                supplierAccountMapper.insert(supplierAccount);
+
+                //更新供货人银行数据
+                supplier.setBankNum(order.getBankNum());
+                supplier.setBankName(order.getBankName());
+                supplierMapper.updateByPrimaryKey(supplier);
+                //把订单编号写入合同文件
+                Map<String,Object> infoMap=new HashMap<>();
+                //设置标记符和替换变量
+                //签订时间
+                infoMap.put(KeyWord.CODE.getValue(), order.getOrderNum());
+                //替换关键字和图片
+                String path=getNewOrderContract(new File(order.getPath()),supplier.getIdNum());
+                XWPFDocument doc = WordUtils.generateWord(infoMap,order.getPath());
+                try {
+                    FileOutputStream fopts = new FileOutputStream(path);
+                    doc.write(fopts);
+                    fopts.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                order.setPath(path);
                 if(orderMapper.updateByPrimaryKey(order)==1)
                 {
                     return "成功";
@@ -758,6 +799,7 @@ public class ContractService {
         List<Integer> statusList=new ArrayList<>();
         statusList.add(0);
         statusList.add(90);
+        statusList.add(10);
         example.createCriteria().andSupplierIdEqualTo(supplier.getId()).andStatusIn(statusList);
         List<Order> orders=orderMapper.selectByExample(example);
         //两个列表分别存放废纸和废钢
@@ -950,7 +992,7 @@ public class ContractService {
         Order order=orderMapper.selectByPrimaryKey(Long.valueOf(id));
         if(order!=null)
         {
-            if(order.getStatus()!=10)
+            if(order.getStatus()!=10&&order.getTemplateId()!=null)
             {
                 throw new CustomizeException(CustomizeErrorCode.ORDER_STATUS_WRONG);
             }
@@ -958,7 +1000,10 @@ public class ContractService {
             String pdfPath=upload(upload,rootPatch+contractPDFPatch);
             order.setPdfPath(pdfPath);
             //设置状态为已生效
-            order.setStatus(90);
+            if(order.getTemplateId()!=null)
+            {
+                order.setStatus(90);
+            }
             orderMapper.updateByPrimaryKey(order);
             return "成功";
         }
@@ -983,5 +1028,82 @@ public class ContractService {
             values.put("branchBankName","");
         }
         return values;
+    }
+
+    /**
+     * @Description: 后台添加记录
+     * @Author: DengHaoRan
+     * @Date: 2021/1/14 13:29
+     * @params: [request]
+     * @return: java.lang.Long
+     **/
+    public Boolean addOrderByWeb(AddByWebDTO addByWebDTO)
+    {
+        Order order=new Order();
+        //货物名称
+        order.setItemName(addByWebDTO.getItemName());
+        //价格
+        if(!addByWebDTO.getPrice().isEmpty())
+        {
+            order.setPrice(Double.valueOf(addByWebDTO.getPrice()));
+        }
+        //状态
+        Integer status=Integer.valueOf(addByWebDTO.getStatus());
+        order.setStatus(status);
+        //需方名称
+        order.setCompanyName(addByWebDTO.getCompanyName());
+        //供货人相关
+        SupplierExample example=new SupplierExample();
+        example.createCriteria().andIdNumEqualTo(addByWebDTO.getSupplierIdNum());
+        List<Supplier> supplierList=supplierMapper.selectByExample(example);
+        //没有该供货人,就插入
+        if(supplierList.size()==0)
+        {
+            Supplier supplier=new Supplier();
+            supplier.setStstus(1);
+            supplier.setIdNum(addByWebDTO.getSupplierIdNum());
+            supplier.setName(addByWebDTO.getSupplierName());
+            supplier.setBankName(addByWebDTO.getBankName()+addByWebDTO.getBranchBankName());
+            supplier.setBankNum(addByWebDTO.getBankNum());
+            supplier.setPassword("123456");
+            supplier.setPhoneNum(addByWebDTO.getPhone());
+            supplier.setUpdateTime(new Date());
+            supplier.setIdCardTimeLimit("");
+            supplier.setEthnic("");
+            supplier.setSex("");
+            supplier.setAgencies("");
+            supplierMapper.insert(supplier);
+            order.setSupplierId(supplier.getId());
+        }else
+        {
+            order.setSupplierId(supplierList.get(0).getId());
+        }
+        //银行
+        order.setBankName(addByWebDTO.getBankName());
+        order.setBranchBankName(addByWebDTO.getBranchBankName());
+        //日期
+        order.setStartDate(addByWebDTO.getStartDate());
+        order.setEndDate(addByWebDTO.getEndDate());
+        order.setCreateTime(new Date());
+        order.setUpdateTime(new Date());
+        //pdf
+        order.setPath("");
+        order.setPdfPath("");
+
+        if(orderMapper.insert(order)==1)
+        {
+            return true;
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
+        }
+    }
+
+    public Boolean uploadPDF(MultipartFile upload)
+    {
+        //上传模板文件
+        String path=upload(upload,rootPatch+filePath);
+        return null;
     }
 }

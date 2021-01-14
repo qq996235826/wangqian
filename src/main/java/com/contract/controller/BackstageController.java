@@ -1,15 +1,20 @@
 package com.contract.controller;
 
+import com.contract.dto.AddByWebDTO;
 import com.contract.dto.OrderDTO;
 import com.contract.dto.ResultDTO;
+import com.contract.dto.SupplierDTO;
 import com.contract.service.BackstageService;
+import com.contract.service.CompanyService;
 import com.contract.service.ContractService;
+import com.contract.service.SupplierService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +32,12 @@ public class BackstageController {
 
     @Resource
     private ContractService contractService;
+
+    @Resource
+    private SupplierService supplierService;
+
+    @Resource
+    private CompanyService companyService;
 
     /**
      * 负责页面跳转
@@ -84,9 +95,9 @@ public class BackstageController {
      */
     @RequestMapping("/getOrders")
     @ResponseBody
-    public Map getOrders()
+    public Map getOrders(HttpServletRequest request)
     {
-        return backstageService.getOrders();
+        return backstageService.getOrders(request);
     }
 
 
@@ -96,9 +107,9 @@ public class BackstageController {
      */
     @RequestMapping("/getSuppliers")
     @ResponseBody
-    public Map getSuppliers()
+    public Map getSuppliers(HttpServletRequest request)
     {
-        return backstageService.getSuppliers();
+        return backstageService.getSuppliers(request);
     }
 
     /**
@@ -107,9 +118,9 @@ public class BackstageController {
      */
     @RequestMapping("/getOrdersInfo")
     @ResponseBody
-    public Map getOrdersInfo()
+    public Map getOrdersInfo(HttpServletRequest request)
     {
-        return backstageService.getOrdersInfo();
+        return backstageService.getOrdersInfo(request);
     }
 
     /**
@@ -118,9 +129,9 @@ public class BackstageController {
      */
     @RequestMapping("/getTemplates")
     @ResponseBody
-    public Map getTemplates()
+    public Map getTemplates(HttpServletRequest request)
     {
-        return backstageService.getTemplates();
+        return backstageService.getTemplates(request);
     }
 
 
@@ -198,6 +209,50 @@ public class BackstageController {
     public ResultDTO update(@RequestBody OrderDTO orderDTO)
     {
         return ResultDTO.okOf(contractService.update(orderDTO));
+    }
+
+
+    /**
+     * 停用供货人
+     * @return 信息
+     */
+    @ResponseBody
+    @RequestMapping("/deactivate")
+    public ResultDTO deactivate(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(supplierService.deactivate(request.getParameter("id")));
+    }
+
+    /**
+     * 停用供货人
+     * @return 信息
+     */
+    @ResponseBody
+    @RequestMapping("/enable")
+    public ResultDTO enable(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(supplierService.enable(request.getParameter("id")));
+    }
+
+    @ResponseBody
+    @RequestMapping("/addOrderByWeb")
+    public ResultDTO addOrderByWeb(@RequestBody AddByWebDTO addByWebDTO)
+    {
+        return ResultDTO.okOf(contractService.addOrderByWeb(addByWebDTO));
+    }
+
+    @ResponseBody
+    @RequestMapping("/getCompany")
+    public List<Map<String,Object>> getCompany()
+    {
+        return companyService.getCompanies();
+    }
+
+    @ResponseBody
+    @RequestMapping("/getContractStatus")
+    public List<Map<String,Object>> getContractStatus()
+    {
+        return backstageService.getContractStatus();
     }
 
 

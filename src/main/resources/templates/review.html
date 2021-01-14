@@ -11,16 +11,40 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px 30px;
+        }
+        .ftitle{
+            font-size:14px;
+            font-weight:bold;
+            padding:5px 0;
+            margin-bottom:10px;
+            border-bottom:1px solid #ccc;
+        }
+        .fitem{
+            margin-bottom:5px;
+        }
+        .fitem label{
+            display:inline-block;
+            width:80px;
+        }
+        .fitem input{
+            width:160px;
+        }
+    </style>
 </head>
 
 <body style="padding: 0px">
 <table id="dg" title="审核列表" class="easyui-datagrid" style="width:100%;height:800px"
        pagination="true"
+       striped="true"
+       singleSelect="true"
        toolbar="#toolbar"
        url="getOrders"
        rownumbers="true"
        fitColumns="true"
-       singleSelect="true"
        data-options="onClickCell:onClickCell"
        loadMsg="正在查询...">
 
@@ -54,12 +78,93 @@
 <div id="toolbar">
     <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="pass()">审核通过</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="notpass()">审核不通过</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addInput()">添加记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="deleteOrder()">删除记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">提交修改并生成新合同文件</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadStamp()">上传盖章文件</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="openPDF()">查看合同</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="downloadContract()">下载选中的合同</a>
+</div>
+
+<div id="addInput" class="easyui-dialog" style="width:500px;height:350px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">新记录</div>
+    <form id="fm" method="post" novalidate>
+        <div class="fitem">
+<!--            <label>签订日期:</label>-->
+<!--            <input id="date" class="easyui-textbox" required="true">-->
+            <label>签订日期:</label>
+            <input id="date" style="width:250px" name="createDate" type="text" class="easyui-datebox" required="required">
+        </div>
+        <div class="fitem">
+            <label>货物名称:</label>
+            <input id="itemName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>价格:</label>
+            <input id="price" class="easyui-textbox" >
+        </div>
+        <div class="fitem">
+            <label>审核状态:</label>
+<!--            <input id="status" class="easyui-textbox" required="true">-->
+            <select class="easyui-combobox" name="companyCode" id="status"
+                    validType="selectValueRequired['#companyCode1']"
+                    style="width:250px"
+                    data-options="valueField:'code',textField:'status',
+                            url:'/hetong/web/getContractStatus',
+                            editable:true,
+                            prompt:'请选择状态'" required="required">
+            </select>
+        </div>
+        <div class="fitem">
+            <label>供应商:</label>  <!--下面的ID与页面工具栏的重复了，故改成companyCode1-->
+            <select class="easyui-combobox" name="companyCode" id="companyCode1"
+                    validType="selectValueRequired['#companyCode1']"
+                    style="width:250px"
+                    data-options="valueField:'code',textField:'name',
+                            url:'/hetong/web/getCompany',
+                            editable:true,
+                            prompt:'请选择供应商'" required="required">
+            </select>
+        </div>
+        <div class="fitem">
+            <label>乙方:</label>
+            <input id="supplierName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>乙方身份证号:</label>
+            <input id="supplierIdNum" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>乙方手机号:</label>
+            <input id="phone" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>开户行:</label>
+            <input id="bankName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>支行:</label>
+            <input id="branchBankName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>银行卡号:</label>
+            <input id="bankNum" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>合同生效日期:</label>
+            <input id="startDate" style="width:250px" name="createDate" type="text" class="easyui-datebox" required="required">
+        </div>
+        <div class="fitem">
+            <label>合同失效日期:</label>
+            <input id="endDate" style="width:250px" name="createDate" type="text" class="easyui-datebox" required="required">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveEqument()" style="width:120px">保存新纪录</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#addInput').dialog('close')" style="width:120px">取消</a>
 </div>
 
 <!--文件上传-->
@@ -79,28 +184,9 @@
     </div>
 </div>
 
+
+
 </body>
-
-<!--分页-->
-<!--<script type="text/javascript">-->
-
-<!--    $('#pp').pagination({-->
-<!--        total:getCountOfOrders(),-->
-<!--        pageSize:10-->
-<!--    });-->
-
-<!--     function getCountOfOrders()  {-->
-<!--        $.ajax({-->
-<!--            url:"getCountOfOrders",-->
-<!--            type:"post",-->
-<!--            datatype:"josn",-->
-<!--            success:function(result){-->
-<!--                return result.data;-->
-<!--            }-->
-<!--        });-->
-<!--    }-->
-<!--</script>-->
-
 
 <script type="text/javascript">
 
@@ -116,9 +202,10 @@
     //盖章
     function uploadStamp() {
         var row = $('#dg').datagrid('getSelected');
+        var template=row.templateId;
         if(row)
         {
-            if(row.status!=="待盖章")
+            if(row.status!=="待盖章"&&template!=null)
             {
                 alert("状态为待盖章的才可以上传盖章文件");
             }else
@@ -136,7 +223,9 @@
     function uploadonline(id) {
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
-        if(row.status!=="待盖章")
+        var template=row.templateId;
+
+        if(row.status!=="待盖章"&&template!=null)
         {
             alert("状态为待盖章的才可以上传盖章文件");
         }
@@ -167,6 +256,8 @@
             });
         }
     }
+
+    //上传PDF合同文件
 
 
     // function stamp() {
@@ -300,6 +391,66 @@
         }
     }
 
+    //弹出新建窗口
+    function addInput() {
+        $('#addInput').dialog('open').dialog('center').dialog('setTitle', '新建商品');
+        $('#fm').form('clear');
+    }
+
+    function saveEqument() {
+        var date=document.getElementById("date").value;
+        var itemName=document.getElementById("itemName").value;
+        var price=document.getElementById("price").value;
+        var status=$("#status").combobox("getValue");
+        var companyName=$("#companyCode1").combobox("getText");
+        var supplierName=document.getElementById("supplierName").value;
+        var supplierIdNum=document.getElementById("supplierIdNum").value;
+        var bankName=document.getElementById("bankName").value;
+        var branchBankName=document.getElementById("branchBankName").value;
+        var bankNum=document.getElementById("bankNum").value;
+        var startDate=document.getElementById("startDate").value;
+        var endDate=document.getElementById("endDate").value;
+        var phone=document.getElementById("phone").value;
+
+        $.ajax({
+            url:"/hetong/web/addOrderByWeb",
+            type:"post",
+            data:JSON.stringify(
+                {
+                    date:date,
+                    itemName:itemName,
+                    price:price,
+                    status:status,
+                    companyName:companyName,
+                    supplierName:supplierName,
+                    supplierIdNum:supplierIdNum,
+                    bankName:bankName,
+                    branchBankName:branchBankName,
+                    bankNum:bankNum,
+                    startDate:startDate,
+                    endDate:endDate,
+                    phone:phone,
+                }
+            ),
+            datatype:"josn",
+            contentType:"application/json",
+            success:function(result){
+                if(result.status===200)
+                {
+                    alert("添加成功");
+                }
+                else
+                {
+                    alert("添加失败");
+                }
+                $('#dg').datagrid('reload');
+            }
+        });
+    }
+
+
+
+
 
 </script>
 
@@ -345,5 +496,8 @@
             editIndex = index;
         }
     }
+
+
+
 </script>
 </html>

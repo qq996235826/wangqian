@@ -23,6 +23,10 @@ public class Supplier {
 
     private String ethnic;
 
+    private String bankName;
+
+    private String bankNum;
+
     private String idCardTimeLimit;
 
     private String id0Path;
@@ -125,6 +129,22 @@ public class Supplier {
 
     public void setEthnic(String ethnic) {
         this.ethnic = ethnic == null ? null : ethnic.trim();
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBankNum() {
+        return bankNum;
+    }
+
+    public void setBankNum(String bankNum) {
+        this.bankNum = bankNum == null ? null : bankNum.trim();
     }
 
     public String getIdCardTimeLimit() {

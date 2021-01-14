@@ -67,6 +67,7 @@ public class SupplierService {
         supplier.setPhoneNum(supplierDTO.getPhoneNum());
         supplier.setIdNum(supplierDTO.getIdNum());
         supplier.setPassword(supplierDTO.getPassword());
+        supplier.setStstus(1);
 
         if(supplierMapper.insert(supplier)!=1)
         {
@@ -259,7 +260,14 @@ public class SupplierService {
         {
             if(supplierList.get(0).getPassword().equals(password))
             {
-                return UUID.randomUUID().toString();
+                if(supplierList.get(0).getStstus()!=4)
+                {
+                    return UUID.randomUUID().toString();
+                }
+                else
+                {
+                    throw  new CustomizeException(CustomizeErrorCode.SUPPLIER_STATUS_WRONG);
+                }
             }
             else
             {
@@ -321,5 +329,49 @@ public class SupplierService {
         {
             throw new CustomizeException(CustomizeErrorCode.PASS_WRONG);
         }
+    }
+
+    /**
+     * @Description: 停用用户
+     * @Author: DengHaoRan
+     * @Date: 2021/1/7 23:43
+     * @params: [id, i]
+     * @return: java.lang.Boolean
+     **/
+    public Boolean deactivate(String id)
+    {
+        Supplier supplier=supplierMapper.selectByPrimaryKey(Long.valueOf(id));
+        if(supplier==null)
+        {
+            return false;
+        }
+        supplier.setStstus(4);
+        if(supplierMapper.updateByPrimaryKey(supplier)==1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @Description: 启用用户
+     * @Author: DengHaoRan
+     * @Date: 2021/1/7 23:43
+     * @params: [id, i]
+     * @return: java.lang.Boolean
+     **/
+    public Boolean enable(String id)
+    {
+        Supplier supplier=supplierMapper.selectByPrimaryKey(Long.valueOf(id));
+        if(supplier==null)
+        {
+            return false;
+        }
+        supplier.setStstus(1);
+        if(supplierMapper.updateByPrimaryKey(supplier)==1)
+        {
+            return true;
+        }
+        return false;
     }
 }

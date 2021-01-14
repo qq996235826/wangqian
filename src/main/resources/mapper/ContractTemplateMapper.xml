@@ -107,24 +107,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.contract.model.ContractTemplate">
-    insert into contracttemplate (id, path, createTime, 
-      isUsing, versionNum, updateTime, 
-      updateBy, note, ossUrl, 
-      pdfPath, jpgPath, jpgOssUrl
-      )
-    values (#{id,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{isUsing,jdbcType=BIT}, #{versionNum,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, #{ossUrl,jdbcType=VARCHAR}, 
-      #{pdfPath,jdbcType=VARCHAR}, #{jpgPath,jdbcType=VARCHAR}, #{jpgOssUrl,jdbcType=VARCHAR}
-      )
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.contract.model.ContractTemplate" useGeneratedKeys="true">
+    insert into contracttemplate (path, createTime, isUsing, 
+      versionNum, updateTime, updateBy, 
+      note, ossUrl, pdfPath, 
+      jpgPath, jpgOssUrl)
+    values (#{path,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isUsing,jdbcType=BIT}, 
+      #{versionNum,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, 
+      #{note,jdbcType=VARCHAR}, #{ossUrl,jdbcType=VARCHAR}, #{pdfPath,jdbcType=VARCHAR}, 
+      #{jpgPath,jdbcType=VARCHAR}, #{jpgOssUrl,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.contract.model.ContractTemplate">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.ContractTemplate" useGeneratedKeys="true">
     insert into contracttemplate
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="path != null">
         path,
       </if>
@@ -160,9 +155,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="path != null">
         #{path,jdbcType=VARCHAR},
       </if>

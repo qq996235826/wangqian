@@ -13,7 +13,8 @@ public enum KeyWord {
     END_TIME("[endtime]"),
     PartyB_NAMEPAGE("[picture]"),
     COMPANY("[company]"),
-    PLACE("[place]");
+    PLACE("[place]"),
+    CODE("[code]");
 
 
 

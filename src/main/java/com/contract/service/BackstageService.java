@@ -4,8 +4,10 @@ import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.*;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,98 +38,121 @@ public class BackstageService {
      * 负责给审核页面的表格返回数据
      * @return Map
      */
-    public Map getOrders()
+    public Map getOrders(HttpServletRequest request)
     {
+        Integer page=Integer.valueOf(request.getParameter("page"));
+        Integer row=Integer.valueOf(request.getParameter("rows"));
         //创建map用于返回
         Map result=new HashMap<>();
         //List放在result里
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         OrderExample example=new OrderExample();
+        example.setOrderByClause(" id desc");
         example.createCriteria().andStatusNotEqualTo(-1).andStatusNotEqualTo(20);
-        List<Order> orders=orderMapper.selectByExample(example);
+        //总数据
+        Long totalCount = orderMapper.countByExample(example);
+        result.put("total",totalCount);
+        //分页
+        RowBounds rowBounds=new RowBounds((page-1)*row,row);
+        List<Order> orders=orderMapper.selectByExampleWithRowbounds(example,rowBounds);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
         {
-            //获得供货人信息
-            Supplier supplier=supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
-            Map map=new HashMap();
-            //合同id
-            map.put("id",orders.get(a).getId());
-            //使用模板id
-            map.put("templateId",orders.get(a).getTemplateId());
-            //合同创建时间
-            map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
-            //货物名称
-            map.put("itemName",orders.get(a).getItemName());
-            //价格
-            map.put("price",orders.get(a).getPrice());
-            //业务编码
-            map.put("orderNum",orders.get(a).getOrderNum());
-            //甲方名字
-            map.put("companyName",orders.get(a).getCompanyName());
-            //供货人id
-            map.put("supplierId",orders.get(a).getSupplierId());
-            //供货人名字
-            map.put("supplierName",supplier.getName());
-            //供货人身份证号
-            map.put("supplierIdNum",supplier.getIdNum());
-            //开户行
-            map.put("bankName",orders.get(a).getBankName());
-            //支行
-            map.put("branchBankName",orders.get(a).getBranchBankName());
-            //银行卡号
-            map.put("bankNum",orders.get(a).getBankNum());
-            //审核状态
-            //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
-            if(orders.get(a).getStatus()==0)
+            try
             {
-                map.put("status","已提交");
+                //获得供货人信息
+                Supplier supplier=supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
+                Map map=new HashMap();
+                //合同id
+                map.put("id",orders.get(a).getId());
+                //使用模板id
+                map.put("templateId",orders.get(a).getTemplateId());
+                //合同创建时间
+                map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
+                //货物名称
+                map.put("itemName",orders.get(a).getItemName());
+                //价格
+                map.put("price",orders.get(a).getPrice());
+                //业务编码
+                map.put("orderNum",orders.get(a).getOrderNum());
+                //甲方名字
+                map.put("companyName",orders.get(a).getCompanyName());
+                //供货人id
+                map.put("supplierId",orders.get(a).getSupplierId());
+                //供货人名字
+                map.put("supplierName",supplier.getName());
+                //供货人身份证号
+                map.put("supplierIdNum",supplier.getIdNum());
+                //开户行
+                map.put("bankName",orders.get(a).getBankName());
+                //支行
+                map.put("branchBankName",orders.get(a).getBranchBankName());
+                //银行卡号
+                map.put("bankNum",orders.get(a).getBankNum());
+                //审核状态
+                //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
+                if(orders.get(a).getStatus()==0)
+                {
+                    map.put("status","已提交");
+                }
+                else if(orders.get(a).getStatus()==10)
+                {
+                    map.put("status","待盖章");
+                }
+                else if(orders.get(a).getStatus()==20)
+                {
+                    map.put("status","已失效");
+                }
+                else if(orders.get(a).getStatus()==90)
+                {
+                    map.put("status","已生效");
+                }
+                //生效日期
+                map.put("startDate",orders.get(a).getStartDate());
+                //截止日期
+                map.put("endDate",orders.get(a).getEndDate());
+                //记录更新日期
+                map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
+                //pdf路径
+                map.put("pdfUrl",orders.get(a).getPdfPath());
+                rows.add(map);
             }
-            else if(orders.get(a).getStatus()==10)
+            catch (Exception e)
             {
-                map.put("status","待盖章");
+                e.printStackTrace();
             }
-            else if(orders.get(a).getStatus()==20)
-            {
-                map.put("status","已失效");
-            }
-            else if(orders.get(a).getStatus()==90)
-            {
-                map.put("status","已生效");
-            }
-            //生效日期
-            map.put("startDate",orders.get(a).getStartDate());
-            //截止日期
-            map.put("endDate",orders.get(a).getEndDate());
-            //记录更新日期
-            map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
-            //pdf路径
-            map.put("pdfUrl",orders.get(a).getPdfPath());
-            rows.add(map);
+
         }
-        //设置数据行数
-        result.put("total",rows.size());
         //把list放入Map中
         result.put("rows",rows);
         return result;
     }
 
 
+
     /**
      * 获得所有的供货人
      * @return Map
      */
-    public Map getSuppliers()
+    public Map getSuppliers(HttpServletRequest request)
     {
+        Integer page=Integer.valueOf(request.getParameter("page"));
+        Integer row=Integer.valueOf(request.getParameter("rows"));
         //创建map用于返回
         Map result=new HashMap<>();
         //List放在result里
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         SupplierExample example=new SupplierExample();
+        example.setOrderByClause(" id desc");
         example.createCriteria().andIdIsNotNull();
-        List<Supplier> supplierList=supplierMapper.selectByExample(example);
+        //总数据
+        Long totalCount = supplierMapper.countByExample(example);
+        result.put("total",totalCount);
+        //分页
+        RowBounds rowBounds=new RowBounds((page-1)*row,row);
+        List<Supplier> supplierList=supplierMapper.selectByExampleWithRowbounds(example,rowBounds);
         //把数据填入map,每个supplier都是一个map,把每个map存入list中
         for (int a=0;a<supplierList.size();a++)
         {
@@ -143,24 +168,39 @@ public class BackstageService {
             map.put("sex",supplierList.get(a).getSex());
             map.put("ethnic",supplierList.get(a).getEthnic());
             map.put("updateTime",sdf.format(supplierList.get(a).getUpdateTime()));
+            if(supplierList.get(a).getStstus()==4)
+            {
+                map.put("status","停用");
+            }
+            else
+            {
+                map.put("status","启用");
+            }
             rows.add(map);
         }
-        //设置数据行数
-        result.put("total",rows.size());
         //把list放入Map中
         result.put("rows",rows);
         return result;
     }
 
-    public Map getOrdersInfo() {
+    public Map getOrdersInfo(HttpServletRequest request) {
+        //分页
+        Integer page=Integer.valueOf(request.getParameter("page"));
+        Integer row=Integer.valueOf(request.getParameter("rows"));
         //创建map用于返回
         Map result=new HashMap<>();
         //List放在result里
         List<Map> rows=new ArrayList<>();
         //从数据获得数据
         OrderExample example=new OrderExample();
+        example.setOrderByClause(" id desc");
         example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(-1);
-        List<Order> orders=orderMapper.selectByExample(example);
+        //总数据
+        Long totalCount = orderMapper.countByExample(example);
+        result.put("total",totalCount);
+        //分页
+        RowBounds rowBounds=new RowBounds((page-1)*row,row);
+        List<Order> orders=orderMapper.selectByExampleWithRowbounds(example,rowBounds);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
         {
@@ -216,14 +256,14 @@ public class BackstageService {
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
             rows.add(map);
         }
-        //设置数据行数
-        result.put("total",rows.size());
         //把list放入Map中
         result.put("rows",rows);
         return result;
     }
 
-    public Map getTemplates() {
+    public Map getTemplates(HttpServletRequest request) {
+        Integer page=Integer.valueOf(request.getParameter("page"));
+        Integer row=Integer.valueOf(request.getParameter("rows"));
         //创建map用于返回
         Map result=new HashMap<>();
         //List放在result里
@@ -231,7 +271,12 @@ public class BackstageService {
         //从数据获得数据
         ContractTemplateExample example=new ContractTemplateExample();
         example.createCriteria().andIdIsNotNull();
-        List<ContractTemplate> templates= contractTemplateMapper.selectByExample(example);
+        //总数据
+        Long totalCount = contractTemplateMapper.countByExample(example);
+        result.put("total",totalCount);
+        //分页
+        RowBounds rowBounds=new RowBounds((page-1)*row,row);
+        List<ContractTemplate> templates= contractTemplateMapper.selectByExampleWithRowbounds(example,rowBounds);
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<templates.size();a++)
         {
@@ -247,8 +292,6 @@ public class BackstageService {
             map.put("jpgOssUrl",templates.get(a).getJpgOssUrl());
             rows.add(map);
         }
-        //设置数据行数
-        result.put("total",rows.size());
         //把list放入Map中
         result.put("rows",rows);
         return result;
@@ -264,6 +307,32 @@ public class BackstageService {
         return orderMapper.countByExample(example);
     }
 
+
+    public List<Map<String, Object>> getContractStatus()
+    {
+        List<Map<String, Object>> statusList=new ArrayList<>();
+        Map<String, Object> status1=new HashMap<>();
+        Map<String, Object> status2=new HashMap<>();
+        Map<String, Object> status3=new HashMap<>();
+        Map<String, Object> status4=new HashMap<>();
+        Map<String, Object> status5=new HashMap<>();
+        status1.put("code",-1);
+        status1.put("status","未签名");
+        status2.put("code",0);
+        status2.put("status","未提交");
+        status3.put("code",10);
+        status3.put("status","审核通过");
+        status4.put("code",20);
+        status4.put("status","已失效");
+        status5.put("code",90);
+        status5.put("status","已生效");
+        statusList.add(status1);
+        statusList.add(status2);
+        statusList.add(status3);
+        statusList.add(status4);
+        statusList.add(status5);
+        return statusList;
+    }
 
 
 }
