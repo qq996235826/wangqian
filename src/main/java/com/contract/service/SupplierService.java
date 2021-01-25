@@ -73,9 +73,9 @@ public class SupplierService {
         {
             throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
         }
-        SupplierAccount supplierAccount=new SupplierAccount();
-        supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
-        supplierAccountMapper.insert(supplierAccount);
+//        SupplierAccount supplierAccount=new SupplierAccount();
+//        supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
+//        supplierAccountMapper.insert(supplierAccount);
         //返回供货人id
         return supplierMapper.selectByExample(supplierExample).get(0).getId();
     }
@@ -102,12 +102,45 @@ public class SupplierService {
             SupplierAccountExample supplierAccountExample=new SupplierAccountExample();
             supplierAccountExample.createCriteria().andSupplierIDNumEqualTo(supplierDTO.getIdNum());
             List<SupplierAccount> supplierAccounts=supplierAccountMapper.selectByExample(supplierAccountExample);
-            if(supplierAccounts.size()==1)
+
+            //插入supplierAccount表
+            if(supplierAccounts.size()!=0)
             {
-                SupplierAccount supplierAccount=supplierAccounts.get(0);
-                supplierAccount.setName(supplierDTO.getName());
-                supplierAccountMapper.updateByPrimaryKey(supplierAccount);
+                Boolean pd=false;
+                for (int a=0;a<supplierAccounts.size();a++)
+                {
+                    if(supplierAccounts.get(a).getAccount().equals(supplierDTO.getBankNum()))
+                    {
+                        pd=true;
+                        break;
+                    }
+                }
+                if(!pd)
+                {
+                    SupplierAccount supplierAccount=new SupplierAccount();
+                    supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
+                    supplierAccount.setName(supplierDTO.getName());
+                    supplierAccount.setAccount(supplierDTO.getBankNum());
+                    supplierAccount.setBank(supplierDTO.getBankName());
+                    supplierAccount.setCreateTime(new Date());
+                    supplierAccount.setCompanyCode("");
+                    supplierAccount.setNote("用户创建时的记录");
+                    supplierAccountMapper.insert(supplierAccount);
+                }
             }
+            else
+            {
+                SupplierAccount supplierAccount=new SupplierAccount();
+                supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
+                supplierAccount.setName(supplierDTO.getName());
+                supplierAccount.setAccount(supplierDTO.getBankNum());
+                supplierAccount.setBank(supplierDTO.getBankName());
+                supplierAccount.setCreateTime(new Date());
+                supplierAccount.setCompanyCode("");
+                supplierAccount.setNote("用户创建时的记录");
+                supplierAccountMapper.insert(supplierAccount);
+            }
+
 
             return supplier.getId();
         }

@@ -81,9 +81,21 @@ public class BackstageService {
                 //供货人id
                 map.put("supplierId",orders.get(a).getSupplierId());
                 //供货人名字
-                map.put("supplierName",supplier.getName());
+                if(supplier.getName()==null)
+                {
+                    map.put("supplierName","找不到供货人");
+                }else
+                {
+                    map.put("supplierName",supplier.getName());
+                }
                 //供货人身份证号
-                map.put("supplierIdNum",supplier.getIdNum());
+                if (supplier.getIdNum()==null)
+                {
+                    map.put("supplierIdNum","找不到供货人");
+                }else
+                {
+                    map.put("supplierIdNum",supplier.getIdNum());
+                }
                 //开户行
                 map.put("bankName",orders.get(a).getBankName());
                 //支行
@@ -204,53 +216,78 @@ public class BackstageService {
         //把数据填入map,每个Order都是一个map,把每个map存入list中
         for (int a=0;a<orders.size();a++)
         {
-            //获得供货人信息
-            Supplier supplier=supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
 
-            Map map=new HashMap();
+            //获得供货人信息
+            Supplier supplier = supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
+
+            Map map = new HashMap();
             //合同id
-            map.put("id",orders.get(a).getId());
+            map.put("id", orders.get(a).getId());
             //使用模板id
-            map.put("templateId",orders.get(a).getTemplateId());
+            map.put("templateId", orders.get(a).getTemplateId());
             //合同创建时间
-            map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
+            map.put("createTime", sdf.format(orders.get(a).getCreateTime()));
             //货物名称
-            map.put("itemName",orders.get(a).getItemName());
+            map.put("itemName", orders.get(a).getItemName());
             //价格
-            map.put("price",orders.get(a).getPrice());
+            map.put("price", orders.get(a).getPrice());
             //业务编码
-            map.put("orderNum",orders.get(a).getOrderNum());
+            map.put("orderNum", orders.get(a).getOrderNum());
             //甲方名字
-            map.put("companyName",orders.get(a).getCompanyName());
+            map.put("companyName", orders.get(a).getCompanyName());
             //供货人id
-            map.put("supplierId",orders.get(a).getSupplierId());
+            map.put("supplierId", orders.get(a).getSupplierId());
+
             //供货人名字
-            map.put("supplierName",supplier.getName());
+            if (supplier.getName() == null)
+            {
+                map.put("supplierName", "找不到供货人");
+            }
+            else
+            {
+                map.put("supplierName", supplier.getName());
+            }
             //供货人身份证号
-            map.put("supplierIdNum",supplier.getIdNum());
+            if (supplier.getIdNum() == null)
+            {
+                map.put("supplierIdNum", "找不到供货人");
+            }
+            else
+            {
+                map.put("supplierIdNum", supplier.getIdNum());
+            }
             //开户行
-            map.put("bankName",orders.get(a).getBankName());
+            map.put("bankName", orders.get(a).getBankName());
             //支行
-            map.put("branchBankName",orders.get(a).getBranchBankName());
+            map.put("branchBankName", orders.get(a).getBranchBankName());
             //银行卡号
-            map.put("bankNum",orders.get(a).getBankNum());
+            map.put("bankNum", orders.get(a).getBankNum());
             //审核状态
             //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
-            if(orders.get(a).getStatus()==0)
+            if (orders.get(a).getStatus() == 0)
             {
-                map.put("status","草拟");
+                map.put("status", "草拟");
             }
-            else if(orders.get(a).getStatus()==10)
+            else if (orders.get(a).getStatus() == 10)
             {
-                map.put("status","待盖章");
+                map.put("status", "待盖章");
             }
-            else if(orders.get(a).getStatus()==20)
+            else if (orders.get(a).getStatus() == 20)
             {
-                map.put("status","审核未通过");
+                map.put("status", "审核未通过");
             }
-            else if(orders.get(a).getStatus()==90)
+            else if (orders.get(a).getStatus() == 90)
             {
-                map.put("status","已盖章");
+                map.put("status", "已生效");
+            }
+            //线上线下
+            if (orders.get(a).getOrigin()==null||orders.get(a).getOrigin()!=1)
+            {
+                map.put("origin", "线上");
+            }
+            else
+            {
+                map.put("origin", "线下");
             }
 
             map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
@@ -335,4 +372,19 @@ public class BackstageService {
     }
 
 
+    public List<Map<String, Object>> getName(String q)
+    {
+        SupplierExample example=new SupplierExample();
+        example.createCriteria().andNameLike(q);
+        List<Supplier> suppliers=supplierMapper.selectByExample(example);
+        List<Map<String,Object>> supplierList=new ArrayList<>();
+        for(int a=0;a<suppliers.size();a++)
+        {
+            Map<String,Object> map=new HashMap<>();
+            map.put("id",suppliers.get(a).getId());
+            map.put("name",suppliers.get(a).getName());
+            supplierList.add(map);
+        }
+        return supplierList;
+    }
 }

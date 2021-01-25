@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class AddByWebDTO
 {
+    private String orderCode;
     private String date;
     private String itemName;
     private String price;

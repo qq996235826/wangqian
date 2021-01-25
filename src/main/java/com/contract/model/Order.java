@@ -65,6 +65,8 @@ public class Order {
 
     private String endDate;
 
+    private Integer origin;
+
     public Long getId() {
         return id;
     }
@@ -311,5 +313,13 @@ public class Order {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate == null ? null : endDate.trim();
+    }
+
+    public Integer getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Integer origin) {
+        this.origin = origin;
     }
 }

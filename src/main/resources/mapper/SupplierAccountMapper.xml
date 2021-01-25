@@ -10,6 +10,8 @@
     <result column="bankImage" jdbcType="VARCHAR" property="bankImage" />
     <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="companyCode" jdbcType="CHAR" property="companyCode" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, supplierIDNum, name, account, bank, bankImage, note, status
+    ID, supplierIDNum, name, account, bank, bankImage, note, status, companyCode, createTime
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.SupplierAccountExample" resultMap="BaseResultMap">
     select
@@ -105,10 +107,12 @@
   <insert id="insert" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.SupplierAccount" useGeneratedKeys="true">
     insert into supplieraccount (supplierIDNum, name, account, 
       bank, bankImage, note, 
-      status)
+      status, companyCode, createTime
+      )
     values (#{supplierIDNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
       #{bank,jdbcType=VARCHAR}, #{bankImage,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER})
+      #{status,jdbcType=INTEGER}, #{companyCode,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.SupplierAccount" useGeneratedKeys="true">
     insert into supplieraccount
@@ -134,6 +138,12 @@
       <if test="status != null">
         status,
       </if>
+      <if test="companyCode != null">
+        companyCode,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="supplierIDNum != null">
@@ -156,6 +166,12 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -192,6 +208,12 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.companyCode != null">
+        companyCode = #{record.companyCode,jdbcType=CHAR},
+      </if>
+      <if test="record.createTime != null">
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -206,7 +228,9 @@
       bank = #{record.bank,jdbcType=VARCHAR},
       bankImage = #{record.bankImage,jdbcType=VARCHAR},
       note = #{record.note,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER}
+      status = #{record.status,jdbcType=INTEGER},
+      companyCode = #{record.companyCode,jdbcType=CHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -235,6 +259,12 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="companyCode != null">
+        companyCode = #{companyCode,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where ID = #{ID,jdbcType=INTEGER}
   </update>
@@ -246,7 +276,9 @@
       bank = #{bank,jdbcType=VARCHAR},
       bankImage = #{bankImage,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER}
+      status = #{status,jdbcType=INTEGER},
+      companyCode = #{companyCode,jdbcType=CHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
     where ID = #{ID,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.SupplierAccountExample" resultMap="BaseResultMap">

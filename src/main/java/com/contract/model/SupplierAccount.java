@@ -1,5 +1,7 @@
 package com.contract.model;
 
+import java.util.Date;
+
 public class SupplierAccount {
     private Integer ID;
 
@@ -16,6 +18,10 @@ public class SupplierAccount {
     private String note;
 
     private Integer status;
+
+    private String companyCode;
+
+    private Date createTime;
 
     public Integer getID() {
         return ID;
@@ -79,5 +85,21 @@ public class SupplierAccount {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode == null ? null : companyCode.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

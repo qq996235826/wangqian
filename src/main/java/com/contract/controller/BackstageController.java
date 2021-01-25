@@ -1,9 +1,6 @@
 package com.contract.controller;
 
-import com.contract.dto.AddByWebDTO;
-import com.contract.dto.OrderDTO;
-import com.contract.dto.ResultDTO;
-import com.contract.dto.SupplierDTO;
+import com.contract.dto.*;
 import com.contract.service.BackstageService;
 import com.contract.service.CompanyService;
 import com.contract.service.ContractService;
@@ -11,7 +8,6 @@ import com.contract.service.SupplierService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -25,7 +21,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/web")
-public class BackstageController {
+public class BackstageController
+{
 
     @Resource
     private BackstageService backstageService;
@@ -39,8 +36,10 @@ public class BackstageController {
     @Resource
     private CompanyService companyService;
 
+
     /**
      * 负责页面跳转
+     *
      * @return String
      */
     @GetMapping("/index")
@@ -51,6 +50,7 @@ public class BackstageController {
 
     /**
      * 负责页面跳转
+     *
      * @return String
      */
     @GetMapping("/templateManagement")
@@ -61,6 +61,7 @@ public class BackstageController {
 
     /**
      * 负责页面跳转
+     *
      * @return String
      */
     @GetMapping("/review")
@@ -71,6 +72,7 @@ public class BackstageController {
 
     /**
      * 负责页面跳转
+     *
      * @return String
      */
     @GetMapping("/supplier")
@@ -81,6 +83,7 @@ public class BackstageController {
 
     /**
      * 负责页面跳转
+     *
      * @return String
      */
     @GetMapping("/contractList")
@@ -91,6 +94,7 @@ public class BackstageController {
 
     /**
      * 负责给easyUI的审核页面表格返回数据
+     *
      * @return Map
      */
     @RequestMapping("/getOrders")
@@ -103,6 +107,7 @@ public class BackstageController {
 
     /**
      * 负责给easyUI的供货人页面表格返回数据
+     *
      * @return Map
      */
     @RequestMapping("/getSuppliers")
@@ -114,6 +119,7 @@ public class BackstageController {
 
     /**
      * 负责给easyUI的合同清单页面表格返回数据
+     *
      * @return Map
      */
     @RequestMapping("/getOrdersInfo")
@@ -125,6 +131,7 @@ public class BackstageController {
 
     /**
      * 负责给easyUI的模板管理页面表格返回数据
+     *
      * @return Map
      */
     @RequestMapping("/getTemplates")
@@ -144,29 +151,34 @@ public class BackstageController {
 
     /**
      * 上传新的合同接口
+     *
      * @param upload
      * @return 合同模板存储路径
      */
     @ResponseBody
     @PostMapping("/uploadContractTemplate")
-    public ResultDTO uploadContract(MultipartFile upload) {
+    public ResultDTO uploadContract(MultipartFile upload)
+    {
         return ResultDTO.okOf(contractService.uploadContractTemplate(upload));
     }
 
     /**
      * 上传盖章文件
+     *
      * @param upload
      * @param id
      * @return
      */
     @ResponseBody
     @PostMapping("/uploadContractFile")
-    public ResultDTO uploadContractFile(MultipartFile upload,String id) {
-        return ResultDTO.okOf(contractService.uploadContractFile(upload,id));
+    public ResultDTO uploadContractFile(MultipartFile upload, String id)
+    {
+        return ResultDTO.okOf(contractService.uploadContractFile(upload, id));
     }
 
     /**
      * 通过指定合同审核
+     *
      * @return 信息
      */
     //-1--未签名 0--已提交(签名,没审核),10--待盖章(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
@@ -174,33 +186,36 @@ public class BackstageController {
     @RequestMapping("/passOrder")
     public ResultDTO passOrder(HttpServletRequest request)
     {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),10));
+        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"), 10));
     }
 
     /**
      * 不通过指定合同审核
+     *
      * @return 信息
      */
     @ResponseBody
     @RequestMapping("/notPassOrder")
     public ResultDTO notPassOrder(HttpServletRequest request)
     {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),20));
+        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"), 20));
     }
 
     /**
      * 删除指定合同记录
+     *
      * @return 信息
      */
     @ResponseBody
     @RequestMapping("/deleteOrder")
     public ResultDTO deleteOrder(HttpServletRequest request)
     {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"),20));
+        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"), 20));
     }
 
     /**
      * 更新合同
+     *
      * @param orderDTO
      * @return
      */
@@ -214,6 +229,7 @@ public class BackstageController {
 
     /**
      * 停用供货人
+     *
      * @return 信息
      */
     @ResponseBody
@@ -225,6 +241,7 @@ public class BackstageController {
 
     /**
      * 停用供货人
+     *
      * @return 信息
      */
     @ResponseBody
@@ -243,16 +260,55 @@ public class BackstageController {
 
     @ResponseBody
     @RequestMapping("/getCompany")
-    public List<Map<String,Object>> getCompany()
+    public List<Map<String, Object>> getCompany()
     {
         return companyService.getCompanies();
     }
 
     @ResponseBody
     @RequestMapping("/getContractStatus")
-    public List<Map<String,Object>> getContractStatus()
+    public List<Map<String, Object>> getContractStatus()
     {
         return backstageService.getContractStatus();
+    }
+
+    @ResponseBody
+    @RequestMapping("/supplierOnlyOne")
+    public ResultDTO supplierOnlyOne(String idNum)
+    {
+        return ResultDTO.okOf(supplierService.haveIdNum(idNum));
+    }
+
+    @ResponseBody
+    @RequestMapping("/addSupplier")
+    public ResultDTO addSupplier(@RequestBody SupplierDTO supplierDTO)
+    {
+        Long id = 0L;
+        try
+        {
+            supplierService.createSupplier(supplierDTO);
+            id = supplierService.addSupplierInfo(supplierDTO);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return ResultDTO.okOf(false);
+        }
+        return ResultDTO.okOf(id);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getInfo")
+    public ResultDTO getName(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(supplierService.getSupplierInfo(request.getParameter("idNum")));
+    }
+
+    @ResponseBody
+    @RequestMapping("/searchOrder")
+    public ResultDTO searchOrder(@RequestBody SearchDTO searchDTO)
+    {
+        return ResultDTO.okOf(contractService.searchOrder(searchDTO));
     }
 
 

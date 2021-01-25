@@ -11,6 +11,29 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px 30px;
+        }
+        .ftitle{
+            font-size:14px;
+            font-weight:bold;
+            padding:5px 0;
+            margin-bottom:10px;
+            border-bottom:1px solid #ccc;
+        }
+        .fitem{
+            margin-bottom:5px;
+        }
+        .fitem label{
+            display:inline-block;
+            width:80px;
+        }
+        .fitem input{
+            width:160px;
+        }
+    </style>
 </head>
 
 <body style="padding: 0px">
@@ -44,6 +67,7 @@
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="checkDeactivate()">停用</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="checkEnable()">启用</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addSupplier()">添加供货人</a>
 </div>
 
 <div id="checkDeactivate" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
@@ -51,14 +75,89 @@
     <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="deactivate()" style="width:80px">确认</a>
     </div>
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeDeactivate()" style="width:80px">取消</a>
+    </div>
 </div>
 
 <div id="checkEnable" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
     <div>确定启用用户吗?</div>
     <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
-        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="enable()" style="width:80px" handler>确认</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="enable()" style="width:80px">确认</a>
+    </div>
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeEnable()" style="width:80px">取消</a>
     </div>
 </div>
+
+<!--添加供货人窗口-->
+<div id="addSupplier" class="easyui-dialog" style="width:500px;height:350px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">新建供货人</div>
+    <form id="fm" method="post" novalidate>
+        <div class="fitem">
+            <label>姓名:</label>
+            <input id="name" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>登陆密码:</label>
+            <input id="password" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>身份证号:</label>
+            <input id="idNum" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>发证机关:</label>
+            <input id="agencies" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <!--            <label>签订日期:</label>-->
+            <!--            <input id="date" class="easyui-textbox" required="true">-->
+            <label>身份证有效期:</label>
+            <input id="idCardTimeLimit" style="width:250px" name="createDate" type="text" class="easyui-datebox" required="required">
+        </div>
+        <div class="fitem">
+            <label>手机号:</label>
+            <input id="phoneNum" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>家庭住址:</label>
+            <input id="homeAddress" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <!--            <label>签订日期:</label>-->
+            <!--            <input id="date" class="easyui-textbox" required="true">-->
+            <label>出生日期:</label>
+            <input id="birth" style="width:250px" name="createDate" type="text" class="easyui-datebox" required="required">
+        </div>
+        <div class="fitem">
+            <label>性别:</label>
+            <!--            <input id="status" class="easyui-textbox" required="true">-->
+            <select class="easyui-combobox" name="companyCode" id="sex" style="width:250px">
+                <option>男</option>
+                <option>女</option>
+            </select>
+        </div>
+        <div class="fitem">
+            <label>民族:</label>
+            <input id="ethnic" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>银行名:</label>
+            <input id="bankName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>银行卡号:</label>
+            <input id="bankNum" class="easyui-textbox" required="true">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveEqument()" style="width:120px">保存新纪录</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#addInput').dialog('close')" style="width:120px">取消</a>
+</div>
+
 </body>
 <script type="text/javascript">
 
@@ -108,10 +207,97 @@
                 datatype:"josn",
                 success:function(result){
                     $('#dg').datagrid('reload');
-                    $('#checkEnable').dialog('close')
+                    $('#checkEnable').dialog('close');
                 }
             });
         }
+    }
+
+    function closeDeactivate()
+    {
+        $('#checkDeactivate').dialog('close');
+    }
+
+    function closeEnable()
+    {
+        $('#checkEnable').dialog('close');
+    }
+
+    //添加供货人
+    function addSupplier()
+    {
+        $('#addSupplier').dialog('open').dialog('center').dialog('setTitle', '新建商品');
+        $('#fm').form('clear');
+    }
+
+    function saveEqument() {
+        var name=document.getElementById("name").value;
+        var password=document.getElementById("password").value;
+        var idNum=document.getElementById("idNum").value;
+        var agencies=document.getElementById("agencies").value;
+        var idCardTimeLimit=document.getElementById("idCardTimeLimit").value;
+        var phoneNum=document.getElementById("phoneNum").value;
+        var homeAddress=document.getElementById("homeAddress").value;
+        var birth=document.getElementById("birth").value;
+        var sex=$("#sex").combobox("getText");
+        var ethnic=document.getElementById("ethnic").value;
+        var bankName=document.getElementById("bankName").value;
+        var bankNum=document.getElementById("bankNum").value;
+
+        var formData = new FormData();
+        formData.append("idNum",idNum);
+        $.ajax({
+            url:"/hetong/web/supplierOnlyOne",
+            type:"post",
+            data:formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
+                if(result.data===false)
+                {
+                    $.ajax({
+                        url:"/hetong/web/addSupplier",
+                        type:"post",
+                        data:JSON.stringify(
+                            {
+                                name:name,
+                                password:password,
+                                idNum:idNum,
+                                agencies:agencies,
+                                idCardTimeLimit:idCardTimeLimit,
+                                phoneNum:phoneNum,
+                                homeAddress:homeAddress,
+                                birth:birth,
+                                sex:sex,
+                                ethnic:ethnic,
+                                bankName:bankName,
+                                bankNum:bankNum
+                            }
+                        ),
+                        datatype:"josn",
+                        contentType:"application/json",
+                        success:function(result){
+                            if(result.status===200)
+                            {
+                                alert("添加成功,新用户id是"+result.data);
+                            }
+                            else
+                            {
+                                alert("添加失败");
+                            }
+                            $('#dg').datagrid('reload');
+                        }
+                    });
+                }
+                else
+                {
+                    alert("该身份证已经存在");
+                }
+                $('#dg').datagrid('reload');
+            }
+        })
+
     }
 
 

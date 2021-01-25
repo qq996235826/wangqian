@@ -24,8 +24,8 @@ import java.net.URLEncoder;
  * @date 2020/11/28 23:27
  */
 @Controller
-@RequestMapping("/download")
 public class DownloadController {
+
     @Value("${rootPatch}")
     String rootPatch;
 
@@ -35,8 +35,9 @@ public class DownloadController {
     @Resource
     ContractTemplateMapper contractTemplateMapper;
 
+
     @RequestMapping("/download")
-    public ResponseEntity<byte[]> downlaodFile(String orderId,String model) {
+    public ResponseEntity<byte[]> downlaodFile(String orderId, String model) {
         Order order=orderMapper.selectByPrimaryKey(Long.valueOf(orderId));
         String fileName=order.getPdfPath().split("/")[order.getPdfPath().split("/").length-1];
         // 根路径加上传参数的路径构成文件路径地址

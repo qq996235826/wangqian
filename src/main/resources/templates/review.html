@@ -76,21 +76,52 @@
 
 
 <div id="toolbar">
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="pass()">审核通过</a>
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="notpass()">审核不通过</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="checkPass()">审核通过</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="checkNotPass()">审核不通过</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addInput()">添加记录</a>
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="deleteOrder()">删除记录</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="checkDelete()">删除记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">提交修改并生成新合同文件</a>
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadStamp()">上传盖章文件</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="uploadStamp()">上传pdf文件</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="openPDF()">查看合同</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="downloadContract()">下载选中的合同</a>
 </div>
 
+<!--确认框-->
+<div id="checkPass" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
+    <div>您确认要通过审核吗?</div>
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="pass()" style="width:80px" handler>确认</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closePass()" style="width:80px">取消</a>
+    </div>
+</div>
+
+<div id="checkNotPass" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
+    <div>您确认要不通过审核吗?</div>
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="notPass()" style="width:80px" handler>确认</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeNotPass()" style="width:80px">取消</a>
+    </div>
+</div>
+
+<div id="checkDelete" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
+    <div>您确认要删除吗?</div>
+    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="deleteOrder()" style="width:80px" handler>确认</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeDelete()" style="width:80px">取消</a>
+    </div>
+</div>
+
+
+<!--添加记录窗口-->
 <div id="addInput" class="easyui-dialog" style="width:500px;height:350px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons">
     <div class="ftitle">新记录</div>
     <form id="fm" method="post" novalidate>
+        <div class="fitem">
+            <label>业务编码:</label>
+            <input id="orderCode" class="easyui-textbox" required="true">
+        </div>
         <div class="fitem">
 <!--            <label>签订日期:</label>-->
 <!--            <input id="date" class="easyui-textbox" required="true">-->
@@ -109,7 +140,6 @@
             <label>审核状态:</label>
 <!--            <input id="status" class="easyui-textbox" required="true">-->
             <select class="easyui-combobox" name="companyCode" id="status"
-                    validType="selectValueRequired['#companyCode1']"
                     style="width:250px"
                     data-options="valueField:'code',textField:'status',
                             url:'/hetong/web/getContractStatus',
@@ -120,7 +150,6 @@
         <div class="fitem">
             <label>供应商:</label>  <!--下面的ID与页面工具栏的重复了，故改成companyCode1-->
             <select class="easyui-combobox" name="companyCode" id="companyCode1"
-                    validType="selectValueRequired['#companyCode1']"
                     style="width:250px"
                     data-options="valueField:'code',textField:'name',
                             url:'/hetong/web/getCompany',
@@ -129,12 +158,12 @@
             </select>
         </div>
         <div class="fitem">
-            <label>乙方:</label>
-            <input id="supplierName" class="easyui-textbox" required="true">
+            <label>乙方身份证号:</label>
+            <input id="supplierIdNum" class="easyui-textbox" required="true" buttonAlign="right" buttonText="补全数据" onClickButton="getInfo()" style="width:250px">
         </div>
         <div class="fitem">
-            <label>乙方身份证号:</label>
-            <input id="supplierIdNum" class="easyui-textbox" required="true">
+            <label>乙方姓名:</label>
+            <input id="supplierName" class="easyui-textbox" required="true">
         </div>
         <div class="fitem">
             <label>乙方手机号:</label>
@@ -189,7 +218,28 @@
 </body>
 
 <script type="text/javascript">
+    //供货人模糊搜索
+    $("#supplierIdNum").textbox({onClickButton:function(){
+            var supplierIdNum=document.getElementById("supplierIdNum").value;
+            $.ajax({
+                url:"/hetong/web/getInfo?idNum="+supplierIdNum,
+                type:"post",
+                success:function(result){
+                    if(result.status === 200)
+                    {
+                        $("#supplierName").textbox("setText",result.data.name);
+                        $("#bankNum").textbox("setText",result.data.bankNum);
+                        $("#phone").textbox("setText",result.data.phoneNum);
+                        $("#bankName").textbox("setText",result.data.bankName);
+                    }
+                    else {
+                        alert("没有找到该供货人,请确认身份证号或者新建供货人");
+                    }
+                }
+            });
+        }})
 
+    //下载合同
     function downloadContract() {
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
@@ -246,6 +296,7 @@
                             title: 'Success',
                             msg: '上传成功'
                         });
+                        $('#uploadStamp').dialog('close');
                     } else {
                         $.messager.show({
                             title: 'Error',
@@ -279,6 +330,15 @@
     // }
 
     //通过审核
+    function checkPass()
+    {
+        $('#checkPass').window('open').dialog('setTitle','操作确认');
+    }
+
+    function closePass() {
+        $('#checkPass').dialog('close');
+    }
+
     function pass() {
         var row = $('#dg').datagrid('getSelected');
         if (row){
@@ -296,13 +356,23 @@
                 datatype:"josn",
                 success:function(result){
                     $('#dg').datagrid('reload');
+                    $('#checkPass').dialog('close');
                 }
             });
         }
     }
 
     //不通过审核
-    function notpass() {
+    function checkNotPass()
+    {
+        $('#checkNotPass').window('open').dialog('setTitle','操作确认');
+    }
+
+    function closeNotPass() {
+        $('#checkNotPass').dialog('close');
+    }
+
+    function notPass() {
         var row = $('#dg').datagrid('getSelected');
         if (row){
             var id=row.id;
@@ -315,12 +385,22 @@
                 datatype:"josn",
                 success:function(result){
                     $('#dg').datagrid('reload');
+                    $('#checkNotPass').dialog('close');
                 }
             });
         }
     }
 
-    //不通过审核
+    //删除记录
+    function checkDelete()
+    {
+        $('#checkDelete').window('open').dialog('setTitle','操作确认');
+    }
+
+    function closeDelete() {
+        $('#checkDelete').dialog('close');
+    }
+
     function deleteOrder() {
         var row = $('#dg').datagrid('getSelected');
         if (row){
@@ -334,6 +414,7 @@
                 datatype:"josn",
                 success:function(result){
                     $('#dg').datagrid('reload');
+                    $('#checkDelete').dialog('close');
                 }
             });
         }
@@ -386,7 +467,7 @@
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
         if (row){
-            var url="/hetong/download/download?orderId="+orderId+"&model=0";
+            var url="/hetong/download?orderId="+orderId+"&model=0";
             window.open(url);
         }
     }
@@ -398,6 +479,7 @@
     }
 
     function saveEqument() {
+        var orderCode=document.getElementById("orderCode").value;
         var date=document.getElementById("date").value;
         var itemName=document.getElementById("itemName").value;
         var price=document.getElementById("price").value;
@@ -411,41 +493,65 @@
         var startDate=document.getElementById("startDate").value;
         var endDate=document.getElementById("endDate").value;
         var phone=document.getElementById("phone").value;
+        var formData = new FormData();
+        formData.append("item",itemName);
+        formData.append("company",companyName);
+        formData.append("idNum",supplierIdNum);
 
         $.ajax({
-            url:"/hetong/web/addOrderByWeb",
+            url:"/hetong/contract/onlyOne",
             type:"post",
-            data:JSON.stringify(
-                {
-                    date:date,
-                    itemName:itemName,
-                    price:price,
-                    status:status,
-                    companyName:companyName,
-                    supplierName:supplierName,
-                    supplierIdNum:supplierIdNum,
-                    bankName:bankName,
-                    branchBankName:branchBankName,
-                    bankNum:bankNum,
-                    startDate:startDate,
-                    endDate:endDate,
-                    phone:phone,
-                }
-            ),
-            datatype:"josn",
-            contentType:"application/json",
+            data:formData,
+            cache: false,
+            processData: false,
+            contentType: false,
             success:function(result){
-                if(result.status===200)
+                if(result.data===true)
                 {
-                    alert("添加成功");
+                    $.ajax({
+                        url:"/hetong/web/addOrderByWeb",
+                        type:"post",
+                        data:JSON.stringify(
+                            {
+                                orderCode:orderCode,
+                                date:date,
+                                itemName:itemName,
+                                price:price,
+                                status:status,
+                                companyName:companyName,
+                                supplierName:supplierName,
+                                supplierIdNum:supplierIdNum,
+                                bankName:bankName,
+                                branchBankName:branchBankName,
+                                bankNum:bankNum,
+                                startDate:startDate,
+                                endDate:endDate,
+                                phone:phone,
+                            }
+                        ),
+                        datatype:"josn",
+                        contentType:"application/json",
+                        success:function(result){
+                            if(result.status===200)
+                            {
+                                alert("添加成功");
+                            }
+                            else
+                            {
+                                alert("添加失败");
+                            }
+                            $('#dg').datagrid('reload');
+                        }
+                    });
                 }
                 else
                 {
-                    alert("添加失败");
+                    alert("出现重复订单");
                 }
                 $('#dg').datagrid('reload');
             }
-        });
+        })
+
     }
 
 

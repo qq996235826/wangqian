@@ -33,6 +33,7 @@
     <result column="pdfPath" jdbcType="VARCHAR" property="pdfPath" />
     <result column="startDate" jdbcType="VARCHAR" property="startDate" />
     <result column="endDate" jdbcType="VARCHAR" property="endDate" />
+    <result column="origin" jdbcType="INTEGER" property="origin" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -96,7 +97,7 @@
     id, templateId, supplierId, createTime, itemName, companyCode, companyName, companyAddress, 
     bankName, branchBankName, bankNum, bankImagePath, weight, price, amount, orderNum, 
     orderNumTime, status, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
-    chech2Bby, check2Note, signaturePath, path, pdfPath, startDate, endDate
+    chech2Bby, check2Note, signaturePath, path, pdfPath, startDate, endDate, origin
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -138,8 +139,8 @@
       updateBy, check1Time, chech1By, 
       check1Note, check2Time, chech2Bby, 
       check2Note, signaturePath, path, 
-      pdfPath, startDate, endDate
-      )
+      pdfPath, startDate, endDate, 
+      origin)
     values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{itemName,jdbcType=VARCHAR}, #{companyCode,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{companyAddress,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, 
@@ -149,8 +150,8 @@
       #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
       #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
       #{check2Note,jdbcType=VARCHAR}, #{signaturePath,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
-      #{pdfPath,jdbcType=VARCHAR}, #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR}
-      )
+      #{pdfPath,jdbcType=VARCHAR}, #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR}, 
+      #{origin,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
     insert into businessorder
@@ -245,6 +246,9 @@
       <if test="endDate != null">
         endDate,
       </if>
+      <if test="origin != null">
+        origin,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="templateId != null">
@@ -336,6 +340,9 @@
       </if>
       <if test="endDate != null">
         #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        #{origin,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -441,6 +448,9 @@
       <if test="record.endDate != null">
         endDate = #{record.endDate,jdbcType=VARCHAR},
       </if>
+      <if test="record.origin != null">
+        origin = #{record.origin,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -478,7 +488,8 @@
       path = #{record.path,jdbcType=VARCHAR},
       pdfPath = #{record.pdfPath,jdbcType=VARCHAR},
       startDate = #{record.startDate,jdbcType=VARCHAR},
-      endDate = #{record.endDate,jdbcType=VARCHAR}
+      endDate = #{record.endDate,jdbcType=VARCHAR},
+      origin = #{record.origin,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -576,6 +587,9 @@
       <if test="endDate != null">
         endDate = #{endDate,jdbcType=VARCHAR},
       </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -610,7 +624,8 @@
       path = #{path,jdbcType=VARCHAR},
       pdfPath = #{pdfPath,jdbcType=VARCHAR},
       startDate = #{startDate,jdbcType=VARCHAR},
-      endDate = #{endDate,jdbcType=VARCHAR}
+      endDate = #{endDate,jdbcType=VARCHAR},
+      origin = #{origin,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">

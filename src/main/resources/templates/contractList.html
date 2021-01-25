@@ -38,12 +38,41 @@
         <th field="bankName" width="5%">开户行</th>
         <th field="branchBankName" width="5%">支行</th>
         <th field="bankNum" width="12%">银行卡号</th>
+        <th field="origin" width="5%">签订方式</th>
         <th field="status" width="5%" >审核状态</th>
         <th field="updateTime" width="10%">更新时间</th>
     </tr>
     </thead>
 </table>
 <div id="toolbar">
+    <label>供应商:</label>
+    <select class="easyui-combobox" name="company" id="company"
+            style="width:250px"
+            data-options="valueField:'code',textField:'name',
+                            url:'/hetong/web/getCompany',
+                            editable:true">
+    </select>
+    <label>货物:</label>
+    <select class="easyui-combobox" name="item" id="item" style="width:100px">
+        <option>废纸</option>
+        <option>废钢</option>
+    </select>
+    <label>审核状态:</label>
+    <select class="easyui-combobox" name="status" id="status"
+            style="width:100px"
+            data-options="valueField:'code',textField:'status',
+                            url:'/hetong/web/getContractStatus',
+                            editable:true">
+    </select>
+    <label>供货人名:</label>
+    <input id="supplierName" class="easyui-textbox" style="width:100px">
+    <label>供货人身份证:</label>
+    <input id="supplierIdNum" class="easyui-textbox" >
+    <label>合同编号:</label>
+    <input id="orderCode" class="easyui-textbox" >
+    <label>银行:</label>
+    <input id="bank" class="easyui-textbox" >
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="searchInfo()">搜索记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新记录</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="openPDF()">查看合同</a>
 </div>
@@ -62,9 +91,58 @@
         var row = $('#dg').datagrid('getSelected');
         var orderId=row.id;
         if (row){
-            var url="/hetong/download/download?orderId="+orderId+"&model=0";
+            var url="/hetong/download?orderId="+orderId+"&model=0";
             window.open(url);
         }
+    }
+    //搜索
+    function searchInfo() {
+        var supplierIdNum=document.getElementById("supplierIdNum").value;
+        var supplierName=document.getElementById("supplierName").value;
+        var company=$("#company").combobox("getText");
+        var status=$("#status").combobox("getText");
+        var item=$("#item").combobox("getText");
+        var orderCode=document.getElementById("orderCode").value;
+        var bank=document.getElementById("bank").value;
+        var page = $("#dg").datagrid('options').pageNumber;
+        var rows = $("#dg").datagrid('options').pageSize;
+        var options = $('#dg').datagrid('getPager').data("pagination").options;
+        var total = options.total;
+        $('#dg').datagrid('loading');
+        $.ajax({
+            url:"/hetong/web/searchOrder",
+            type:"post",
+            data:JSON.stringify(
+                {
+                    total:total,
+                    page:page,
+                    rows:rows,
+                    orderCode:orderCode,
+                    status:status,
+                    supplierName:supplierName,
+                    supplierIdNum:supplierIdNum,
+                    bank:bank,
+                    item:item,
+                    company:company
+                }
+            ),
+            datatype:"josn",
+            contentType:"application/json",
+            success:function(result){
+                if(result.status===200)
+                {
+                    $('#dg').datagrid('loaded');
+                    $('#dg').datagrid('loadData',result.data);
+                }
+                else
+                {
+                    $('#dg').datagrid('loaded');
+                    alert(result.message);
+                }
+
+            }
+        });
+
     }
 </script>
 
