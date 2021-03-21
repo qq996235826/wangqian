@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>网签线下合同审核系统</title>
+    <title>网签线上合同审核系统</title>
     <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/color.css}">
@@ -42,7 +42,7 @@
        striped="true"
        singleSelect="true"
        toolbar="#toolbar"
-       url="getOrders?origin=1"
+       url="getOrders?origin=0"
        rownumbers="true"
        fitColumns="true"
        loadMsg="正在查询...">
@@ -74,9 +74,9 @@
 
 
 <div id="toolbar">
-<!--    <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="checkPass()">审核通过</a>-->
-<!--    <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="checkNotPass()">审核不通过</a>-->
-    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addInput()">新增合同</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="checkPass()">审核通过</a>
+    <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="checkNotPass()">审核不通过</a>
+<!--    <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addInput()">新增合同</a>-->
     <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="checkDelete()">删除合同</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新合同</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="update()">修改合同</a>
@@ -237,7 +237,7 @@
         <table border="0" style="margin-top:4px;" width="100%" align="center">
             <tr>
                 <td>
-                    <input class="easyui-filebox" name="upload" data-options="buttonText:'选择文件',prompt:'文件上传'" style="width:100%"></input>
+                    <input class="easyui-filebox" name="upload" data-options="buttonText:'选择文件',prompt:'文件上传'" style="width:100%">
                 </td>
             </tr>
         </table>
@@ -253,8 +253,6 @@
 </body>
 
 <script type="text/javascript">
-
-    var model=1;
 
     //默认选择
     $("#statusSearch").combobox({
@@ -556,7 +554,6 @@
 
     //更新数据
     function update() {
-        this.model=2;
         $('#addInput').dialog('open').dialog('center').dialog('setTitle', '修改');
         $('#fm').form('clear');
         var row = $('#dg').datagrid('getSelected');
@@ -598,6 +595,7 @@
         {
             alert("请选择一条数据");
         }
+
     }
 
 
@@ -614,190 +612,12 @@
 
     //弹出新建窗口
     function addInput() {
-        this.model=1;
         $('#addInput').dialog('open').dialog('center').dialog('setTitle', '新建');
         $('#fm').form('clear');
     }
 
+    //更新
     function saveEqument() {
-
-        //判定必填项是否填完了
-            if(model===1)
-            {
-                if($("#fm").form('validate'))
-                {
-                    var orderCode=document.getElementById("orderCode").value;
-                    var date=document.getElementById("date").value;
-                    var itemName=document.getElementById("itemName").value;
-                    var price=document.getElementById("price").value;
-                    var weight=document.getElementById("weight").value;
-                    var status=$("#status1").combobox("getValue");
-                    var companyName=$("#companyCode1").combobox("getText");
-                    var supplierName=document.getElementById("supplierName").value;
-                    var supplierIdNum=document.getElementById("supplierIdNum").value;
-                    var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
-                    var bankName=document.getElementById("bankName").value;
-                    var branchBankName=document.getElementById("branchBankName").value;
-                    var bankNum=document.getElementById("bankNum").value;
-                    var startDate=document.getElementById("startDate").value;
-                    var endDate=document.getElementById("endDate").value;
-                    var phone=document.getElementById("phone").value;
-                    var formData = new FormData();
-                    formData.append("item",itemName);
-                    formData.append("company",companyName);
-                    formData.append("idNum",supplierIdNum);
-
-                    if(status==="1")
-                    {
-                        status="0";
-                    }
-
-                    $.ajax({
-                        url:"/hetong/contract/onlyOne",
-                        type:"post",
-                        data:formData,
-                        cache: false,
-                        processData: false,
-                        contentType: false,
-                        success:function(result){
-                            if(result.data===true)
-                            {
-                                $.ajax({
-                                    url:"/hetong/web/addOrderByWeb",
-                                    type:"post",
-                                    data:JSON.stringify(
-                                        {
-                                            orderCode:orderCode,
-                                            date:date,
-                                            itemName:itemName,
-                                            price:price,
-                                            weight:weight,
-                                            status:status,
-                                            companyName:companyName,
-                                            supplierName:supplierName,
-                                            supplierIdNum:supplierIdNum,
-                                            supplierHomeAddress:supplierHomeAddress,
-                                            bankName:bankName,
-                                            branchBankName:branchBankName,
-                                            bankNum:bankNum,
-                                            startDate:startDate,
-                                            endDate:endDate,
-                                            phone:phone,
-                                        }
-                                    ),
-                                    datatype:"josn",
-                                    contentType:"application/json",
-                                    success:function(result){
-                                        if(result.status===200)
-                                        {
-                                            alert("添加成功");
-                                        }
-                                        else
-                                        {
-                                            alert(result.message);
-                                        }
-                                        $('#dg').datagrid('reload');
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                alert("出现重复合同,该供货人存在着另一个品名和公司与此相同的合同");
-                            }
-                            $('#dg').datagrid('reload');
-                        }
-                    })
-                }
-                else
-                {
-                    alert("请填完所有必填空");
-                }
-
-            }
-            else if(model===2)
-            {
-                //判定必填项是否填完了
-                if($("#fm").form('validate')){
-                    var row = $('#dg').datagrid('getSelected');
-                    var id=row.id;
-                    var supplierId=row.supplierId;
-                    var orderCode=document.getElementById("orderCode").value;
-                    var date=document.getElementById("date").value;
-                    var itemName=document.getElementById("itemName").value;
-                    var price=document.getElementById("price").value;
-                    var weight=document.getElementById("weight").value;
-                    var status=$("#status1").combobox("getValue");
-                    var companyName=$("#companyCode1").combobox("getText");
-                    var supplierName=document.getElementById("supplierName").value;
-                    var supplierIdNum=document.getElementById("supplierIdNum").value;
-                    var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
-                    var bankName=document.getElementById("bankName").value;
-                    var branchBankName=document.getElementById("branchBankName").value;
-                    var bankNum=document.getElementById("bankNum").value;
-                    var startDate=document.getElementById("startDate").value;
-                    var endDate=document.getElementById("endDate").value;
-                    var phone=document.getElementById("phone").value;
-                    var formData = new FormData();
-                    formData.append("item",itemName);
-                    formData.append("company",companyName);
-                    formData.append("idNum",supplierIdNum);
-
-                    if(status==="1")
-                    {
-                        status="0";
-                    }
-                    $.ajax({
-                        url:"/hetong/web/update",
-                        type:"post",
-                        data:JSON.stringify(
-                            {
-                                id:id,
-                                orderCode:orderCode,
-                                createTime:date,
-                                itemName:itemName,
-                                price:price,
-                                weight:weight,
-                                status:status,
-                                companyName:companyName,
-                                supplierId:supplierId,
-                                supplierName:supplierName,
-                                supplierIdNum:supplierIdNum,
-                                supplierPhone:phone,
-                                supplierHomeAddress:supplierHomeAddress,
-                                bankName:bankName,
-                                branchBankName:branchBankName,
-                                bankNum:bankNum,
-                                startDate:startDate,
-                                endDate:endDate,
-                                phone:phone,
-                                origin:1,
-                            }
-                        ),
-                        datatype:"josn",
-                        contentType:"application/json",
-                        success:function(result){
-                            if(result.status===200)
-                            {
-                                alert("修改成功");
-                            }
-                            else
-                            {
-                                alert(result.message);
-                            }
-                            $('#dg').datagrid('reload');
-                        }
-                    });
-                }
-                else
-                {
-                    alert("请填完所有必填空");
-                }
-            }
-
-    }
-
-    function updateEqument()
-    {
         //判定必填项是否填完了
         if($("#fm").form('validate')){
             var row = $('#dg').datagrid('getSelected');
@@ -852,7 +672,7 @@
                         startDate:startDate,
                         endDate:endDate,
                         phone:phone,
-                        origin:1,
+                        origin:0,
                     }
                 ),
                 datatype:"josn",
@@ -874,6 +694,8 @@
         {
             alert("请填完所有必填空");
         }
+
+
     }
 
 
@@ -901,7 +723,7 @@
                     item:item,
                     company:company,
                     info:info,
-                    origin:1,
+                    origin:0,
                 }
             ),
             datatype:"josn",

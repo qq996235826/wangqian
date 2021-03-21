@@ -21,4 +21,6 @@ public class SearchDTO
     private String bank;
     private String item;
     private String company;
+    private String info;
+    private Integer origin;
 };

@@ -25,6 +25,8 @@ public class Supplier {
 
     private String bankName;
 
+    private String branchBankName;
+
     private String bankNum;
 
     private String idCardTimeLimit;
@@ -137,6 +139,14 @@ public class Supplier {
 
     public void setBankName(String bankName) {
         this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBranchBankName() {
+        return branchBankName;
+    }
+
+    public void setBranchBankName(String branchBankName) {
+        this.branchBankName = branchBankName == null ? null : branchBankName.trim();
     }
 
     public String getBankNum() {

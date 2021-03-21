@@ -1,5 +1,11 @@
 package com.contract.model;
 
+import com.contract.dto.AddByWebDTO;
+import com.contract.dto.OrderDTO;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Order {
@@ -8,6 +14,22 @@ public class Order {
     private Long templateId;
 
     private Long supplierId;
+
+    private String bankName;
+
+    private String branchBankName;
+
+    private String bankNum;
+
+    private String bankImagePath;
+
+    private String supplierName;
+
+    private String supplierIdNum;
+
+    private String supplierHomeAddress;
+
+    private String supplierPhone;
 
     private Date createTime;
 
@@ -19,17 +41,9 @@ public class Order {
 
     private String companyAddress;
 
-    private String bankName;
-
-    private String branchBankName;
-
-    private String bankNum;
-
-    private String bankImagePath;
-
     private Double weight;
 
-    private Double price;
+    private BigDecimal price;
 
     private Double amount;
 
@@ -91,6 +105,70 @@ public class Order {
         this.supplierId = supplierId;
     }
 
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBranchBankName() {
+        return branchBankName;
+    }
+
+    public void setBranchBankName(String branchBankName) {
+        this.branchBankName = branchBankName == null ? null : branchBankName.trim();
+    }
+
+    public String getBankNum() {
+        return bankNum;
+    }
+
+    public void setBankNum(String bankNum) {
+        this.bankNum = bankNum == null ? null : bankNum.trim();
+    }
+
+    public String getBankImagePath() {
+        return bankImagePath;
+    }
+
+    public void setBankImagePath(String bankImagePath) {
+        this.bankImagePath = bankImagePath == null ? null : bankImagePath.trim();
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getSupplierIdNum() {
+        return supplierIdNum;
+    }
+
+    public void setSupplierIdNum(String supplierIdNum) {
+        this.supplierIdNum = supplierIdNum == null ? null : supplierIdNum.trim();
+    }
+
+    public String getSupplierHomeAddress() {
+        return supplierHomeAddress;
+    }
+
+    public void setSupplierHomeAddress(String supplierHomeAddress) {
+        this.supplierHomeAddress = supplierHomeAddress == null ? null : supplierHomeAddress.trim();
+    }
+
+    public String getSupplierPhone() {
+        return supplierPhone;
+    }
+
+    public void setSupplierPhone(String supplierPhone) {
+        this.supplierPhone = supplierPhone == null ? null : supplierPhone.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -131,38 +209,6 @@ public class Order {
         this.companyAddress = companyAddress == null ? null : companyAddress.trim();
     }
 
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName == null ? null : bankName.trim();
-    }
-
-    public String getBranchBankName() {
-        return branchBankName;
-    }
-
-    public void setBranchBankName(String branchBankName) {
-        this.branchBankName = branchBankName == null ? null : branchBankName.trim();
-    }
-
-    public String getBankNum() {
-        return bankNum;
-    }
-
-    public void setBankNum(String bankNum) {
-        this.bankNum = bankNum == null ? null : bankNum.trim();
-    }
-
-    public String getBankImagePath() {
-        return bankImagePath;
-    }
-
-    public void setBankImagePath(String bankImagePath) {
-        this.bankImagePath = bankImagePath == null ? null : bankImagePath.trim();
-    }
-
     public Double getWeight() {
         return weight;
     }
@@ -171,11 +217,11 @@ public class Order {
         this.weight = weight;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -321,5 +367,38 @@ public class Order {
 
     public void setOrigin(Integer origin) {
         this.origin = origin;
+    }
+
+    public void updateByOrderDTO(AddByWebDTO orderDTO)
+    {
+        this.id=orderDTO.getId();
+        this.supplierId=orderDTO.getSupplierId();
+        this.bankName=orderDTO.getBankName();
+        this.branchBankName=orderDTO.getBranchBankName();
+        this.bankNum=orderDTO.getBankNum();
+        this.supplierName=orderDTO.getSupplierName();
+        this.supplierIdNum=orderDTO.getSupplierIdNum();
+        this.supplierHomeAddress=orderDTO.getSupplierHomeAddress();
+        this.supplierPhone=orderDTO.getSupplierPhone();
+        try
+        {
+            this.createTime=new SimpleDateFormat("yyyy-MM-dd").parse(orderDTO.getCreateTime());
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        this.itemName=orderDTO.getItemName();
+        this.companyCode=orderDTO.getCompanyCode();
+        this.companyName=orderDTO.getCompanyName();
+        this.weight= Double.valueOf(orderDTO.getWeight());
+        this.price=new BigDecimal(orderDTO.getPrice());
+        this.orderNum=orderDTO.getOrderCode();
+        this.orderNumTime=new Date();
+        this.status= Integer.valueOf(orderDTO.getStatus());
+        this.updateTime=new Date();
+        this.startDate=orderDTO.getStartDate();
+        this.endDate=orderDTO.getEndDate();
+        this.origin=orderDTO.getOrigin();
     }
 }

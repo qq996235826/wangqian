@@ -25,6 +25,8 @@ public class SupplierDTO {
     String bankNum;
     //开户行名
     String bankName;
+    //支行名
+    String branchBankName;
     //家庭地址
     String homeAddress;
     //出生日期

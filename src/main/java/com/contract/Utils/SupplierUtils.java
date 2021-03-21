@@ -39,6 +39,19 @@ public class SupplierUtils {
         supplier.setEthnic(StringUtils.isNullOrEmpty(supplierDTO.getEthnic())?supplier.getEthnic():supplierDTO.getEthnic());
         //身份证有效期
         supplier.setIdCardTimeLimit(StringUtils.isNullOrEmpty(supplierDTO.getIdCardTimeLimit())?supplier.getIdCardTimeLimit():supplierDTO.getIdCardTimeLimit());
+        //银行
+        if(!StringUtils.isNullOrEmpty(supplierDTO.getBankName()))
+        {
+            supplier.setBankName(supplierDTO.getBankName());
+        }
+        if(!StringUtils.isNullOrEmpty(supplierDTO.getBranchBankName()))
+        {
+            supplier.setBranchBankName(supplierDTO.getBranchBankName());
+        }
+        if(!StringUtils.isNullOrEmpty(supplierDTO.getBankNum()))
+        {
+            supplier.setBankNum(supplierDTO.getBankNum());
+        }
     }
 
     /**

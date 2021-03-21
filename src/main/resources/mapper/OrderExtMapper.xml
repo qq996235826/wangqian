@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contract.mapper.OrderExtMapper">
+    <resultMap id="BaseResultMap" type="com.contract.model.Order">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="templateId" jdbcType="BIGINT" property="templateId" />
+        <result column="supplierId" jdbcType="BIGINT" property="supplierId" />
+        <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+        <result column="branchBankName" jdbcType="VARCHAR" property="branchBankName" />
+        <result column="bankNum" jdbcType="VARCHAR" property="bankNum" />
+        <result column="bankImagePath" jdbcType="VARCHAR" property="bankImagePath" />
+        <result column="supplierName" jdbcType="VARCHAR" property="supplierName" />
+        <result column="supplierIdNum" jdbcType="VARCHAR" property="supplierIdNum" />
+        <result column="supplierHomeAddress" jdbcType="VARCHAR" property="supplierHomeAddress" />
+        <result column="supplierPhone" jdbcType="VARCHAR" property="supplierPhone" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="itemName" jdbcType="VARCHAR" property="itemName" />
+        <result column="companyCode" jdbcType="CHAR" property="companyCode" />
+        <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+        <result column="companyAddress" jdbcType="VARCHAR" property="companyAddress" />
+        <result column="weight" jdbcType="DOUBLE" property="weight" />
+        <result column="price" jdbcType="DOUBLE" property="price" />
+        <result column="amount" jdbcType="DOUBLE" property="amount" />
+        <result column="orderNum" jdbcType="VARCHAR" property="orderNum" />
+        <result column="orderNumTime" jdbcType="TIMESTAMP" property="orderNumTime" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="updateBy" jdbcType="BIGINT" property="updateBy" />
+        <result column="check1Time" jdbcType="TIMESTAMP" property="check1Time" />
+        <result column="chech1By" jdbcType="BIGINT" property="chech1By" />
+        <result column="check1Note" jdbcType="VARCHAR" property="check1Note" />
+        <result column="check2Time" jdbcType="TIMESTAMP" property="check2Time" />
+        <result column="chech2Bby" jdbcType="BIGINT" property="chech2Bby" />
+        <result column="check2Note" jdbcType="VARCHAR" property="check2Note" />
+        <result column="signaturePath" jdbcType="VARCHAR" property="signaturePath" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="pdfPath" jdbcType="VARCHAR" property="pdfPath" />
+        <result column="startDate" jdbcType="VARCHAR" property="startDate" />
+        <result column="endDate" jdbcType="VARCHAR" property="endDate" />
+        <result column="origin" jdbcType="INTEGER" property="origin" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, templateId, supplierId, bankName, branchBankName, bankNum, bankImagePath, supplierName,
+    supplierIdNum, supplierHomeAddress, supplierPhone, createTime, itemName, companyCode,
+    companyName, companyAddress, weight, price, amount, orderNum, orderNumTime, status,
+    updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, chech2Bby, check2Note,
+    signaturePath, path, pdfPath, startDate, endDate, origin
+    </sql>
+
+    <select id="orderFuzzySearch" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from businessorder
+        where status = #{status} and itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info}
+    </select>
+
+    <select id="orderFuzzySearchWithoutStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from businessorder
+        where itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info} and origin = #{origin}
+    </select>
+
+</mapper>

@@ -865,6 +865,76 @@ public class SupplierExample {
             return (Criteria) this;
         }
 
+        public Criteria andBranchBankNameIsNull() {
+            addCriterion("branchBankName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameIsNotNull() {
+            addCriterion("branchBankName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameEqualTo(String value) {
+            addCriterion("branchBankName =", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameNotEqualTo(String value) {
+            addCriterion("branchBankName <>", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameGreaterThan(String value) {
+            addCriterion("branchBankName >", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameGreaterThanOrEqualTo(String value) {
+            addCriterion("branchBankName >=", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameLessThan(String value) {
+            addCriterion("branchBankName <", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameLessThanOrEqualTo(String value) {
+            addCriterion("branchBankName <=", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameLike(String value) {
+            addCriterion("branchBankName like", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameNotLike(String value) {
+            addCriterion("branchBankName not like", value, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameIn(List<String> values) {
+            addCriterion("branchBankName in", values, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameNotIn(List<String> values) {
+            addCriterion("branchBankName not in", values, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameBetween(String value1, String value2) {
+            addCriterion("branchBankName between", value1, value2, "branchBankName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBranchBankNameNotBetween(String value1, String value2) {
+            addCriterion("branchBankName not between", value1, value2, "branchBankName");
+            return (Criteria) this;
+        }
+
         public Criteria andBankNumIsNull() {
             addCriterion("bankNum is null");
             return (Criteria) this;

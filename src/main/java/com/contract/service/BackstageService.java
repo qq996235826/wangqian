@@ -1,9 +1,13 @@
 package com.contract.service;
 
+import com.contract.dto.OrderDTO;
+import com.contract.exception.CustomizeErrorCode;
+import com.contract.exception.CustomizeException;
 import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.*;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -42,6 +46,12 @@ public class BackstageService {
     {
         Integer page=Integer.valueOf(request.getParameter("page"));
         Integer row=Integer.valueOf(request.getParameter("rows"));
+        //划分线上
+        Integer origin=Integer.valueOf(request.getParameter("origin"));
+        if(origin!=0&&origin!=1)
+        {
+            origin=1;
+        }
         //创建map用于返回
         Map result=new HashMap<>();
         //List放在result里
@@ -49,7 +59,7 @@ public class BackstageService {
         //从数据获得数据
         OrderExample example=new OrderExample();
         example.setOrderByClause(" id desc");
-        example.createCriteria().andStatusNotEqualTo(-1).andStatusNotEqualTo(20);
+        example.createCriteria().andStatusNotEqualTo(-1).andStatusNotEqualTo(20).andOriginEqualTo(origin);
         //总数据
         Long totalCount = orderMapper.countByExample(example);
         result.put("total",totalCount);
@@ -66,14 +76,16 @@ public class BackstageService {
                 Map map=new HashMap();
                 //合同id
                 map.put("id",orders.get(a).getId());
-                //使用模板id
-                map.put("templateId",orders.get(a).getTemplateId());
+//                //使用模板id
+//                map.put("templateId",orders.get(a).getTemplateId());
                 //合同创建时间
                 map.put("createTime",sdf.format(orders.get(a).getCreateTime()));
                 //货物名称
                 map.put("itemName",orders.get(a).getItemName());
                 //价格
                 map.put("price",orders.get(a).getPrice());
+                //重量
+                map.put("weight",orders.get(a).getWeight());
                 //业务编码
                 map.put("orderNum",orders.get(a).getOrderNum());
                 //甲方名字
@@ -81,21 +93,9 @@ public class BackstageService {
                 //供货人id
                 map.put("supplierId",orders.get(a).getSupplierId());
                 //供货人名字
-                if(supplier.getName()==null)
-                {
-                    map.put("supplierName","找不到供货人");
-                }else
-                {
-                    map.put("supplierName",supplier.getName());
-                }
+                map.put("supplierName",orders.get(a).getSupplierName());
                 //供货人身份证号
-                if (supplier.getIdNum()==null)
-                {
-                    map.put("supplierIdNum","找不到供货人");
-                }else
-                {
-                    map.put("supplierIdNum",supplier.getIdNum());
-                }
+                map.put("supplierIdNum",orders.get(a).getSupplierIdNum());
                 //开户行
                 map.put("bankName",orders.get(a).getBankName());
                 //支行
@@ -103,10 +103,10 @@ public class BackstageService {
                 //银行卡号
                 map.put("bankNum",orders.get(a).getBankNum());
                 //审核状态
-                //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
+                //-1--未签名 0--待审核(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
                 if(orders.get(a).getStatus()==0)
                 {
-                    map.put("status","已提交");
+                    map.put("status","待审核");
                 }
                 else if(orders.get(a).getStatus()==10)
                 {
@@ -124,10 +124,10 @@ public class BackstageService {
                 map.put("startDate",orders.get(a).getStartDate());
                 //截止日期
                 map.put("endDate",orders.get(a).getEndDate());
-                //记录更新日期
-                map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
-                //pdf路径
-                map.put("pdfUrl",orders.get(a).getPdfPath());
+//                //记录更新日期
+//                map.put("updateTime",sdf.format(orders.get(a).getUpdateTime()));
+//                //pdf路径
+//                map.put("pdfUrl",orders.get(a).getPdfPath());
                 rows.add(map);
             }
             catch (Exception e)
@@ -223,8 +223,6 @@ public class BackstageService {
             Map map = new HashMap();
             //合同id
             map.put("id", orders.get(a).getId());
-            //使用模板id
-            map.put("templateId", orders.get(a).getTemplateId());
             //合同创建时间
             map.put("createTime", sdf.format(orders.get(a).getCreateTime()));
             //货物名称
@@ -237,24 +235,30 @@ public class BackstageService {
             map.put("companyName", orders.get(a).getCompanyName());
             //供货人id
             map.put("supplierId", orders.get(a).getSupplierId());
+            //重量
+            map.put("weight",orders.get(a).getWeight());
+            //生效日期
+            map.put("startDate",orders.get(a).getStartDate());
+            //截止日期
+            map.put("endDate",orders.get(a).getEndDate());
 
             //供货人名字
-            if (supplier.getName() == null)
+            if (orders.get(a).getSupplierName() == null)
             {
                 map.put("supplierName", "找不到供货人");
             }
             else
             {
-                map.put("supplierName", supplier.getName());
+                map.put("supplierName", orders.get(a).getSupplierName());
             }
             //供货人身份证号
-            if (supplier.getIdNum() == null)
+            if (orders.get(a).getSupplierIdNum() == null)
             {
                 map.put("supplierIdNum", "找不到供货人");
             }
             else
             {
-                map.put("supplierIdNum", supplier.getIdNum());
+                map.put("supplierIdNum", orders.get(a).getSupplierIdNum());
             }
             //开户行
             map.put("bankName", orders.get(a).getBankName());
@@ -266,7 +270,7 @@ public class BackstageService {
             //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
             if (orders.get(a).getStatus() == 0)
             {
-                map.put("status", "草拟");
+                map.put("status", "待审核");
             }
             else if (orders.get(a).getStatus() == 10)
             {
@@ -274,7 +278,7 @@ public class BackstageService {
             }
             else if (orders.get(a).getStatus() == 20)
             {
-                map.put("status", "审核未通过");
+                map.put("status", "已失效");
             }
             else if (orders.get(a).getStatus() == 90)
             {
@@ -353,12 +357,43 @@ public class BackstageService {
         Map<String, Object> status3=new HashMap<>();
         Map<String, Object> status4=new HashMap<>();
         Map<String, Object> status5=new HashMap<>();
+        Map<String, Object> status6=new HashMap<>();
         status1.put("code",-1);
         status1.put("status","未签名");
         status2.put("code",0);
-        status2.put("status","未提交");
+        status2.put("status","待审核");
         status3.put("code",10);
-        status3.put("status","审核通过");
+        status3.put("status","待盖章");
+        status4.put("code",20);
+        status4.put("status","已失效");
+        status5.put("code",90);
+        status5.put("status","已生效");
+        status6.put("code",-2);
+        status6.put("status","全部");
+        status6.put("selected","true");
+        statusList.add(status1);
+        statusList.add(status2);
+        statusList.add(status3);
+        statusList.add(status4);
+        statusList.add(status5);
+        statusList.add(status6);
+        return statusList;
+    }
+
+    public List<Map<String, Object>> getContractStatusNew()
+    {
+        List<Map<String, Object>> statusList=new ArrayList<>();
+        Map<String, Object> status1=new HashMap<>();
+        Map<String, Object> status2=new HashMap<>();
+        Map<String, Object> status3=new HashMap<>();
+        Map<String, Object> status4=new HashMap<>();
+        Map<String, Object> status5=new HashMap<>();
+        status1.put("code",-1);
+        status1.put("status","未签名");
+        status2.put("code",1);
+        status2.put("status","待审核");
+        status3.put("code",10);
+        status3.put("status","待盖章");
         status4.put("code",20);
         status4.put("status","已失效");
         status5.put("code",90);
@@ -386,5 +421,18 @@ public class BackstageService {
             supplierList.add(map);
         }
         return supplierList;
+    }
+
+    public OrderDTO getOrderInfo(String id)
+    {
+        Order order=orderMapper.selectByPrimaryKey(Long.valueOf(id));
+        if(order!=null)
+        {
+            return new OrderDTO(order);
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
+        }
     }
 }

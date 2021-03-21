@@ -70,6 +70,12 @@ public class BackstageController
         return "review";
     }
 
+    @GetMapping("/reviewol")
+    public String reviewol()
+    {
+        return "reviewol";
+    }
+
     /**
      * 负责页面跳转
      *
@@ -127,6 +133,20 @@ public class BackstageController
     public Map getOrdersInfo(HttpServletRequest request)
     {
         return backstageService.getOrdersInfo(request);
+    }
+
+    /**
+     * @Description: 获得单个合同信息
+     * @Author: DengHaoRan
+     * @Date: 2021/3/21 14:36
+     * @params: [request]
+     * @return: com.contract.dto.ResultDTO
+     **/
+    @RequestMapping("/getOrderInfo")
+    @ResponseBody
+    public ResultDTO getOrderInfo(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(backstageService.getOrderInfo(request.getParameter("id")));
     }
 
     /**
@@ -216,14 +236,14 @@ public class BackstageController
     /**
      * 更新合同
      *
-     * @param orderDTO
+     * @param AddByWebDTO
      * @return
      */
     @ResponseBody
     @RequestMapping("/update")
-    public ResultDTO update(@RequestBody OrderDTO orderDTO)
+    public ResultDTO update(@RequestBody AddByWebDTO addByWebDTO)
     {
-        return ResultDTO.okOf(contractService.update(orderDTO));
+        return ResultDTO.okOf(contractService.update(addByWebDTO));
     }
 
 
@@ -273,6 +293,14 @@ public class BackstageController
     }
 
     @ResponseBody
+    @RequestMapping("/getContractStatusNew")
+    public List<Map<String, Object>> getContractStatusNew()
+    {
+        return backstageService.getContractStatusNew();
+    }
+
+
+    @ResponseBody
     @RequestMapping("/supplierOnlyOne")
     public ResultDTO supplierOnlyOne(String idNum)
     {
@@ -304,6 +332,13 @@ public class BackstageController
         return ResultDTO.okOf(supplierService.getSupplierInfo(request.getParameter("idNum")));
     }
 
+    /**
+     * @Description: 条件搜索
+     * @Author: DengHaoRan
+     * @Date: 2021/3/11 20:43
+     * @params: [searchDTO]
+     * @return: com.contract.dto.ResultDTO
+     **/
     @ResponseBody
     @RequestMapping("/searchOrder")
     public ResultDTO searchOrder(@RequestBody SearchDTO searchDTO)
@@ -311,5 +346,19 @@ public class BackstageController
         return ResultDTO.okOf(contractService.searchOrder(searchDTO));
     }
 
+
+//    /**
+//     * @Description: 模糊搜索
+//     * @Author: DengHaoRan
+//     * @Date: 2021/3/11 20:43
+//     * @params: [request]
+//     * @return: com.contract.dto.ResultDTO
+//     **/
+//    @ResponseBody
+//    @RequestMapping("/searchFuzzyOrder")
+//    public ResultDTO orderFuzzySearch(HttpServletRequest request)
+//    {
+//        return ResultDTO.okOf(contractService.orderFuzzySearch(request.getParameter("info"),Integer.valueOf(request.getParameter("rows")),Integer.valueOf(request.getParameter("page"))));
+//    }
 
 }

@@ -18,9 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
+import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +51,9 @@ public class ContractService {
 
     @Resource
     private OrderMapper orderMapper;
+
+    @Resource
+    private OrderExtMapper orderExtMapper;
 
     @Resource
     private SupplierAccountMapper supplierAccountMapper;
@@ -116,6 +121,8 @@ public class ContractService {
         //获得供货人
         Supplier supplier=getSupplierByIdNum(idNum);
         supplier.setPhoneNum(phoneNum);
+        supplier.setBankName(bankName);
+        supplier.setBranchBankName(branchBankName);
         supplierMapper.updateByPrimaryKey(supplier);
         //获得甲方
         Company company=getCompanyByCode(companyCode);
@@ -220,6 +227,10 @@ public class ContractService {
             order.setTemplateId(contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getId());
             //设置供货人id
             order.setSupplierId(supplier.getId());
+            //设置供货人其他信息
+            order.setSupplierName(supplier.getName());
+            order.setSupplierPhone(supplier.getPhoneNum());
+            order.setSupplierIdNum(supplier.getIdNum());
             //设置创建时间
             order.setCreateTime(new Date());
             //更新日期
@@ -240,13 +251,22 @@ public class ContractService {
             order.setBankName(bankName);
             //设置支行
             order.setBranchBankName(branchBankName);
-
-
+            //设置供货人地址
+            order.setSupplierHomeAddress(supplier.getHomeAddress());
+            //设置线上
+            order.setOrigin(0);
             //设置价格
             if(!StringUtils.isNullOrEmpty(price))
             {
-                order.setPrice(Double.valueOf(price));
+                order.setPrice(new BigDecimal(price));
             }
+            else
+            {
+                order.setPrice(new BigDecimal("0.0"));
+            }
+
+            //设置重量
+            order.setWeight(0.0);
 
             //设置审核状态
             // -1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
@@ -751,28 +771,30 @@ public class ContractService {
                 //签订时间
                 infoMap.put(KeyWord.CODE.getValue(), order.getOrderNum());
                 //替换关键字和图片
-                String path=getNewOrderContract(new File(order.getPath()),supplier.getIdNum());
-                XWPFDocument doc = WordUtils.generateWord(infoMap,order.getPath());
-                try {
-                    FileOutputStream fopts = new FileOutputStream(path);
-                    doc.write(fopts);
-                    fopts.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                order.setPath(path);
-                //docx转PDF
-                String pdfPath=wordToPDFAndJPG.docxToPDF(path);
-                order.setPdfPath(pdfPath);
-                if(orderMapper.updateByPrimaryKey(order)==1)
+                if(order.getOrigin()==0)
                 {
-                    return "成功";
+                    String path=getNewOrderContract(new File(order.getPath()),supplier.getIdNum());
+                    XWPFDocument doc = WordUtils.generateWord(infoMap,order.getPath());
+                    try {
+                        FileOutputStream fopts = new FileOutputStream(path);
+                        doc.write(fopts);
+                        fopts.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    order.setPath(path);
+                    //docx转PDF
+                    String pdfPath=wordToPDFAndJPG.docxToPDF(path);
+                    order.setPdfPath(pdfPath);
+                    if(orderMapper.updateByPrimaryKey(order)==1)
+                    {
+                        return "成功";
+                    }
+                    else
+                    {
+                        return "出错";
+                    }
                 }
-                else
-                {
-                    return "出错";
-                }
-
 
             }
             //设置状态
@@ -884,75 +906,85 @@ public class ContractService {
     }
 
     /**
-     * 更改银行信息接口
+     * 更改合同信息接口
      * @param orderDTO
      * @return
      */
-    public Boolean update(OrderDTO orderDTO) {
+    public Boolean update(AddByWebDTO orderDTO) {
         //获得合同订单
         Order order=orderMapper.selectByPrimaryKey(orderDTO.getId());
-        order.setBankName(orderDTO.getBankName());
-        order.setBranchBankName(orderDTO.getBranchBankName());
+        order.updateByOrderDTO(orderDTO);
+        //获得公司编号
+        CompanyExample companyExample=new CompanyExample();
+        companyExample.createCriteria().andNameEqualTo(order.getCompanyName());
+        order.setCompanyCode(companyMapper.selectByExample(companyExample).get(0).getCode());
         //获得供货人
         Supplier supplier=supplierMapper.selectByPrimaryKey(orderDTO.getSupplierId());
-        //设置更新后的合同信息
-        Map<String,Object> infoMap=new HashMap<>();
-        //设置标记符和替换变量
-        //签订时间
-        infoMap.put(KeyWord.CREATE_TIME.getValue(), order.getStartDate());
-        //终止日期
-        infoMap.put(KeyWord.END_TIME.getValue(), order.getEndDate());
-        //乙方
-        infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
-        //身份证号
-        infoMap.put(KeyWord.ID_NUM.getValue(),supplier.getIdNum());
-        //电话号
-        infoMap.put(KeyWord.PHONE_NUM.getValue(),supplier.getPhoneNum());
-        //银行卡号
-        infoMap.put(KeyWord.BANK_ID.getValue(),order.getBankNum());
-        //开户行
-        infoMap.put(KeyWord.BANK_NAME.getValue(),orderDTO.getBankName()+orderDTO.getBranchBankName());
-        //设置甲方
-        infoMap.put(KeyWord.COMPANY.getValue(),order.getCompanyName());
-        //设置甲方地址
-        infoMap.put(KeyWord.PLACE.getValue(),order.getCompanyAddress());
-        //物品名
-        infoMap.put(KeyWord.ITEM_NAM.getValue(),order.getItemName());
-        //价格
-        infoMap.put(KeyWord.PRICE.getValue(),order.getPrice());
 
-        //合成新的合同
-        ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
-        contractTemplateExample.createCriteria().andIdEqualTo(orderDTO.getTemplateId());
-        String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
-        //新合同路径
-        String path=getNewOrderContract(new File(temPath),supplier.getIdNum());
-        //WordUtils.replaceAll(path,infoMap);
+        if(orderDTO.getOrigin()==0)
+        {
+            //设置更新后的合同信息
+            Map<String,Object> infoMap=new HashMap<>();
+            //设置标记符和替换变量
+            //合同号
+            infoMap.put(KeyWord.CODE.getValue(),order.getOrderNum());
+            //签订时间
+            infoMap.put(KeyWord.CREATE_TIME.getValue(), order.getStartDate());
+            //终止日期
+            infoMap.put(KeyWord.END_TIME.getValue(), order.getEndDate());
+            //乙方
+            infoMap.put(KeyWord.PartyB.getValue(),supplier.getName());
+            //身份证号
+            infoMap.put(KeyWord.ID_NUM.getValue(),supplier.getIdNum());
+            //电话号
+            infoMap.put(KeyWord.PHONE_NUM.getValue(),supplier.getPhoneNum());
+            //银行卡号
+            infoMap.put(KeyWord.BANK_ID.getValue(),order.getBankNum());
+            //开户行
+            infoMap.put(KeyWord.BANK_NAME.getValue(),orderDTO.getBankName()+orderDTO.getBranchBankName());
+            //设置甲方
+            infoMap.put(KeyWord.COMPANY.getValue(),order.getCompanyName());
+            //设置甲方地址
+            infoMap.put(KeyWord.PLACE.getValue(),order.getCompanyAddress());
+            //物品名
+            infoMap.put(KeyWord.ITEM_NAM.getValue(),order.getItemName());
+            //价格
+            infoMap.put(KeyWord.PRICE.getValue(),order.getPrice());
 
-        //后台替换关键字
-        //WordUtils.replaceAndGenerateWord(path,path,infoMap);
-        //图片插入
-        Map<String,Object> header = new HashMap<>();
-        header.put("width",150);
-        header.put("height",75);
-        header.put("type", "png");
-        header.put("content", order.getSignaturePath());//图片路径
-        infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
-        //替换关键字和图片
-        XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
-        try {
-            FileOutputStream fopts = new FileOutputStream(path);
-            doc.write(fopts);
-            fopts.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            //合成新的合同
+            ContractTemplateExample contractTemplateExample=new ContractTemplateExample();
+            contractTemplateExample.createCriteria().andIdEqualTo(order.getTemplateId());
+            String temPath=contractTemplateMapper.selectByExample(contractTemplateExample).get(0).getPath();
+            //新合同路径
+            String path=getNewOrderContract(new File(temPath),supplier.getIdNum());
+            //WordUtils.replaceAll(path,infoMap);
+
+            //后台替换关键字
+            //WordUtils.replaceAndGenerateWord(path,path,infoMap);
+            //图片插入
+            Map<String,Object> header = new HashMap<>();
+            header.put("width",150);
+            header.put("height",75);
+            header.put("type", "png");
+            header.put("content", order.getSignaturePath());//图片路径
+            infoMap.put(KeyWord.PartyB_NAMEPAGE.getValue(),header);
+            //替换关键字和图片
+            XWPFDocument doc = WordUtils.generateWord(infoMap,temPath);
+            try {
+                FileOutputStream fopts = new FileOutputStream(path);
+                doc.write(fopts);
+                fopts.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //docx转PDF
+            String pdfPath=wordToPDFAndJPG.docxToPDF(path);
+            //设置合同存储路径
+            order.setPath(path);
+            order.setPdfPath(pdfPath);
+            order.setUpdateTime(new Date());
         }
-        //docx转PDF
-        String pdfPath=wordToPDFAndJPG.docxToPDF(path);
-        //设置合同存储路径
-        order.setPath(path);
-        order.setPdfPath(pdfPath);
-        order.setUpdateTime(new Date());
+
         if(orderMapper.updateByPrimaryKey(order)==1)
         {
             return true;
@@ -1078,6 +1110,13 @@ public class ContractService {
      **/
     public Boolean addOrderByWeb(AddByWebDTO addByWebDTO)
     {
+        //检查协议号是否有重复
+        OrderExample orderExample=new OrderExample();
+        orderExample.createCriteria().andOrderNumEqualTo(addByWebDTO.getOrderCode());
+        if(orderMapper.selectByExample(orderExample).size()>0)
+        {
+            throw new CustomizeException(CustomizeErrorCode.ORDER_NUM_REPEAT);
+        }
         Order order=new Order();
         //设置线下创建
         order.setOrigin(1);
@@ -1088,13 +1127,23 @@ public class ContractService {
         //价格
         if(!addByWebDTO.getPrice().isEmpty())
         {
-            order.setPrice(Double.valueOf(addByWebDTO.getPrice()));
+            order.setPrice(new BigDecimal(addByWebDTO.getPrice()));
+        }
+        //重量
+        if(!addByWebDTO.getWeight().isEmpty())
+        {
+            order.setWeight(Double.valueOf(addByWebDTO.getWeight()));
         }
         //状态
         Integer status=Integer.valueOf(addByWebDTO.getStatus());
         order.setStatus(status);
         //需方名称
         order.setCompanyName(addByWebDTO.getCompanyName());
+        //需方代号
+        CompanyExample companyExample=new CompanyExample();
+        companyExample.createCriteria().andNameEqualTo(addByWebDTO.getCompanyName());
+        String companyCode=companyMapper.selectByExample(companyExample).get(0).getCode();
+        order.setCompanyCode(companyCode);
         //供货人相关
         SupplierExample example=new SupplierExample();
         example.createCriteria().andIdNumEqualTo(addByWebDTO.getSupplierIdNum());
@@ -1115,15 +1164,27 @@ public class ContractService {
             supplier.setEthnic("");
             supplier.setSex("");
             supplier.setAgencies("");
+            supplier.setHomeAddress(addByWebDTO.getSupplierHomeAddress());
             supplierMapper.insert(supplier);
             order.setSupplierId(supplier.getId());
+            order.setSupplierName(supplier.getName());
+            order.setSupplierIdNum(supplier.getIdNum());
+            order.setSupplierPhone(supplier.getPhoneNum());
+            order.setSupplierHomeAddress(supplier.getHomeAddress());
         }else
         {
             order.setSupplierId(supplierList.get(0).getId());
+            order.setSupplierName(supplierList.get(0).getName());
+            order.setSupplierIdNum(supplierList.get(0).getIdNum());
+            order.setSupplierPhone(supplierList.get(0).getPhoneNum());
+            order.setSupplierHomeAddress(supplierList.get(0).getHomeAddress());
         }
+
+
         //银行
         order.setBankName(addByWebDTO.getBankName());
         order.setBranchBankName(addByWebDTO.getBranchBankName());
+        order.setBankNum(addByWebDTO.getBankNum());
         //日期
         order.setStartDate(addByWebDTO.getStartDate());
         order.setEndDate(addByWebDTO.getEndDate());
@@ -1157,18 +1218,18 @@ public class ContractService {
         //List放在result里
         List<Map> rows=new ArrayList<>();
 
-        if(searchDTO.getStatus()!=null&&!searchDTO.getStatus().equals(""))
+        if(searchDTO.getStatus()!=null&&!searchDTO.getStatus().equals("全部"))
         {
             Integer status;
             if(searchDTO.getStatus().equals("未签名"))
             {
                 status=-1;
             }
-            else if(searchDTO.getStatus().equals("未提交"))
+            else if(searchDTO.getStatus().equals("待审核"))
             {
                 status=0;
             }
-            else if(searchDTO.getStatus().equals("审核通过"))
+            else if(searchDTO.getStatus().equals("待盖章"))
             {
                 status=10;
             }
@@ -1184,10 +1245,7 @@ public class ContractService {
             {
                 throw new CustomizeException(CustomizeErrorCode.ORDER_STATUS_WRONG2);
             }
-            OrderExample example=new OrderExample();
-            example.createCriteria().andOrderNumLike("%"+searchDTO.getOrderCode()+"%").andStatusEqualTo(status).andBankNameLike("%"+searchDTO.getBank()+"%").
-                    andItemNameLike(searchDTO.getItem()).andCompanyNameLike("%"+searchDTO.getCompany()+"%");
-            List<Order> orderList=orderMapper.selectByExample(example);
+            List<Order> orderList=orderExtMapper.orderFuzzySearch(status,"%"+searchDTO.getItem()+"%","%"+searchDTO.getCompany()+"%","%"+ searchDTO.getInfo()+"%",searchDTO.getOrigin());
             //筛选身份证和姓名
             if(searchDTO.getSupplierIdNum()!=null)
             {
@@ -1246,25 +1304,12 @@ public class ContractService {
                 map.put("companyName", orders.get(a).getCompanyName());
                 //供货人id
                 map.put("supplierId", orders.get(a).getSupplierId());
-
+                //供货人地址
+                map.put("supplierHomeAddress",orders.get(a).getSupplierHomeAddress());
                 //供货人名字
-                if (supplier.getName() == null)
-                {
-                    map.put("supplierName", "找不到供货人");
-                }
-                else
-                {
-                    map.put("supplierName", supplier.getName());
-                }
+                map.put("supplierName", supplier.getName());
                 //供货人身份证号
-                if (supplier.getIdNum() == null)
-                {
-                    map.put("supplierIdNum", "找不到供货人");
-                }
-                else
-                {
-                    map.put("supplierIdNum", supplier.getIdNum());
-                }
+                map.put("supplierIdNum", supplier.getIdNum());
                 //开户行
                 map.put("bankName", orders.get(a).getBankName());
                 //支行
@@ -1275,7 +1320,7 @@ public class ContractService {
                 //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
                 if (orders.get(a).getStatus() == 0)
                 {
-                    map.put("status", "草拟");
+                    map.put("status", "待审核");
                 }
                 else if (orders.get(a).getStatus() == 10)
                 {
@@ -1283,11 +1328,11 @@ public class ContractService {
                 }
                 else if (orders.get(a).getStatus() == 20)
                 {
-                    map.put("status", "审核未通过");
+                    map.put("status", "已失效");
                 }
                 else if (orders.get(a).getStatus() == 90)
                 {
-                    map.put("status", "已盖章");
+                    map.put("status", "已生效");
                 }
                 //线上线下
                 if (orders.get(a).getOrigin()==null||orders.get(a).getOrigin()!=1)
@@ -1308,10 +1353,8 @@ public class ContractService {
         }
         else
         {
-            OrderExample example=new OrderExample();
-            example.createCriteria().andOrderNumLike("%"+searchDTO.getOrderCode()+"%").andBankNameLike("%"+searchDTO.getBank()+"%").
-                    andItemNameLike("%"+searchDTO.getItem()+"%").andCompanyNameLike("%"+searchDTO.getCompany()+"%");
-            List<Order> orderList=orderMapper.selectByExample(example);
+            List<Order> orderList=orderExtMapper.orderFuzzySearchWithoutStatus("%"+searchDTO.getItem()+"%","%"+searchDTO.getCompany()+"%","%"+ searchDTO.getInfo()+"%",searchDTO.getOrigin());
+
             //筛选身份证和姓名
             if(searchDTO.getSupplierIdNum()!=null)
             {
@@ -1355,39 +1398,26 @@ public class ContractService {
                 Map map = new HashMap();
                 //合同id
                 map.put("id", orders.get(a).getId());
-                //使用模板id
-                map.put("templateId", orders.get(a).getTemplateId());
                 //合同创建时间
                 map.put("createTime", sdf.format(orders.get(a).getCreateTime()));
                 //货物名称
                 map.put("itemName", orders.get(a).getItemName());
                 //价格
                 map.put("price", orders.get(a).getPrice());
+                //重量
+                map.put("weight", orders.get(a).getWeight());
                 //业务编码
                 map.put("orderNum", orders.get(a).getOrderNum());
                 //甲方名字
                 map.put("companyName", orders.get(a).getCompanyName());
                 //供货人id
                 map.put("supplierId", orders.get(a).getSupplierId());
-
+                //供货人地址
+                map.put("supplierHomeAddress",orders.get(a).getSupplierHomeAddress());
                 //供货人名字
-                if (supplier.getName() == null)
-                {
-                    map.put("supplierName", "找不到供货人");
-                }
-                else
-                {
-                    map.put("supplierName", supplier.getName());
-                }
+                map.put("supplierName", supplier.getName());
                 //供货人身份证号
-                if (supplier.getIdNum() == null)
-                {
-                    map.put("supplierIdNum", "找不到供货人");
-                }
-                else
-                {
-                    map.put("supplierIdNum", supplier.getIdNum());
-                }
+                map.put("supplierIdNum", supplier.getIdNum());
                 //开户行
                 map.put("bankName", orders.get(a).getBankName());
                 //支行
@@ -1398,7 +1428,7 @@ public class ContractService {
                 //'checking':"审核中","checkPass":"审核通过","checkFail":"审核未通过"
                 if (orders.get(a).getStatus() == 0)
                 {
-                    map.put("status", "草拟");
+                    map.put("status", "待审核");
                 }
                 else if (orders.get(a).getStatus() == 10)
                 {
@@ -1406,7 +1436,7 @@ public class ContractService {
                 }
                 else if (orders.get(a).getStatus() == 20)
                 {
-                    map.put("status", "审核未通过");
+                    map.put("status", "已失效");
                 }
                 else if (orders.get(a).getStatus() == 90)
                 {
@@ -1431,4 +1461,94 @@ public class ContractService {
         }
 
     }
+
+//    public Map orderFuzzySearch(String info,Integer row,Integer page)
+//    {
+//        //创建map用于返回
+//        Map result = new HashMap<>();
+//        //List放在result里
+//        List<Map> rows = new ArrayList<>();
+//
+//        List<Order> orderList = orderExtMapper.orderFuzzySearch('%' + info + '%');
+//
+//        //分页
+//        int size=page*row;
+//        if(size>orderList.size())
+//        {
+//            size=orderList.size();
+//        }
+//        List<Order> orders=orderList.subList((page -1)* row,size);
+//        //把数据填入map,每个Order都是一个map,把每个map存入list中
+//        for (int a = 0; a < orders.size(); a++)
+//        {
+//            try
+//            {
+//                //获得供货人信息
+//                Supplier supplier = supplierMapper.selectByPrimaryKey(orders.get(a).getSupplierId());
+//                Map map = new HashMap();
+//                //合同id
+//                map.put("id", orders.get(a).getId());
+//                //合同创建时间
+//                map.put("createTime", sdf.format(orders.get(a).getCreateTime()));
+//                //货物名称
+//                map.put("itemName", orders.get(a).getItemName());
+//                //价格
+//                map.put("price", orders.get(a).getPrice());
+//                //重量
+//                map.put("weight", orders.get(a).getWeight());
+//                //业务编码
+//                map.put("orderNum", orders.get(a).getOrderNum());
+//                //甲方名字
+//                map.put("companyName", orders.get(a).getCompanyName());
+//                //供货人id
+//                map.put("supplierId", orders.get(a).getSupplierId());
+//                //供货人名字
+//                map.put("supplierName", supplier.getName());
+//                //供货人地址
+//                map.put("supplierHomeAddress",orders.get(a).getSupplierHomeAddress());
+//                //供货人身份证号
+//                map.put("supplierIdNum", supplier.getIdNum());
+//                //开户行
+//                map.put("bankName", orders.get(a).getBankName());
+//                //支行
+//                map.put("branchBankName", orders.get(a).getBranchBankName());
+//                //银行卡号
+//                map.put("bankNum", orders.get(a).getBankNum());
+//                //审核状态
+//                //-1--未签名 0--已提交(签名,没审核),10--审核通过(有了签名,有审核,没盖章),90--已生效(上传了盖章文件),20--已失效
+//                if (orders.get(a).getStatus() == 0)
+//                {
+//                    map.put("status", "待审核");
+//                }
+//                else if (orders.get(a).getStatus() == 10)
+//                {
+//                    map.put("status", "待盖章");
+//                }
+//                else if (orders.get(a).getStatus() == 20)
+//                {
+//                    map.put("status", "已失效");
+//                }
+//                else if (orders.get(a).getStatus() == 90)
+//                {
+//                    map.put("status", "已生效");
+//                }
+//                //生效日期
+//                map.put("startDate", orders.get(a).getStartDate());
+//                //截止日期
+//                map.put("endDate", orders.get(a).getEndDate());
+//                rows.add(map);
+//            }
+//            catch (Exception e)
+//            {
+//                e.printStackTrace();
+//            }
+//
+//            result.put("total", orders.size());
+//            result.put("rows", rows);
+//
+//
+//        }
+//
+//        return result;
+//    }
 }

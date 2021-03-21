@@ -5,17 +5,21 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="templateId" jdbcType="BIGINT" property="templateId" />
     <result column="supplierId" jdbcType="BIGINT" property="supplierId" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <result column="branchBankName" jdbcType="VARCHAR" property="branchBankName" />
+    <result column="bankNum" jdbcType="VARCHAR" property="bankNum" />
+    <result column="bankImagePath" jdbcType="VARCHAR" property="bankImagePath" />
+    <result column="supplierName" jdbcType="VARCHAR" property="supplierName" />
+    <result column="supplierIdNum" jdbcType="VARCHAR" property="supplierIdNum" />
+    <result column="supplierHomeAddress" jdbcType="VARCHAR" property="supplierHomeAddress" />
+    <result column="supplierPhone" jdbcType="VARCHAR" property="supplierPhone" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="itemName" jdbcType="VARCHAR" property="itemName" />
     <result column="companyCode" jdbcType="CHAR" property="companyCode" />
     <result column="companyName" jdbcType="VARCHAR" property="companyName" />
     <result column="companyAddress" jdbcType="VARCHAR" property="companyAddress" />
-    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
-    <result column="branchBankName" jdbcType="VARCHAR" property="branchBankName" />
-    <result column="bankNum" jdbcType="VARCHAR" property="bankNum" />
-    <result column="bankImagePath" jdbcType="VARCHAR" property="bankImagePath" />
     <result column="weight" jdbcType="DOUBLE" property="weight" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="amount" jdbcType="DOUBLE" property="amount" />
     <result column="orderNum" jdbcType="VARCHAR" property="orderNum" />
     <result column="orderNumTime" jdbcType="TIMESTAMP" property="orderNumTime" />
@@ -94,10 +98,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, templateId, supplierId, createTime, itemName, companyCode, companyName, companyAddress, 
-    bankName, branchBankName, bankNum, bankImagePath, weight, price, amount, orderNum, 
-    orderNumTime, status, updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, 
-    chech2Bby, check2Note, signaturePath, path, pdfPath, startDate, endDate, origin
+    id, templateId, supplierId, bankName, branchBankName, bankNum, bankImagePath, supplierName, 
+    supplierIdNum, supplierHomeAddress, supplierPhone, createTime, itemName, companyCode, 
+    companyName, companyAddress, weight, price, amount, orderNum, orderNumTime, status, 
+    updateTime, updateBy, check1Time, chech1By, check1Note, check2Time, chech2Bby, check2Note, 
+    signaturePath, path, pdfPath, startDate, endDate, origin
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.OrderExample" resultMap="BaseResultMap">
     select
@@ -130,28 +135,30 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
-    insert into businessorder (templateId, supplierId, createTime, 
-      itemName, companyCode, companyName, 
-      companyAddress, bankName, branchBankName, 
-      bankNum, bankImagePath, weight, 
-      price, amount, orderNum, 
-      orderNumTime, status, updateTime, 
-      updateBy, check1Time, chech1By, 
-      check1Note, check2Time, chech2Bby, 
-      check2Note, signaturePath, path, 
-      pdfPath, startDate, endDate, 
-      origin)
-    values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{itemName,jdbcType=VARCHAR}, #{companyCode,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{companyAddress,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, 
-      #{bankNum,jdbcType=VARCHAR}, #{bankImagePath,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, 
-      #{price,jdbcType=DOUBLE}, #{amount,jdbcType=DOUBLE}, #{orderNum,jdbcType=VARCHAR}, 
-      #{orderNumTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, #{chech1By,jdbcType=BIGINT}, 
-      #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, #{chech2Bby,jdbcType=BIGINT}, 
-      #{check2Note,jdbcType=VARCHAR}, #{signaturePath,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
-      #{pdfPath,jdbcType=VARCHAR}, #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR}, 
-      #{origin,jdbcType=INTEGER})
+    insert into businessorder (templateId, supplierId, bankName, 
+      branchBankName, bankNum, bankImagePath, 
+      supplierName, supplierIdNum, supplierHomeAddress, 
+      supplierPhone, createTime, itemName, 
+      companyCode, companyName, companyAddress, 
+      weight, price, amount, 
+      orderNum, orderNumTime, status, 
+      updateTime, updateBy, check1Time, 
+      chech1By, check1Note, check2Time, 
+      chech2Bby, check2Note, signaturePath, 
+      path, pdfPath, startDate, 
+      endDate, origin)
+    values (#{templateId,jdbcType=BIGINT}, #{supplierId,jdbcType=BIGINT}, #{bankName,jdbcType=VARCHAR}, 
+      #{branchBankName,jdbcType=VARCHAR}, #{bankNum,jdbcType=VARCHAR}, #{bankImagePath,jdbcType=VARCHAR}, 
+      #{supplierName,jdbcType=VARCHAR}, #{supplierIdNum,jdbcType=VARCHAR}, #{supplierHomeAddress,jdbcType=VARCHAR}, 
+      #{supplierPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{itemName,jdbcType=VARCHAR}, 
+      #{companyCode,jdbcType=CHAR}, #{companyName,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=DOUBLE}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DOUBLE}, 
+      #{orderNum,jdbcType=VARCHAR}, #{orderNumTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT}, #{check1Time,jdbcType=TIMESTAMP}, 
+      #{chech1By,jdbcType=BIGINT}, #{check1Note,jdbcType=VARCHAR}, #{check2Time,jdbcType=TIMESTAMP}, 
+      #{chech2Bby,jdbcType=BIGINT}, #{check2Note,jdbcType=VARCHAR}, #{signaturePath,jdbcType=VARCHAR}, 
+      #{path,jdbcType=VARCHAR}, #{pdfPath,jdbcType=VARCHAR}, #{startDate,jdbcType=VARCHAR}, 
+      #{endDate,jdbcType=VARCHAR}, #{origin,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.contract.model.Order" useGeneratedKeys="true">
     insert into businessorder
@@ -161,6 +168,30 @@
       </if>
       <if test="supplierId != null">
         supplierId,
+      </if>
+      <if test="bankName != null">
+        bankName,
+      </if>
+      <if test="branchBankName != null">
+        branchBankName,
+      </if>
+      <if test="bankNum != null">
+        bankNum,
+      </if>
+      <if test="bankImagePath != null">
+        bankImagePath,
+      </if>
+      <if test="supplierName != null">
+        supplierName,
+      </if>
+      <if test="supplierIdNum != null">
+        supplierIdNum,
+      </if>
+      <if test="supplierHomeAddress != null">
+        supplierHomeAddress,
+      </if>
+      <if test="supplierPhone != null">
+        supplierPhone,
       </if>
       <if test="createTime != null">
         createTime,
@@ -176,18 +207,6 @@
       </if>
       <if test="companyAddress != null">
         companyAddress,
-      </if>
-      <if test="bankName != null">
-        bankName,
-      </if>
-      <if test="branchBankName != null">
-        branchBankName,
-      </if>
-      <if test="bankNum != null">
-        bankNum,
-      </if>
-      <if test="bankImagePath != null">
-        bankImagePath,
       </if>
       <if test="weight != null">
         weight,
@@ -257,6 +276,30 @@
       <if test="supplierId != null">
         #{supplierId,jdbcType=BIGINT},
       </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null">
+        #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNum != null">
+        #{bankNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankImagePath != null">
+        #{bankImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null">
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierIdNum != null">
+        #{supplierIdNum,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierHomeAddress != null">
+        #{supplierHomeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierPhone != null">
+        #{supplierPhone,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -272,23 +315,11 @@
       <if test="companyAddress != null">
         #{companyAddress,jdbcType=VARCHAR},
       </if>
-      <if test="bankName != null">
-        #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="branchBankName != null">
-        #{branchBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="bankNum != null">
-        #{bankNum,jdbcType=VARCHAR},
-      </if>
-      <if test="bankImagePath != null">
-        #{bankImagePath,jdbcType=VARCHAR},
-      </if>
       <if test="weight != null">
         #{weight,jdbcType=DOUBLE},
       </if>
       <if test="price != null">
-        #{price,jdbcType=DOUBLE},
+        #{price,jdbcType=DECIMAL},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DOUBLE},
@@ -364,6 +395,30 @@
       <if test="record.supplierId != null">
         supplierId = #{record.supplierId,jdbcType=BIGINT},
       </if>
+      <if test="record.bankName != null">
+        bankName = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.branchBankName != null">
+        branchBankName = #{record.branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankNum != null">
+        bankNum = #{record.bankNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankImagePath != null">
+        bankImagePath = #{record.bankImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierName != null">
+        supplierName = #{record.supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierIdNum != null">
+        supplierIdNum = #{record.supplierIdNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierHomeAddress != null">
+        supplierHomeAddress = #{record.supplierHomeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierPhone != null">
+        supplierPhone = #{record.supplierPhone,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null">
         createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -379,23 +434,11 @@
       <if test="record.companyAddress != null">
         companyAddress = #{record.companyAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.bankName != null">
-        bankName = #{record.bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.branchBankName != null">
-        branchBankName = #{record.branchBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.bankNum != null">
-        bankNum = #{record.bankNum,jdbcType=VARCHAR},
-      </if>
-      <if test="record.bankImagePath != null">
-        bankImagePath = #{record.bankImagePath,jdbcType=VARCHAR},
-      </if>
       <if test="record.weight != null">
         weight = #{record.weight,jdbcType=DOUBLE},
       </if>
       <if test="record.price != null">
-        price = #{record.price,jdbcType=DOUBLE},
+        price = #{record.price,jdbcType=DECIMAL},
       </if>
       <if test="record.amount != null">
         amount = #{record.amount,jdbcType=DOUBLE},
@@ -461,17 +504,21 @@
     set id = #{record.id,jdbcType=BIGINT},
       templateId = #{record.templateId,jdbcType=BIGINT},
       supplierId = #{record.supplierId,jdbcType=BIGINT},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      branchBankName = #{record.branchBankName,jdbcType=VARCHAR},
+      bankNum = #{record.bankNum,jdbcType=VARCHAR},
+      bankImagePath = #{record.bankImagePath,jdbcType=VARCHAR},
+      supplierName = #{record.supplierName,jdbcType=VARCHAR},
+      supplierIdNum = #{record.supplierIdNum,jdbcType=VARCHAR},
+      supplierHomeAddress = #{record.supplierHomeAddress,jdbcType=VARCHAR},
+      supplierPhone = #{record.supplierPhone,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       itemName = #{record.itemName,jdbcType=VARCHAR},
       companyCode = #{record.companyCode,jdbcType=CHAR},
       companyName = #{record.companyName,jdbcType=VARCHAR},
       companyAddress = #{record.companyAddress,jdbcType=VARCHAR},
-      bankName = #{record.bankName,jdbcType=VARCHAR},
-      branchBankName = #{record.branchBankName,jdbcType=VARCHAR},
-      bankNum = #{record.bankNum,jdbcType=VARCHAR},
-      bankImagePath = #{record.bankImagePath,jdbcType=VARCHAR},
       weight = #{record.weight,jdbcType=DOUBLE},
-      price = #{record.price,jdbcType=DOUBLE},
+      price = #{record.price,jdbcType=DECIMAL},
       amount = #{record.amount,jdbcType=DOUBLE},
       orderNum = #{record.orderNum,jdbcType=VARCHAR},
       orderNumTime = #{record.orderNumTime,jdbcType=TIMESTAMP},
@@ -503,6 +550,30 @@
       <if test="supplierId != null">
         supplierId = #{supplierId,jdbcType=BIGINT},
       </if>
+      <if test="bankName != null">
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null">
+        branchBankName = #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNum != null">
+        bankNum = #{bankNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankImagePath != null">
+        bankImagePath = #{bankImagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null">
+        supplierName = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierIdNum != null">
+        supplierIdNum = #{supplierIdNum,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierHomeAddress != null">
+        supplierHomeAddress = #{supplierHomeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierPhone != null">
+        supplierPhone = #{supplierPhone,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -518,23 +589,11 @@
       <if test="companyAddress != null">
         companyAddress = #{companyAddress,jdbcType=VARCHAR},
       </if>
-      <if test="bankName != null">
-        bankName = #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="branchBankName != null">
-        branchBankName = #{branchBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="bankNum != null">
-        bankNum = #{bankNum,jdbcType=VARCHAR},
-      </if>
-      <if test="bankImagePath != null">
-        bankImagePath = #{bankImagePath,jdbcType=VARCHAR},
-      </if>
       <if test="weight != null">
         weight = #{weight,jdbcType=DOUBLE},
       </if>
       <if test="price != null">
-        price = #{price,jdbcType=DOUBLE},
+        price = #{price,jdbcType=DECIMAL},
       </if>
       <if test="amount != null">
         amount = #{amount,jdbcType=DOUBLE},
@@ -597,17 +656,21 @@
     update businessorder
     set templateId = #{templateId,jdbcType=BIGINT},
       supplierId = #{supplierId,jdbcType=BIGINT},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      branchBankName = #{branchBankName,jdbcType=VARCHAR},
+      bankNum = #{bankNum,jdbcType=VARCHAR},
+      bankImagePath = #{bankImagePath,jdbcType=VARCHAR},
+      supplierName = #{supplierName,jdbcType=VARCHAR},
+      supplierIdNum = #{supplierIdNum,jdbcType=VARCHAR},
+      supplierHomeAddress = #{supplierHomeAddress,jdbcType=VARCHAR},
+      supplierPhone = #{supplierPhone,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       itemName = #{itemName,jdbcType=VARCHAR},
       companyCode = #{companyCode,jdbcType=CHAR},
       companyName = #{companyName,jdbcType=VARCHAR},
       companyAddress = #{companyAddress,jdbcType=VARCHAR},
-      bankName = #{bankName,jdbcType=VARCHAR},
-      branchBankName = #{branchBankName,jdbcType=VARCHAR},
-      bankNum = #{bankNum,jdbcType=VARCHAR},
-      bankImagePath = #{bankImagePath,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DOUBLE},
-      price = #{price,jdbcType=DOUBLE},
+      price = #{price,jdbcType=DECIMAL},
       amount = #{amount,jdbcType=DOUBLE},
       orderNum = #{orderNum,jdbcType=VARCHAR},
       orderNumTime = #{orderNumTime,jdbcType=TIMESTAMP},

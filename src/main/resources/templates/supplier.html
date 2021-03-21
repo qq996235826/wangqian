@@ -28,10 +28,10 @@
         }
         .fitem label{
             display:inline-block;
-            width:80px;
+            width:100px;
         }
         .fitem input{
-            width:160px;
+            width:250px;
         }
     </style>
 </head>
@@ -74,8 +74,6 @@
     <div>确定停用用户吗?</div>
     <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="deactivate()" style="width:80px">确认</a>
-    </div>
-    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
         <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeDeactivate()" style="width:80px">取消</a>
     </div>
 </div>
@@ -84,8 +82,6 @@
     <div>确定启用用户吗?</div>
     <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
         <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="enable()" style="width:80px">确认</a>
-    </div>
-    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
         <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeEnable()" style="width:80px">取消</a>
     </div>
 </div>
@@ -93,7 +89,7 @@
 <!--添加供货人窗口-->
 <div id="addSupplier" class="easyui-dialog" style="width:500px;height:350px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons">
-    <div class="ftitle">新建供货人</div>
+    <div class="ftitle">供货人信息</div>
     <form id="fm" method="post" novalidate>
         <div class="fitem">
             <label>姓名:</label>
@@ -148,6 +144,10 @@
             <input id="bankName" class="easyui-textbox" required="true">
         </div>
         <div class="fitem">
+            <label>支行名:</label>
+            <input id="branchBankName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
             <label>银行卡号:</label>
             <input id="bankNum" class="easyui-textbox" required="true">
         </div>
@@ -155,7 +155,7 @@
 </div>
 <div id="dlg-buttons">
     <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveEqument()" style="width:120px">保存新纪录</a>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#addInput').dialog('close')" style="width:120px">取消</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#addSupplier').dialog('close')" style="width:120px">取消</a>
 </div>
 
 </body>
@@ -168,32 +168,74 @@
 
     //停用
     function checkDeactivate() {
-        $('#checkDeactivate').window('open').dialog('setTitle','确认操作');
+        // $('#checkDeactivate').window('open').dialog('setTitle','确认操作');
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $.messager.confirm('提示', '您确定要停用该用户吗?', function(r) {
+                if (r) {
+                    var id=row.id;
+                    $.ajax({
+                        url:"/hetong/web/deactivate",
+                        type:"post",
+                        data:{
+                            id:id,
+                        },
+                        datatype:"josn",
+                        success:function(result){
+                            $('#dg').datagrid('reload');
+                            $('#checkDeactivate').dialog('close');
+                        }
+                    });
+                }
+            });
+        }
+
     }
 
-    function deactivate() {
+    // function deactivate() {
+    //     var row = $('#dg').datagrid('getSelected');
+    //     if (row){
+    //         var id=row.id;
+    //         $.ajax({
+    //             url:"/hetong/web/deactivate",
+    //             type:"post",
+    //             data:{
+    //                 id:id,
+    //             },
+    //             datatype:"josn",
+    //             success:function(result){
+    //                 $('#dg').datagrid('reload');
+    //                 $('#checkDeactivate').dialog('close');
+    //             }
+    //         });
+    //     }
+    // }
+
+    //启用
+    function checkEnable() {
+        // $('#checkEnable').window('open').dialog('setTitle','确认操作');
         var row = $('#dg').datagrid('getSelected');
-        if (row){
-            var id=row.id;
-            $.ajax({
-                url:"/hetong/web/deactivate",
-                type:"post",
-                data:{
-                    id:id,
-                },
-                datatype:"josn",
-                success:function(result){
-                    $('#dg').datagrid('reload');
-                    $('#checkDeactivate').dialog('close');
+        if (row) {
+            $.messager.confirm('提示', '您确定要启用该用户吗?', function(r) {
+                if (r) {
+                    var id=row.id;
+                    $.ajax({
+                        url:"/hetong/web/enable",
+                        type:"post",
+                        data:{
+                            id:id,
+                        },
+                        datatype:"josn",
+                        success:function(result){
+                            $('#dg').datagrid('reload');
+                            $('#checkEnable').dialog('close');
+                        }
+                    });
                 }
             });
         }
     }
 
-    //启用
-    function checkEnable() {
-        $('#checkEnable').window('open').dialog('setTitle','确认操作');
-    }
     function enable() {
         var row = $('#dg').datagrid('getSelected');
         if (row){
@@ -226,77 +268,87 @@
     //添加供货人
     function addSupplier()
     {
-        $('#addSupplier').dialog('open').dialog('center').dialog('setTitle', '新建商品');
+        $('#addSupplier').dialog('open').dialog('center').dialog('setTitle', '新建');
         $('#fm').form('clear');
     }
 
     function saveEqument() {
-        var name=document.getElementById("name").value;
-        var password=document.getElementById("password").value;
-        var idNum=document.getElementById("idNum").value;
-        var agencies=document.getElementById("agencies").value;
-        var idCardTimeLimit=document.getElementById("idCardTimeLimit").value;
-        var phoneNum=document.getElementById("phoneNum").value;
-        var homeAddress=document.getElementById("homeAddress").value;
-        var birth=document.getElementById("birth").value;
-        var sex=$("#sex").combobox("getText");
-        var ethnic=document.getElementById("ethnic").value;
-        var bankName=document.getElementById("bankName").value;
-        var bankNum=document.getElementById("bankNum").value;
+        if($("#fm").form('validate')){
+            var name=document.getElementById("name").value;
+            var password=document.getElementById("password").value;
+            var idNum=document.getElementById("idNum").value;
+            var agencies=document.getElementById("agencies").value;
+            var idCardTimeLimit=document.getElementById("idCardTimeLimit").value;
+            var phoneNum=document.getElementById("phoneNum").value;
+            var homeAddress=document.getElementById("homeAddress").value;
+            var birth=document.getElementById("birth").value;
+            var sex=$("#sex").combobox("getText");
+            var ethnic=document.getElementById("ethnic").value;
+            var bankName=document.getElementById("bankName").value;
+            var bankNum=document.getElementById("bankNum").value;
+            var branchBankName=document.getElementById("branchBankName").value;
 
-        var formData = new FormData();
-        formData.append("idNum",idNum);
-        $.ajax({
-            url:"/hetong/web/supplierOnlyOne",
-            type:"post",
-            data:formData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success:function(result){
-                if(result.data===false)
-                {
-                    $.ajax({
-                        url:"/hetong/web/addSupplier",
-                        type:"post",
-                        data:JSON.stringify(
-                            {
-                                name:name,
-                                password:password,
-                                idNum:idNum,
-                                agencies:agencies,
-                                idCardTimeLimit:idCardTimeLimit,
-                                phoneNum:phoneNum,
-                                homeAddress:homeAddress,
-                                birth:birth,
-                                sex:sex,
-                                ethnic:ethnic,
-                                bankName:bankName,
-                                bankNum:bankNum
+            var formData = new FormData();
+            formData.append("idNum",idNum);
+            $.ajax({
+                url:"/hetong/web/supplierOnlyOne",
+                type:"post",
+                data:formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success:function(result){
+                    if(result.data===false)
+                    {
+                        $.ajax({
+                            url:"/hetong/web/addSupplier",
+                            type:"post",
+                            data:JSON.stringify(
+                                {
+                                    name:name,
+                                    password:password,
+                                    idNum:idNum,
+                                    agencies:agencies,
+                                    idCardTimeLimit:idCardTimeLimit,
+                                    phoneNum:phoneNum,
+                                    homeAddress:homeAddress,
+                                    birth:birth,
+                                    sex:sex,
+                                    ethnic:ethnic,
+                                    bankName:bankName,
+                                    bankNum:bankNum,
+                                    branchBankName:branchBankName
+                                }
+                            ),
+                            datatype:"josn",
+                            contentType:"application/json",
+                            success:function(result){
+                                if(result.status===200)
+                                {
+                                    alert("添加成功,新用户id是"+result.data);
+                                }
+                                else
+                                {
+                                    alert("添加失败");
+                                }
+                                $('#dg').datagrid('reload');
                             }
-                        ),
-                        datatype:"josn",
-                        contentType:"application/json",
-                        success:function(result){
-                            if(result.status===200)
-                            {
-                                alert("添加成功,新用户id是"+result.data);
-                            }
-                            else
-                            {
-                                alert("添加失败");
-                            }
-                            $('#dg').datagrid('reload');
-                        }
-                    });
+                        });
+                    }
+                    else
+                    {
+                        alert("该身份证已经存在");
+                    }
+                    $('#dg').datagrid('reload');
+                    $('#addSupplier').dialog('close');
                 }
-                else
-                {
-                    alert("该身份证已经存在");
-                }
-                $('#dg').datagrid('reload');
-            }
-        })
+            })
+        }
+        else
+        {
+            alert("请填完所有必填空");
+        }
+
 
     }
 
