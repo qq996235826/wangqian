@@ -230,13 +230,13 @@ public class BackstageController
     @RequestMapping("/deleteOrder")
     public ResultDTO deleteOrder(HttpServletRequest request)
     {
-        return ResultDTO.okOf(contractService.changeOrderStatus(request.getParameter("id"), 20));
+        return ResultDTO.okOf(contractService.deleteOrder(request.getParameter("id")));
     }
 
     /**
      * 更新合同
      *
-     * @param AddByWebDTO
+     * @param addByWebDTO
      * @return
      */
     @ResponseBody
