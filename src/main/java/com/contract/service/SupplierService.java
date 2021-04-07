@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author deng
@@ -121,7 +119,9 @@ public class SupplierService {
                     supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
                     supplierAccount.setName(supplierDTO.getName());
                     supplierAccount.setAccount(supplierDTO.getBankNum());
-                    supplierAccount.setBank(supplierDTO.getBankName());
+                    supplierAccount.setBranchBankName(supplierDTO.getBranchBankName());
+                    supplierAccount.setBankName(supplierDTO.getBankName());
+                    supplierAccount.setBank(supplierDTO.getBankName()+supplierDTO.getBranchBankName());
                     supplierAccount.setCreateTime(new Date());
                     supplierAccount.setCompanyCode("");
                     supplierAccount.setNote("用户创建时的记录");
@@ -134,7 +134,9 @@ public class SupplierService {
                 supplierAccount.setSupplierIDNum(supplierDTO.getIdNum());
                 supplierAccount.setName(supplierDTO.getName());
                 supplierAccount.setAccount(supplierDTO.getBankNum());
-                supplierAccount.setBank(supplierDTO.getBankName());
+                supplierAccount.setBranchBankName(supplierDTO.getBranchBankName());
+                supplierAccount.setBankName(supplierDTO.getBankName());
+                supplierAccount.setBank(supplierDTO.getBankName()+supplierDTO.getBranchBankName());
                 supplierAccount.setCreateTime(new Date());
                 supplierAccount.setCompanyCode("");
                 supplierAccount.setNote("用户创建时的记录");
@@ -315,11 +317,26 @@ public class SupplierService {
 
     /**
      * 根据身份证号获得供货人信息
-     * @param idNum
+     * @param account
      * @return
      */
-    public Supplier getSupplierInfo(String idNum) {
-        return getSupplierByIdNum(idNum);
+    public Supplier getSupplierInfo(String account) {
+        SupplierAccountExample example=new SupplierAccountExample();
+        example.createCriteria().andAccountEqualTo(account);
+        List<SupplierAccount> supplierAccounts=supplierAccountMapper.selectByExample(example);
+        if(supplierAccounts.size()>0)
+        {
+            Supplier supplier=getSupplierByIdNum(supplierAccounts.get(0).getSupplierIDNum());
+            supplier.setBankNum(account);
+            supplier.setBankName(supplierAccounts.get(0).getBankName());
+            supplier.setBranchBankName(supplierAccounts.get(0).getBranchBankName());
+            return supplier;
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_SUPPLIER);
+        }
+
     }
 
     /**
@@ -406,5 +423,25 @@ public class SupplierService {
             return true;
         }
         return false;
+    }
+
+    public List<Map<String, String>> getSupplierAccount(String idNum)
+    {
+        SupplierAccountExample example=new SupplierAccountExample();
+        example.createCriteria().andSupplierIDNumEqualTo(idNum);
+        List<SupplierAccount> supplierAccounts=supplierAccountMapper.selectByExample(example);
+        if(supplierAccounts.size()==0)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_SUPPLIER);
+        }
+        List<Map<String, String>> results=new ArrayList<>();
+        for(SupplierAccount supplier:supplierAccounts)
+        {
+            Map<String, String> map=new HashMap();
+            map.put("code",supplier.getAccount());
+            map.put("account",supplier.getAccount());
+            results.add(map);
+        }
+        return results;
     }
 }

@@ -124,6 +124,20 @@ public class BackstageController
     }
 
     /**
+     * @Description: 获得所有供货人身份证号
+     * @Author: DengHaoRan
+     * @Date: 2021/3/28 13:52
+     * @params: [request]
+     * @return: java.util.Map
+     **/
+    @RequestMapping("/getSuppliersIdNum")
+    @ResponseBody
+    public List<Map<String, Object>> SuppliersIdNum()
+    {
+        return backstageService.SuppliersIdNum();
+    }
+
+    /**
      * 负责给easyUI的合同清单页面表格返回数据
      *
      * @return Map
@@ -327,9 +341,9 @@ public class BackstageController
 
     @ResponseBody
     @RequestMapping("/getInfo")
-    public ResultDTO getName(HttpServletRequest request)
+    public ResultDTO getInfo(HttpServletRequest request)
     {
-        return ResultDTO.okOf(supplierService.getSupplierInfo(request.getParameter("idNum")));
+        return ResultDTO.okOf(supplierService.getSupplierInfo(request.getParameter("account")));
     }
 
     /**
@@ -345,6 +359,14 @@ public class BackstageController
     {
         return ResultDTO.okOf(contractService.searchOrder(searchDTO));
     }
+
+    @ResponseBody
+    @RequestMapping("/getSupplierAccount")
+    public ResultDTO getSupplierAccount(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(supplierService.getSupplierAccount(request.getParameter("idNum")));
+    }
+
 
 
 //    /**

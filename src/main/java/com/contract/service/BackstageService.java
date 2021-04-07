@@ -434,4 +434,20 @@ public class BackstageService {
             throw new CustomizeException(CustomizeErrorCode.ORDER_ID_WRONG);
         }
     }
+
+    public List<Map<String, Object>> SuppliersIdNum()
+    {
+        SupplierExample example = new SupplierExample();
+        example.createCriteria().andIdNumIsNotNull();
+        List<Supplier> suppliers = supplierMapper.selectByExample(example);
+        List<Map<String, Object>> supplierList = new ArrayList<>();
+        for (int a = 0; a < suppliers.size(); a++)
+        {
+            Map<String, Object> map = new HashMap<>();
+            map.put("code", suppliers.get(a).getIdNum());
+            map.put("name", suppliers.get(a).getIdNum());
+            supplierList.add(map);
+        }
+        return supplierList;
+    }
 }

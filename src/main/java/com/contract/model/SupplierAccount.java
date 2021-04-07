@@ -11,6 +11,10 @@ public class SupplierAccount {
 
     private String account;
 
+    private String bankName;
+
+    private String branchBankName;
+
     private String bank;
 
     private String bankImage;
@@ -53,6 +57,22 @@ public class SupplierAccount {
 
     public void setAccount(String account) {
         this.account = account == null ? null : account.trim();
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBranchBankName() {
+        return branchBankName;
+    }
+
+    public void setBranchBankName(String branchBankName) {
+        this.branchBankName = branchBankName == null ? null : branchBankName.trim();
     }
 
     public String getBank() {

@@ -6,6 +6,8 @@
     <result column="supplierIDNum" jdbcType="VARCHAR" property="supplierIDNum" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <result column="branchBankName" jdbcType="VARCHAR" property="branchBankName" />
     <result column="bank" jdbcType="VARCHAR" property="bank" />
     <result column="bankImage" jdbcType="VARCHAR" property="bankImage" />
     <result column="note" jdbcType="VARCHAR" property="note" />
@@ -72,7 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, supplierIDNum, name, account, bank, bankImage, note, status, companyCode, createTime
+    ID, supplierIDNum, name, account, bankName, branchBankName, bank, bankImage, note, 
+    status, companyCode, createTime
   </sql>
   <select id="selectByExample" parameterType="com.contract.model.SupplierAccountExample" resultMap="BaseResultMap">
     select
@@ -106,13 +109,13 @@
   </delete>
   <insert id="insert" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.SupplierAccount" useGeneratedKeys="true">
     insert into supplieraccount (supplierIDNum, name, account, 
-      bank, bankImage, note, 
-      status, companyCode, createTime
-      )
+      bankName, branchBankName, bank, 
+      bankImage, note, status, 
+      companyCode, createTime)
     values (#{supplierIDNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{bank,jdbcType=VARCHAR}, #{bankImage,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{companyCode,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+      #{bankName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
+      #{bankImage,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{companyCode,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="ID" keyProperty="ID" parameterType="com.contract.model.SupplierAccount" useGeneratedKeys="true">
     insert into supplieraccount
@@ -125,6 +128,12 @@
       </if>
       <if test="account != null">
         account,
+      </if>
+      <if test="bankName != null">
+        bankName,
+      </if>
+      <if test="branchBankName != null">
+        branchBankName,
       </if>
       <if test="bank != null">
         bank,
@@ -154,6 +163,12 @@
       </if>
       <if test="account != null">
         #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null">
+        #{branchBankName,jdbcType=VARCHAR},
       </if>
       <if test="bank != null">
         #{bank,jdbcType=VARCHAR},
@@ -196,6 +211,12 @@
       <if test="record.account != null">
         account = #{record.account,jdbcType=VARCHAR},
       </if>
+      <if test="record.bankName != null">
+        bankName = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.branchBankName != null">
+        branchBankName = #{record.branchBankName,jdbcType=VARCHAR},
+      </if>
       <if test="record.bank != null">
         bank = #{record.bank,jdbcType=VARCHAR},
       </if>
@@ -225,6 +246,8 @@
       supplierIDNum = #{record.supplierIDNum,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      branchBankName = #{record.branchBankName,jdbcType=VARCHAR},
       bank = #{record.bank,jdbcType=VARCHAR},
       bankImage = #{record.bankImage,jdbcType=VARCHAR},
       note = #{record.note,jdbcType=VARCHAR},
@@ -246,6 +269,12 @@
       </if>
       <if test="account != null">
         account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null">
+        branchBankName = #{branchBankName,jdbcType=VARCHAR},
       </if>
       <if test="bank != null">
         bank = #{bank,jdbcType=VARCHAR},
@@ -273,6 +302,8 @@
     set supplierIDNum = #{supplierIDNum,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      branchBankName = #{branchBankName,jdbcType=VARCHAR},
       bank = #{bank,jdbcType=VARCHAR},
       bankImage = #{bankImage,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},

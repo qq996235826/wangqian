@@ -1,7 +1,6 @@
 package com.contract.model;
 
 import com.contract.dto.AddByWebDTO;
-import com.contract.dto.OrderDTO;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

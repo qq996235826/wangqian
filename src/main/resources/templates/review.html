@@ -36,8 +36,8 @@
     </style>
 </head>
 
-<body style="padding: 0px">
-<table id="dg" title="审核列表" class="easyui-datagrid" style="width:100%;height:800px"
+<body style="width:100%;height:100%;padding: 0px">
+<table id="dg" title="审核列表" class="easyui-datagrid" style="width:100%;height:100%"
        pagination="true"
        striped="true"
        singleSelect="true"
@@ -45,6 +45,7 @@
        url="getOrders?origin=1"
        rownumbers="true"
        fitColumns="true"
+       fit="true"
        loadMsg="正在查询...">
 
     <thead>
@@ -90,7 +91,7 @@
                 style="width:250px"
                 data-options="valueField:'code',textField:'name',
                             url:'/hetong/web/getCompany',
-                            editable:true">
+                            editable:true,model:'local'">
         </select>
         <label>货物:</label>
         <select class="easyui-combobox" name="itemSearch" id="itemSearch" style="width:100px">
@@ -160,13 +161,6 @@
             <label>重量(吨):</label>
             <input id="weight" class="easyui-textbox" >
         </div>
-<!--        <div class="fitem">-->
-<!--            <label>审核状态:</label>-->
-<!--&lt;!&ndash;            <input id="status" class="easyui-textbox" required="true">&ndash;&gt;-->
-<!--            <select class="easyui-combobox" name="status" id="status"-->
-<!--                    style="width:250px" required="required" value="0">-->
-<!--            </select>-->
-<!--        </div>-->
         <div class="fitem">
             <label>审核状态:</label>
             <select class="easyui-combobox" name="status1" id="status1"
@@ -189,7 +183,14 @@
         </div>
         <div class="fitem">
             <label>供货人身份证号:</label>
-            <input id="supplierIdNum" class="easyui-textbox" required="true" buttonAlign="right" buttonText="补全数据" onClickButton="getInfo()" style="width:250px">
+            <select id="supplierIdNum" class="easyui-combobox" data-options="valueField:'code',textField:'name',
+                            url:'/hetong/web/getSuppliersIdNum',
+                            editable:true,prompt:'请输入身份证号'" required="required" style="width:250px"></select>
+        </div>
+        <div class="fitem">
+            <label>供货人账号:</label>
+            <select id="supplierAccount" class="easyui-combobox" data-options="valueField:'code',textField:'account',
+                            editable:true,prompt:'请选择账号'" required="required" style="width:250px"></select>
         </div>
         <div class="fitem">
             <label>供货人姓名:</label>
@@ -281,11 +282,29 @@
         }
     });
 
-    //供货人模糊搜索
-    $("#supplierIdNum").textbox({onClickButton:function(){
-            var supplierIdNum=document.getElementById("supplierIdNum").value;
+    //供货人账号选择
+    $('#supplierIdNum').combobox({
+        onSelect:function(record){
+            var supplierIdNum=record.code;
             $.ajax({
-                url:"/hetong/web/getInfo?idNum="+supplierIdNum,
+                url:"/hetong/web/getSupplierAccount?idNum="+supplierIdNum,
+                type:"post",
+                success:function(result){
+                    if(result.status===200)
+                    {
+                        $('#supplierAccount').combobox('loadData',result.data);
+                    }
+                }
+            });
+        }
+    });
+
+    //供货人模糊搜索
+    $('#supplierAccount').combobox({
+        onSelect:function(record){
+            var supplierAccount=record.code;
+            $.ajax({
+                url:"/hetong/web/getInfo?account="+supplierAccount,
                 type:"post",
                 success:function(result){
                     if(result.status === 200)
@@ -302,7 +321,8 @@
                     }
                 }
             });
-        }})
+        }
+    });
 
     //下载合同
     function downloadContract() {
@@ -635,6 +655,7 @@
                     var companyName=$("#companyCode1").combobox("getText");
                     var supplierName=document.getElementById("supplierName").value;
                     var supplierIdNum=document.getElementById("supplierIdNum").value;
+                    var supplierAccount=document.getElementById("supplierAccount").value;
                     var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
                     var bankName=document.getElementById("bankName").value;
                     var branchBankName=document.getElementById("branchBankName").value;

@@ -45,6 +45,7 @@
        url="getOrders?origin=0"
        rownumbers="true"
        fitColumns="true"
+       fit="true"
        loadMsg="正在查询...">
 
     <thead>
@@ -189,7 +190,11 @@
         </div>
         <div class="fitem">
             <label>供货人身份证号:</label>
-            <input id="supplierIdNum" class="easyui-textbox" required="true" buttonAlign="right" buttonText="补全数据" onClickButton="getInfo()" style="width:250px">
+            <select id="supplierIdNum" class="easyui-combobox" data-options="valueField:'code',textField:'name',
+                            url:'/hetong/web/getSuppliersIdNum',
+                            editable:true,
+                            prompt:'请输入身份证号'" required="required"
+                    buttonAlign="right" buttonText="补全数据" onClickButton="getInfo()" style="width:250px"></select>
         </div>
         <div class="fitem">
             <label>供货人姓名:</label>
