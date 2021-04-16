@@ -135,7 +135,7 @@
 
 
 <!--添加记录窗口-->
-<div id="addInput" class="easyui-dialog" style="width:600px;height:400px;padding:10px 20px"
+<div id="addInput" class="easyui-dialog" style="width:600px;height:500px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons">
     <div class="ftitle">合同信息</div>
     <form id="fm" method="post" novalidate>
@@ -188,11 +188,6 @@
                             editable:true,prompt:'请输入身份证号'" required="required" style="width:250px"></select>
         </div>
         <div class="fitem">
-            <label>供货人账号:</label>
-            <select id="supplierAccount" class="easyui-combobox" data-options="valueField:'code',textField:'account',
-                            editable:true,prompt:'请选择账号'" required="required" style="width:250px"></select>
-        </div>
-        <div class="fitem">
             <label>供货人姓名:</label>
             <input id="supplierName" class="easyui-textbox" required="true">
         </div>
@@ -203,6 +198,11 @@
         <div class="fitem">
             <label>供货人地址:</label>
             <input id="supplierHomeAddress" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>供货人账号:</label>
+            <select id="supplierAccount" class="easyui-combobox" data-options="valueField:'code',textField:'account',
+                            editable:true,prompt:'请选择账号'" required="required" style="width:250px"></select>
         </div>
         <div class="fitem">
             <label>开户行:</label>
@@ -256,7 +256,6 @@
 <script type="text/javascript">
 
     var model=1;
-
     //默认选择
     $("#statusSearch").combobox({
         url: "/hetong/web/getContractStatus", //获取后台动作方法返回的json数据
@@ -285,6 +284,15 @@
     //供货人账号选择
     $('#supplierIdNum').combobox({
         onSelect:function(record){
+            //清空之前的数据
+            $("#supplierName").textbox("setValue",null);
+            $("#bankNum").textbox("setValue",null);
+            $("#phone").textbox("setValue",null);
+            $("#bankName").textbox("setValue",null);
+            $("#branchBankName").textbox("setValue",null);
+            $("#supplierHomeAddress").textbox("setValue",null);
+            $('#supplierAccount').combobox("clear");
+            //获得新数据
             var supplierIdNum=record.code;
             $.ajax({
                 url:"/hetong/web/getSupplierAccount?idNum="+supplierIdNum,
@@ -293,6 +301,22 @@
                     if(result.status===200)
                     {
                         $('#supplierAccount').combobox('loadData',result.data);
+                    }
+                    else {
+                        alert(result.message);
+                        $('#supplierAccount').combobox('loadData', []);
+                    }
+                }
+            });
+            $.ajax({
+                url:"/hetong/web/getSupplier?idNum="+supplierIdNum,
+                type:"post",
+                success:function(result){
+                    if(result.status===200)
+                    {
+                        $("#supplierName").textbox("setValue",result.data.name);
+                        $("#phone").textbox("setValue",result.data.phoneNum);
+                        $("#supplierHomeAddress").textbox("setValue",result.data.homeAddress);
                     }
                 }
             });
@@ -309,12 +333,9 @@
                 success:function(result){
                     if(result.status === 200)
                     {
-                        $("#supplierName").textbox("setValue",result.data.name);
                         $("#bankNum").textbox("setValue",result.data.bankNum);
-                        $("#phone").textbox("setValue",result.data.phoneNum);
                         $("#bankName").textbox("setValue",result.data.bankName);
                         $("#branchBankName").textbox("setValue",result.data.branchBankName);
-                        $("#supplierHomeAddress").textbox("setValue",result.data.homeAddress);
                     }
                     else {
                         alert("没有找到该供货人,请确认身份证号或者新建供货人");
@@ -580,6 +601,7 @@
         $('#addInput').dialog('open').dialog('center').dialog('setTitle', '修改');
         $('#fm').form('clear');
         var row = $('#dg').datagrid('getSelected');
+        var supplierIdNum=null;
         if(row)
         {
             $.ajax({
@@ -595,7 +617,23 @@
                         $('#status1').combobox('select',result.data.status);
                         $('#companyCode1').combobox('select',result.data.companyName);
                         $('#supplierIdNum').textbox('setValue',result.data.supplierIdNum);
+                        supplierIdNum=result.data.supplierIdNum;
+                        $.ajax({
+                            url:"/hetong/web/getSupplierAccount?idNum="+supplierIdNum,
+                            type:"post",
+                            success:function(result){
+                                if(result.status===200)
+                                {
+                                    $('#supplierAccount').combobox('loadData',result.data);
+                                }
+                                else {
+                                    alert(result.message);
+                                    $('#supplierAccount').combobox('loadData', []);
+                                }
+                            }
+                        });
                         $('#supplierName').textbox('setValue',result.data.supplierName);
+                        $('#supplierAccount').combobox('select',result.data.bankNum)
                         $('#phone').textbox('setValue',result.data.supplierPhone);
                         $('#supplierHomeAddress').textbox('setValue',result.data.supplierHomeAddress);
                         $('#bankName').textbox('setValue',result.data.bankName);
@@ -613,6 +651,7 @@
 
                 }
             });
+
         }
         else
         {
@@ -750,7 +789,7 @@
                     var status=$("#status1").combobox("getValue");
                     var companyName=$("#companyCode1").combobox("getText");
                     var supplierName=document.getElementById("supplierName").value;
-                    var supplierIdNum=document.getElementById("supplierIdNum").value;
+                    var supplierIdNum=$("#supplierIdNum").combobox("getText");
                     var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
                     var bankName=document.getElementById("bankName").value;
                     var branchBankName=document.getElementById("branchBankName").value;

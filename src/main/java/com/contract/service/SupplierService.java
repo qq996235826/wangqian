@@ -344,7 +344,7 @@ public class SupplierService {
      * @param idNum
      * @return
      */
-    private Supplier getSupplierByIdNum(String idNum)
+    public Supplier getSupplierByIdNum(String idNum)
     {
         SupplierExample example=new SupplierExample();
         example.createCriteria().andIdNumEqualTo(idNum);

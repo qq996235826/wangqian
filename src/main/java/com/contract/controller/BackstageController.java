@@ -5,6 +5,7 @@ import com.contract.service.BackstageService;
 import com.contract.service.CompanyService;
 import com.contract.service.ContractService;
 import com.contract.service.SupplierService;
+import io.swagger.annotations.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,10 @@ import java.util.Map;
  * @description 负责网页的controller
  * @date 2020/11/10 21:23
  */
+@Api(tags = "后端网页控制")
 @Controller
 @RequestMapping("/web")
+@CrossOrigin(origins = "*",maxAge = 3600)
 public class BackstageController
 {
 
@@ -37,11 +40,7 @@ public class BackstageController
     private CompanyService companyService;
 
 
-    /**
-     * 负责页面跳转
-     *
-     * @return String
-     */
+    @ApiOperation(value = "负责页面跳转")
     @GetMapping("/index")
     public String index()
     {
@@ -98,11 +97,8 @@ public class BackstageController
         return "contractList";
     }
 
-    /**
-     * 负责给easyUI的审核页面表格返回数据
-     *
-     * @return Map
-     */
+
+    @ApiOperation(value = "负责给easyUI的审核页面表格返回数据")
     @RequestMapping("/getOrders")
     @ResponseBody
     public Map getOrders(HttpServletRequest request)
@@ -367,6 +363,12 @@ public class BackstageController
         return ResultDTO.okOf(supplierService.getSupplierAccount(request.getParameter("idNum")));
     }
 
+    @ResponseBody
+    @RequestMapping("/getSupplier")
+    public ResultDTO getSupplier(HttpServletRequest request)
+    {
+        return ResultDTO.okOf(supplierService.getSupplierByIdNum(request.getParameter("idNum")));
+    }
 
 
 //    /**

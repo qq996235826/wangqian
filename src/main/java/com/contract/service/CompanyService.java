@@ -57,7 +57,7 @@ public class CompanyService
         for (int a = 0; a < companies.size(); a++)
         {
             Map<String, Object> map = new HashMap<>();
-            map.put("code", companies.get(a).getID());
+            map.put("code", companies.get(a).getCode());
             map.put("name", companies.get(a).getName());
             companyList.add(map);
         }
