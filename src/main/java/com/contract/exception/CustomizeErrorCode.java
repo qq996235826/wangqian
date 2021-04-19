@@ -27,6 +27,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     SUPPLIER_ID1_LOST(2007,"供货人身份证反面照片缺失"),
     SUPPLIER_BANK0_LOST(2008,"供货人银行卡正面照片缺失"),
     SUPPLIER_BANK1_LOST(2009,"供货人银行卡反面照片缺失"),
+    UPDATE_ERROR(2010,"合同更新失败"),
     FILE_NAME_WRONG(3000, "文件名或者格式错误"),
     WRITE_FILE_WRONG(3000,"新文件写入错误"),
     CONTRACT_TEMPLATE_WRONG(3000,"后台生效合同模板数出错,请联系管理员"),
@@ -39,13 +40,15 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     ORDER_STATUS_WRONG(3005,"订单状态错误,只有待审核的订单才可以盖章"),
     ORDER_STATUS_WRONG2(3006,"订单状态错误,请确认输入了正确的状态"),
     ORDER_NUM_REPEAT(3007,"委托收购协议号重复!"),
+    ORDER_REPEAT(3008,"合同重复"),
     IMAGE_WRONG(2000, "照片类别错误"),
     SQL_SEARCH_FAIL(4000, "数据库查询失败"),
     SQL_INSERT_FAIL(4000, "数据库插入失败"),
     SQL_UPDATE_FAIL(4000, "数据库更新失败"),
     COMPANY_INFO_WRONG(5001, "没有这家公司或者这家公司的信息数目有误"),
     COMPANY_WRONG(5000, "获取公司列表失败"),
-    DOCX_TO_PDF_WRONG(6000,"docx转pdf失败");
+    DOCX_TO_PDF_WRONG(6000,"docx转pdf失败"),
+    NOT_PDF(6001,"该合同PDF文件不存在,请上传");
 
 
 

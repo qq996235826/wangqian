@@ -1,5 +1,7 @@
 package com.contract.controller;
 
+import com.contract.exception.CustomizeErrorCode;
+import com.contract.exception.CustomizeException;
 import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.model.ContractTemplate;
@@ -39,6 +41,10 @@ public class DownloadController {
     @RequestMapping("/download")
     public ResponseEntity<byte[]> downlaodFile(String orderId, String model) {
         Order order=orderMapper.selectByPrimaryKey(Long.valueOf(orderId));
+        if(order.getPdfPath()==null)
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_PDF);
+        }
         String fileName=order.getPdfPath().split("/")[order.getPdfPath().split("/").length-1];
         // 根路径加上传参数的路径构成文件路径地址
         File file = new File(order.getPdfPath());

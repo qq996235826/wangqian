@@ -7,9 +7,11 @@ import com.contract.exception.CustomizeException;
 import com.contract.mapper.CompanyMapper;
 import com.contract.model.Company;
 import com.contract.model.CompanyExample;
+import com.qiniu.util.StringUtils;
 import okhttp3.Response;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,10 +50,18 @@ public class CompanyService
         }
     }
 
-    public List<Map<String, Object>> getCompanies()
+    public List<Map<String, Object>> getCompanies(HttpServletRequest request)
     {
+        String companyCode=request.getParameter("companyCode");
         CompanyExample example = new CompanyExample();
-        example.createCriteria().andIDIsNotNull();
+        if(StringUtils.isNullOrEmpty(companyCode))
+        {
+            example.createCriteria().andIDIsNotNull();
+        }
+        else
+        {
+            example.createCriteria().andIDIsNotNull().andCodeEqualTo(companyCode);
+        }
         List<Company> companies = companyMapper.selectByExample(example);
         List<Map<String, Object>> companyList = new ArrayList<>();
         for (int a = 0; a < companies.size(); a++)

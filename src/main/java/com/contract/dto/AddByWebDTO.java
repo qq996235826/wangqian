@@ -46,6 +46,8 @@ public class AddByWebDTO
     private String branchBankName;
     @ApiModelProperty(value = "银行卡号")
     private String bankNum;
+    @ApiModelProperty(value = "银行卡照片地址")
+    private String bankImage;
     @ApiModelProperty(value = "开始日期")
     private String startDate;
     @ApiModelProperty(value = "截止日期")

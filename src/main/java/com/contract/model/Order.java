@@ -399,5 +399,6 @@ public class Order {
         this.startDate=orderDTO.getStartDate();
         this.endDate=orderDTO.getEndDate();
         this.origin=orderDTO.getOrigin();
+        this.bankImagePath=(orderDTO.getBankImage()==null?"":orderDTO.getBankImage());
     }
 }

@@ -234,6 +234,8 @@
     </dependencies>
 
     <build>
+        <!--打包名称-->
+        <finalName>hetong</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

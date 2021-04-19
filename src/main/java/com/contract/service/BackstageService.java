@@ -7,6 +7,7 @@ import com.contract.mapper.ContractTemplateMapper;
 import com.contract.mapper.OrderMapper;
 import com.contract.mapper.SupplierMapper;
 import com.contract.model.*;
+import com.qiniu.util.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -46,6 +47,7 @@ public class BackstageService {
      */
     public Map getOrders(HttpServletRequest request)
     {
+        String companyCode=request.getParameter("companyCode");
         Integer page=Integer.valueOf(request.getParameter("page"));
         Integer row=Integer.valueOf(request.getParameter("rows"));
         //划分线上
@@ -61,7 +63,14 @@ public class BackstageService {
         //从数据获得数据
         OrderExample example=new OrderExample();
         example.setOrderByClause(" id desc");
-        example.createCriteria().andStatusNotEqualTo(-1).andStatusNotEqualTo(20).andOriginEqualTo(origin);
+        if(StringUtils.isNullOrEmpty(companyCode))
+        {
+            example.createCriteria().andStatusNotEqualTo(-1).andStatusNotEqualTo(20).andOriginEqualTo(origin);
+        }
+        else
+        {
+            example.createCriteria().andStatusNotEqualTo(-1).andStatusNotEqualTo(20).andOriginEqualTo(origin).andCompanyCodeEqualTo(companyCode);
+        }
         //总数据
         Long totalCount = orderMapper.countByExample(example);
         result.put("total",totalCount);
@@ -208,7 +217,15 @@ public class BackstageService {
         //从数据获得数据
         OrderExample example=new OrderExample();
         example.setOrderByClause(" id desc");
-        example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(-1);
+        String companyCode=request.getParameter("companyCode");
+        if(companyCode==null)
+        {
+            example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(-1);
+        }
+        else
+        {
+            example.createCriteria().andIdIsNotNull().andStatusNotEqualTo(-1).andCompanyCodeEqualTo(companyCode);
+        }
         //总数据
         Long totalCount = orderMapper.countByExample(example);
         result.put("total",totalCount);
@@ -425,8 +442,9 @@ public class BackstageService {
         return supplierList;
     }
 
-    public OrderDTO getOrderInfo(String id)
+    public OrderDTO getOrderInfo(HttpServletRequest request)
     {
+        String id=request.getParameter("id");
         Order order=orderMapper.selectByPrimaryKey(Long.valueOf(id));
         if(order!=null)
         {

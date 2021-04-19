@@ -316,7 +316,27 @@ public class SupplierService {
     }
 
     /**
-     * 根据身份证号获得供货人信息
+     * 根据账号号获得供货人账号信息
+     * @param account
+     * @return
+     */
+    public SupplierAccount getSupplierAccountInfo(String account) {
+        SupplierAccountExample example=new SupplierAccountExample();
+        example.createCriteria().andAccountEqualTo(account);
+        List<SupplierAccount> supplierAccounts=supplierAccountMapper.selectByExample(example);
+        if(supplierAccounts.size()>0)
+        {
+            return supplierAccounts.get(0);
+        }
+        else
+        {
+            throw new CustomizeException(CustomizeErrorCode.NOT_SUPPLIER);
+        }
+
+    }
+
+    /**
+     * 根据身份证号号获得供货人账号信息
      * @param account
      * @return
      */

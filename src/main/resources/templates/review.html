@@ -70,13 +70,7 @@
     </thead>
 </table>
 
-<!--分页-->
-<!--<div id="pp" style="background:#efefef;border:1px solid #ccc;"></div>-->
-
-
 <div id="toolbar">
-<!--    <a  href="#" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="checkPass()">审核通过</a>-->
-<!--    <a  href="#" class="easyui-linkbutton" iconCls="icon-no" plain="true" onclick="checkNotPass()">审核不通过</a>-->
     <a  href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addInput()">新增合同</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="checkDelete()">删除合同</a>
     <a  href="#" class="easyui-linkbutton" iconCls="icon-reload" plain="true" onclick="reload()">刷新合同</a>
@@ -95,7 +89,6 @@
         </select>
         <label>货物:</label>
         <select class="easyui-combobox" name="itemSearch" id="itemSearch" style="width:100px">
-            <option></option>
             <option>废纸</option>
             <option>废钢</option>
         </select>
@@ -109,22 +102,6 @@
 </div>
 
 <!--确认框-->
-<div id="checkPass" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
-    <div>您确认要通过审核吗?</div>
-    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
-        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="pass()" style="width:80px" handler>确认</a>
-        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closePass()" style="width:80px">取消</a>
-    </div>
-</div>
-
-<div id="checkNotPass" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
-    <div>您确认要不通过审核吗?</div>
-    <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
-        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="notPass()" style="width:80px" handler>确认</a>
-        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" href="javascript:void(0)" onclick="closeNotPass()" style="width:80px">取消</a>
-    </div>
-</div>
-
 <div id="checkDelete" class="easyui-window" style="width:380px;padding:10px 40px" closed="true">
     <div>您确认要删除吗?</div>
     <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
@@ -255,7 +232,13 @@
 
 <script type="text/javascript">
 
+    //1是新建,2是更新
     var model=1;
+    //该供货人是否拥有账号
+    var haveAccount=false;
+    //供货人账号银行卡图片地址
+    var bankImage="";
+
     //默认选择
     $("#statusSearch").combobox({
         url: "/hetong/web/getContractStatus", //获取后台动作方法返回的json数据
@@ -263,11 +246,7 @@
         textField: 'status',
         panelHeight: "auto",
         editable: false, //不允许手动输入
-        // onLoadSuccess: function () { //数据加载完毕事件
-        //     $('#statusSearch').combobox('select', '全部');
-        // }
     });
-
 
     //新增合同的状态选择
     $("#status").combobox({
@@ -281,7 +260,7 @@
         }
     });
 
-    //供货人账号选择
+    //供货人身份证框
     $('#supplierIdNum').combobox({
         onSelect:function(record){
             //清空之前的数据
@@ -300,10 +279,10 @@
                 success:function(result){
                     if(result.status===200)
                     {
+                        haveAccount=true;
                         $('#supplierAccount').combobox('loadData',result.data);
                     }
                     else {
-                        alert(result.message);
                         $('#supplierAccount').combobox('loadData', []);
                     }
                 }
@@ -323,8 +302,9 @@
         }
     });
 
-    //供货人模糊搜索
+    //供货人账号框
     $('#supplierAccount').combobox({
+        editable: false,
         onSelect:function(record){
             var supplierAccount=record.code;
             $.ajax({
@@ -333,12 +313,14 @@
                 success:function(result){
                     if(result.status === 200)
                     {
-                        $("#bankNum").textbox("setValue",result.data.bankNum);
+                        $("#bankNum").textbox("setValue",result.data.account);
                         $("#bankName").textbox("setValue",result.data.bankName);
                         $("#branchBankName").textbox("setValue",result.data.branchBankName);
+                        bankImage=result.data.bankImage;
                     }
                     else {
-                        alert("没有找到该供货人,请确认身份证号或者新建供货人");
+                        $.messager.confirm('提示','该用户没有账号,请先创建账号',function(r){
+                        });
                     }
                 }
             });
@@ -363,7 +345,8 @@
         {
             if(row.status!=="待盖章"&&template!=null)
             {
-                alert("状态为待盖章的才可以上传盖章文件");
+                $.messager.confirm('提示','状态为待盖章的才可以上传盖章文件',function(r){
+                });
             }else
             {
                 $('#uploadStamp').window('open').dialog('setTitle','盖章文件上传');
@@ -371,7 +354,8 @@
         }
         else
         {
-            alert("请选择合同");
+            $.messager.confirm('提示','请选择合同',function(r){
+            });
         }
 
     }
@@ -383,7 +367,8 @@
 
         if(row.status!=="待盖章"&&template!=null)
         {
-            alert("状态为待盖章的才可以上传盖章文件");
+            $.messager.confirm('提示','状态为待盖章的才可以上传盖章文件',function(r){
+            });
         }
         else
         {
@@ -409,134 +394,6 @@
                             msg: result.message
                         });
                     }
-                }
-            });
-        }
-    }
-
-    //上传PDF合同文件
-
-
-    // function stamp() {
-    //     var row = $('#dg').datagrid('getSelected');
-    //     if (row){
-    //         var id=row.id;
-    //         $.ajax({
-    //             url:"contract/stamp",
-    //             type:"post",
-    //             data:{
-    //                 id:id,
-    //             },
-    //             datatype:"josn",
-    //             success:function(result){
-    //                 $('#dg').datagrid('reload');
-    //             }
-    //         });
-    //     }
-    // }
-
-    //通过审核
-    function checkPass()
-    {
-        // $('#checkPass').window('open').dialog('setTitle','操作确认');
-        var row = $('#dg').datagrid('getSelected');
-        if (row) {
-            $.messager.confirm('提示', '您确定要通过审核吗?', function(r) {
-                if (r) {
-                    var id=row.id;
-                    if(row.status!=="待审核")
-                    {
-                        alert("状态为待审核的才可以通过");
-                    }
-                    $.ajax({
-                        url:"/hetong/web/passOrder",
-                        type:"post",
-                        data:{
-                            id:id,
-                        },
-                        datatype:"josn",
-                        success:function(result){
-                            $('#dg').datagrid('reload');
-                            $('#checkPass').dialog('close');
-                            alert(result.data);
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    function closePass() {
-        $('#checkPass').dialog('close');
-    }
-
-    function pass() {
-        var row = $('#dg').datagrid('getSelected');
-        if (row){
-            var id=row.id;
-            if(row.status!=="已提交")
-            {
-                alert("状态为已提交的才可以通过");
-            }
-            $.ajax({
-                url:"/hetong/web/passOrder",
-                type:"post",
-                data:{
-                    id:id,
-                },
-                datatype:"josn",
-                success:function(result){
-                    $('#dg').datagrid('reload');
-                    $('#checkPass').dialog('close');
-                }
-            });
-        }
-    }
-
-    //不通过审核
-    function checkNotPass()
-    {
-        // $('#checkNotPass').window('open').dialog('setTitle','操作确认');
-        var row = $('#dg').datagrid('getSelected');
-        if (row) {
-            $.messager.confirm('提示', '您确定要不通过审核吗?', function(r) {
-                if (r) {
-                    var id=row.id;
-                    $.ajax({
-                        url:"/hetong/web/notPassOrder",
-                        type:"post",
-                        data:{
-                            id:id,
-                        },
-                        datatype:"josn",
-                        success:function(result){
-                            $('#dg').datagrid('reload');
-                            $('#checkNotPass').dialog('close');
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    function closeNotPass() {
-        $('#checkNotPass').dialog('close');
-    }
-
-    function notPass() {
-        var row = $('#dg').datagrid('getSelected');
-        if (row){
-            var id=row.id;
-            $.ajax({
-                url:"/hetong/web/notPassOrder",
-                type:"post",
-                data:{
-                    id:id,
-                },
-                datatype:"josn",
-                success:function(result){
-                    $('#dg').datagrid('reload');
-                    $('#checkNotPass').dialog('close');
                 }
             });
         }
@@ -618,35 +475,43 @@
                         $('#companyCode1').combobox('select',result.data.companyName);
                         $('#supplierIdNum').textbox('setValue',result.data.supplierIdNum);
                         supplierIdNum=result.data.supplierIdNum;
+
+                        $('#supplierName').textbox('setValue',result.data.supplierName);
+                        $('#phone').textbox('setValue',result.data.supplierPhone);
+                        $('#supplierHomeAddress').textbox('setValue',result.data.supplierHomeAddress);
+                        $('#date').textbox('setValue',result.data.createTime);
+                        $('#startDate').textbox('setValue',result.data.startDate);
+                        $('#endDate').textbox('setValue',result.data.endDate);
+                        //账号
+                        $('#supplierAccount').combobox('select',result.data.bankNum)
+                        $('#bankName').textbox('setValue',result.data.bankName);
+                        $('#branchBankName').textbox('setValue',result.data.branchBankName);
+                        $('#bankNum').textbox('setValue',result.data.bankNum);
                         $.ajax({
                             url:"/hetong/web/getSupplierAccount?idNum="+supplierIdNum,
                             type:"post",
                             success:function(result){
                                 if(result.status===200)
                                 {
+                                    haveAccount=true;
                                     $('#supplierAccount').combobox('loadData',result.data);
                                 }
                                 else {
-                                    alert(result.message);
                                     $('#supplierAccount').combobox('loadData', []);
+                                    $('#supplierAccount').combobox('clear')
+                                    $('#bankName').textbox('clear');
+                                    $('#branchBankName').textbox('clear');
+                                    $('#bankNum').textbox('clear');
                                 }
                             }
                         });
-                        $('#supplierName').textbox('setValue',result.data.supplierName);
-                        $('#supplierAccount').combobox('select',result.data.bankNum)
-                        $('#phone').textbox('setValue',result.data.supplierPhone);
-                        $('#supplierHomeAddress').textbox('setValue',result.data.supplierHomeAddress);
-                        $('#bankName').textbox('setValue',result.data.bankName);
-                        $('#branchBankName').textbox('setValue',result.data.branchBankName);
-                        $('#bankNum').textbox('setValue',result.data.bankNum);
-                        $('#date').textbox('setValue',result.data.createTime);
-                        $('#startDate').textbox('setValue',result.data.startDate);
-                        $('#endDate').textbox('setValue',result.data.endDate);
+
                     }
                     else
                     {
                         $('#dg').datagrid('loaded');
-                        alert(result.message);
+                        $.messager.confirm('Confirm',result.message,function(r){
+                        });
                     }
 
                 }
@@ -655,7 +520,8 @@
         }
         else
         {
-            alert("请选择一条数据");
+            $.messager.confirm('Confirm',"请选择一条数据",function(r){
+            });
         }
     }
 
@@ -679,102 +545,115 @@
     }
 
     function saveEqument() {
-
-        //判定必填项是否填完了
-            if(model===1)
+        if(!haveAccount)
+        {
+            $.messager.confirm('Confirm','该用户没有账号,请先创建账号',function(r){
+            });
+            return;
+        }
+        //保存
+        var row = $('#dg').datagrid('getSelected');
+        if(model===1)
+        {
+            if($("#fm").form('validate'))
             {
-                if($("#fm").form('validate'))
+                var orderCode=document.getElementById("orderCode").value;
+                var date=document.getElementById("date").value;
+                var itemName=document.getElementById("itemName").value;
+                var price=document.getElementById("price").value;
+                var weight=document.getElementById("weight").value;
+                var status=$("#status1").combobox("getValue");
+                var companyName=$("#companyCode1").combobox("getText");
+                var supplierName=document.getElementById("supplierName").value;
+                var supplierIdNum=$("#supplierIdNum").combobox("getText");
+                var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
+                var bankName=document.getElementById("bankName").value;
+                var branchBankName=document.getElementById("branchBankName").value;
+                var bankNum=document.getElementById("bankNum").value;
+                var startDate=document.getElementById("startDate").value;
+                var endDate=document.getElementById("endDate").value;
+                var phone=document.getElementById("phone").value;
+                var formData = new FormData();
+                var bankImagePath=bankImage;
+                formData.append("item",itemName);
+                formData.append("company",companyName);
+                formData.append("idNum",supplierIdNum);
+
+                if(status==="1")
                 {
-                    var orderCode=document.getElementById("orderCode").value;
-                    var date=document.getElementById("date").value;
-                    var itemName=document.getElementById("itemName").value;
-                    var price=document.getElementById("price").value;
-                    var weight=document.getElementById("weight").value;
-                    var status=$("#status1").combobox("getValue");
-                    var companyName=$("#companyCode1").combobox("getText");
-                    var supplierName=document.getElementById("supplierName").value;
-                    var supplierIdNum=document.getElementById("supplierIdNum").value;
-                    var supplierAccount=document.getElementById("supplierAccount").value;
-                    var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
-                    var bankName=document.getElementById("bankName").value;
-                    var branchBankName=document.getElementById("branchBankName").value;
-                    var bankNum=document.getElementById("bankNum").value;
-                    var startDate=document.getElementById("startDate").value;
-                    var endDate=document.getElementById("endDate").value;
-                    var phone=document.getElementById("phone").value;
-                    var formData = new FormData();
-                    formData.append("item",itemName);
-                    formData.append("company",companyName);
-                    formData.append("idNum",supplierIdNum);
+                    status="0";
+                }
 
-                    if(status==="1")
-                    {
-                        status="0";
-                    }
-
-                    $.ajax({
-                        url:"/hetong/contract/onlyOne",
-                        type:"post",
-                        data:formData,
-                        cache: false,
-                        processData: false,
-                        contentType: false,
-                        success:function(result){
-                            if(result.data===true)
-                            {
-                                $.ajax({
-                                    url:"/hetong/web/addOrderByWeb",
-                                    type:"post",
-                                    data:JSON.stringify(
-                                        {
-                                            orderCode:orderCode,
-                                            date:date,
-                                            itemName:itemName,
-                                            price:price,
-                                            weight:weight,
-                                            status:status,
-                                            companyName:companyName,
-                                            supplierName:supplierName,
-                                            supplierIdNum:supplierIdNum,
-                                            supplierHomeAddress:supplierHomeAddress,
-                                            bankName:bankName,
-                                            branchBankName:branchBankName,
-                                            bankNum:bankNum,
-                                            startDate:startDate,
-                                            endDate:endDate,
-                                            phone:phone,
-                                        }
-                                    ),
-                                    datatype:"josn",
-                                    contentType:"application/json",
-                                    success:function(result){
-                                        if(result.status===200)
-                                        {
-                                            alert("添加成功");
-                                        }
-                                        else
-                                        {
-                                            alert(result.message);
-                                        }
-                                        $('#dg').datagrid('reload');
+                $.ajax({
+                    url:"/hetong/contract/onlyOne",
+                    type:"post",
+                    data:formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success:function(result){
+                        if(result.data===true)
+                        {
+                            $.ajax({
+                                url:"/hetong/web/addOrderByWeb",
+                                type:"post",
+                                data:JSON.stringify(
+                                    {
+                                        orderCode:orderCode,
+                                        date:date,
+                                        itemName:itemName,
+                                        price:price,
+                                        weight:weight,
+                                        status:status,
+                                        companyName:companyName,
+                                        supplierName:supplierName,
+                                        supplierIdNum:supplierIdNum,
+                                        supplierHomeAddress:supplierHomeAddress,
+                                        bankName:bankName,
+                                        branchBankName:branchBankName,
+                                        bankNum:bankNum,
+                                        startDate:startDate,
+                                        endDate:endDate,
+                                        phone:phone,
+                                        bankImage:bankImagePath
                                     }
-                                });
-                            }
-                            else
-                            {
-                                alert("出现重复合同,该供货人存在着另一个品名和公司与此相同的合同");
-                            }
-                            $('#dg').datagrid('reload');
+                                ),
+                                datatype:"josn",
+                                contentType:"application/json",
+                                success:function(result){
+                                    if(result.status===200)
+                                    {
+                                        $.messager.confirm('Confirm','添加成功',function(r){
+                                        });
+                                    }
+                                    else
+                                    {
+                                        $.messager.confirm('Confirm',result.message,function(r){
+                                        });
+                                    }
+                                    $('#dg').datagrid('reload');
+                                }
+                            });
                         }
-                    })
-                }
-                else
-                {
-                    alert("请填完所有必填空");
-                }
-
+                        else
+                        {
+                            $.messager.confirm('Confirm',result.message,function(r){
+                            });
+                        }
+                        $('#dg').datagrid('reload');
+                    }
+                })
             }
-            else if(model===2)
+            else
+            {
+                $.messager.confirm('Confirm',"请填完所有必填空",function(r){
+                });
+            }
+
+        }
+        else if(model===2)
+        {
+            if(row)
             {
                 //判定必填项是否填完了
                 if($("#fm").form('validate')){
@@ -798,142 +677,94 @@
                     var endDate=document.getElementById("endDate").value;
                     var phone=document.getElementById("phone").value;
                     var formData = new FormData();
+                    var bankImagePath=bankImage;
                     formData.append("item",itemName);
                     formData.append("company",companyName);
                     formData.append("idNum",supplierIdNum);
+                    formData.append("orderId",id);
 
                     if(status==="1")
                     {
                         status="0";
                     }
                     $.ajax({
-                        url:"/hetong/web/update",
+                        url:"/hetong/contract/onlyOne",
                         type:"post",
-                        data:JSON.stringify(
-                            {
-                                id:id,
-                                orderCode:orderCode,
-                                createTime:date,
-                                itemName:itemName,
-                                price:price,
-                                weight:weight,
-                                status:status,
-                                companyName:companyName,
-                                supplierId:supplierId,
-                                supplierName:supplierName,
-                                supplierIdNum:supplierIdNum,
-                                supplierPhone:phone,
-                                supplierHomeAddress:supplierHomeAddress,
-                                bankName:bankName,
-                                branchBankName:branchBankName,
-                                bankNum:bankNum,
-                                startDate:startDate,
-                                endDate:endDate,
-                                phone:phone,
-                                origin:1,
-                            }
-                        ),
-                        datatype:"josn",
-                        contentType:"application/json",
+                        data:formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
                         success:function(result){
-                            if(result.status===200)
+                            if(result.data===true)
                             {
-                                alert("修改成功");
+                                $.ajax({
+                                    url:"/hetong/web/update",
+                                    type:"post",
+                                    data:JSON.stringify(
+                                        {
+                                            id:id,
+                                            orderCode:orderCode,
+                                            createTime:date,
+                                            itemName:itemName,
+                                            price:price,
+                                            weight:weight,
+                                            status:status,
+                                            companyName:companyName,
+                                            supplierId:supplierId,
+                                            supplierName:supplierName,
+                                            supplierIdNum:supplierIdNum,
+                                            supplierPhone:phone,
+                                            supplierHomeAddress:supplierHomeAddress,
+                                            bankName:bankName,
+                                            branchBankName:branchBankName,
+                                            bankNum:bankNum,
+                                            startDate:startDate,
+                                            endDate:endDate,
+                                            phone:phone,
+                                            origin:1,
+                                            bankImage:bankImagePath
+                                        }
+                                    ),
+                                    datatype:"josn",
+                                    contentType:"application/json",
+                                    success:function(result){
+                                        if(result.status===200)
+                                        {
+                                            $.messager.confirm('Confirm',"修改成功",function(r){
+                                            });
+                                        }
+                                        else
+                                        {
+                                            $.messager.confirm('Confirm',result.message,function(r){
+                                            });
+                                        }
+                                        $('#dg').datagrid('reload');
+                                    }
+                                });
                             }
                             else
                             {
-                                alert(result.message);
+                                $.messager.confirm('Confirm',result.message,function(r){
+                                });
                             }
-                            $('#dg').datagrid('reload');
-                        }
-                    });
+                        }});
+
                 }
                 else
                 {
-                    alert("请填完所有必填空");
+                    $.messager.confirm('Confirm',"请填完所有必填空",function(r){
+                    });
                 }
             }
-
-    }
-
-    function updateEqument()
-    {
-        //判定必填项是否填完了
-        if($("#fm").form('validate')){
-            var row = $('#dg').datagrid('getSelected');
-            var id=row.id;
-            var supplierId=row.supplierId;
-            var orderCode=document.getElementById("orderCode").value;
-            var date=document.getElementById("date").value;
-            var itemName=document.getElementById("itemName").value;
-            var price=document.getElementById("price").value;
-            var weight=document.getElementById("weight").value;
-            var status=$("#status1").combobox("getValue");
-            var companyName=$("#companyCode1").combobox("getText");
-            var supplierName=document.getElementById("supplierName").value;
-            var supplierIdNum=document.getElementById("supplierIdNum").value;
-            var supplierHomeAddress=document.getElementById("supplierHomeAddress").value;
-            var bankName=document.getElementById("bankName").value;
-            var branchBankName=document.getElementById("branchBankName").value;
-            var bankNum=document.getElementById("bankNum").value;
-            var startDate=document.getElementById("startDate").value;
-            var endDate=document.getElementById("endDate").value;
-            var phone=document.getElementById("phone").value;
-            var formData = new FormData();
-            formData.append("item",itemName);
-            formData.append("company",companyName);
-            formData.append("idNum",supplierIdNum);
-
-            if(status==="1")
+            else
             {
-                status="0";
+                $.messager.confirm('Confirm',"请选择一条数据",function(r){
+                });
             }
-            $.ajax({
-                url:"/hetong/web/update",
-                type:"post",
-                data:JSON.stringify(
-                    {
-                        id:id,
-                        orderCode:orderCode,
-                        createTime:date,
-                        itemName:itemName,
-                        price:price,
-                        weight:weight,
-                        status:status,
-                        companyName:companyName,
-                        supplierId:supplierId,
-                        supplierName:supplierName,
-                        supplierIdNum:supplierIdNum,
-                        supplierPhone:phone,
-                        supplierHomeAddress:supplierHomeAddress,
-                        bankName:bankName,
-                        branchBankName:branchBankName,
-                        bankNum:bankNum,
-                        startDate:startDate,
-                        endDate:endDate,
-                        phone:phone,
-                        origin:1,
-                    }
-                ),
-                datatype:"josn",
-                contentType:"application/json",
-                success:function(result){
-                    if(result.status===200)
-                    {
-                        alert("修改成功");
-                    }
-                    else
-                    {
-                        alert(result.message);
-                    }
-                    $('#dg').datagrid('reload');
-                }
-            });
+
         }
-        else
-        {
-            alert("请填完所有必填空");
-        }
+
+        bankImage="";
     }
 
 
@@ -975,93 +806,14 @@
                 else
                 {
                     $('#dg').datagrid('loaded');
-                    alert(result.message);
+                    $.messager.confirm('Confirm',result.message,function(r){
+                    });
                 }
 
             }
         });
 
     }
-
-    //模糊搜索
-    function searchFuzzyOrder() {
-        var info=document.getElementById("fuzzySearch").value;
-        var page = $("#dg").datagrid('options').pageNumber;
-        var rows = $("#dg").datagrid('options').pageSize;
-        var options = $('#dg').datagrid('getPager').data("pagination").options;
-        //总记录数
-        var total = options.total;
-        $('#dg').datagrid('loading');
-        $.ajax({
-            url:"/hetong/web/searchFuzzyOrder?info="+info+'&rows='+rows+'&page='+page,
-            type:"post",
-            success:function(result){
-                if(result.status===200)
-                {
-                    $('#dg').datagrid('loaded');
-                    $('#dg').datagrid('loadData',result.data);
-                }
-                else
-                {
-                    $('#dg').datagrid('loaded');
-                    alert(result.message);
-                }
-
-            }
-        });
-    }
-
-
-
-
 </script>
 
-
-<!--表格可编辑-->
-<!--<script type="text/javascript">-->
-<!--    $.extend($.fn.datagrid.methods, {-->
-<!--        editCell: function (jq, param) {-->
-<!--            return jq.each(function () {-->
-<!--                var opts = $(this).datagrid('options');-->
-<!--                var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));-->
-<!--                for (var i = 0; i < fields.length; i++) {-->
-<!--                    var col = $(this).datagrid('getColumnOption', fields[i]);-->
-<!--                    col.editor1 = col.editor;-->
-<!--                    if (fields[i] != param.field) {-->
-<!--                        col.editor = null;-->
-<!--                    }-->
-<!--                }-->
-<!--                $(this).datagrid('beginEdit', param.index);-->
-<!--                for (var i = 0; i < fields.length; i++) {-->
-<!--                    var col = $(this).datagrid('getColumnOption', fields[i]);-->
-<!--                    col.editor = col.editor1;-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
-<!--    });-->
-
-<!--    var editIndex = undefined;-->
-<!--    function endEditing() {-->
-<!--        if (editIndex == undefined) { return true }-->
-<!--        if ($('#dg').datagrid('validateRow', editIndex)) {-->
-<!--            $('#dg').datagrid('endEdit', editIndex);-->
-<!--            editIndex = undefined;-->
-<!--            return true;-->
-<!--        } else {-->
-<!--            return false;-->
-<!--        }-->
-<!--    }-->
-
-
-<!--    function onClickCell(index, field) {-->
-<!--        if (endEditing()) {-->
-<!--            $('#dg').datagrid('selectRow', index)-->
-<!--                .datagrid('editCell', { index: index, field: field });-->
-<!--            editIndex = index;-->
-<!--        }-->
-<!--    }-->
-
-
-
-<!--</script>-->
 </html>

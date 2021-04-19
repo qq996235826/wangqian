@@ -89,9 +89,9 @@
     }
     //搜索
     function searchInfo() {
-        var company=$("#companySearch").combobox("getText");
-        var status=$("#statusSearch").combobox("getText");
-        var item=$("#itemSearch").combobox("getText");
+        var company=$("#company").combobox("getText");
+        var status=$("#status").combobox("getText");
+        var item=$("#item").combobox("getText");
         var info=document.getElementById("fuzzySearch").value;
         var page = $("#dg").datagrid('options').pageNumber;
         var rows = $("#dg").datagrid('options').pageSize;
@@ -124,47 +124,14 @@
                 else
                 {
                     $('#dg').datagrid('loaded');
-                    alert(result.message);
+                    $.messager.confirm('提示',result.message,function(r){
+                    });
                 }
 
             }
         });
 
-    }
-
-
-    //模糊搜索
-    function searchFuzzyOrder() {
-        var info=document.getElementById("fuzzySearch").value;
-        var page = $("#dg").datagrid('options').pageNumber;
-        var rows = $("#dg").datagrid('options').pageSize;
-        var options = $('#dg').datagrid('getPager').data("pagination").options;
-        //总记录数
-        var total = options.total;
-        $('#dg').datagrid('loading');
-        $.ajax({
-            url:"/hetong/web/searchFuzzyOrder?info="+info+'&rows='+rows+'&page='+page,
-            type:"post",
-            success:function(result){
-                if(result.status===200)
-                {
-                    $('#dg').datagrid('loaded');
-                    $('#dg').datagrid('loadData',result.data);
-                }
-                else
-                {
-                    $('#dg').datagrid('loaded');
-                    alert(result.message);
-                }
-
-            }
-        });
     }
 </script>
-
-
-
-
-
 
 </html>

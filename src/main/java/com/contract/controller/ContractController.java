@@ -126,9 +126,9 @@ public class ContractController {
      */
     @ResponseBody
     @RequestMapping("/onlyOne")
-    public ResultDTO onlyOne(String item,String company,String idNum)
+    public ResultDTO onlyOne(String item,String company,String idNum,String orderId)
     {
-        return ResultDTO.okOf(contractService.onlyOne(item,company,idNum));
+        return ResultDTO.okOf(contractService.onlyOne(item,company,idNum,orderId));
     }
 
     /**

@@ -10,4 +10,6 @@ public interface OrderExtMapper
 
     List<Order> orderFuzzySearch(@Param("status") int status, @Param("item") String item, @Param("company") String company, @Param("info") String info,@Param("origin") Integer origin);
     List<Order> orderFuzzySearchWithoutStatus(@Param("item") String item, @Param("company") String company, @Param("info") String info,@Param("origin") Integer origin);
+    List<Order> orderContractFuzzySearch(@Param("status") int status, @Param("item") String item, @Param("company") String company, @Param("info") String info);
+    List<Order> orderContractFuzzySearchWithoutStatus(@Param("item") String item, @Param("company") String company, @Param("info") String info);
 }

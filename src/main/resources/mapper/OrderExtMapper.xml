@@ -52,7 +52,7 @@
         select
         <include refid="Base_Column_List" />
         from businessorder
-        where status = #{status} and itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info}
+        where status = #{status} and itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info} and origin = #{origin}
     </select>
 
     <select id="orderFuzzySearchWithoutStatus" resultMap="BaseResultMap">
@@ -60,6 +60,20 @@
         <include refid="Base_Column_List" />
         from businessorder
         where itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info} and origin = #{origin}
+    </select>
+
+    <select id="orderContractFuzzySearch" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from businessorder
+        where status = #{status} and itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info}
+    </select>
+
+    <select id="orderContractFuzzySearchWithoutStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from businessorder
+        where itemName like #{item} and companyName like #{company} and CONCAT_WS(<include refid="Base_Column_List" />) like #{info}
     </select>
 
 </mapper>

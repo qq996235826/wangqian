@@ -156,7 +156,7 @@ public class BackstageController
     @ResponseBody
     public ResultDTO getOrderInfo(HttpServletRequest request)
     {
-        return ResultDTO.okOf(backstageService.getOrderInfo(request.getParameter("id")));
+        return ResultDTO.okOf(backstageService.getOrderInfo(request));
     }
 
     /**
@@ -290,9 +290,9 @@ public class BackstageController
 
     @ResponseBody
     @RequestMapping("/getCompany")
-    public List<Map<String, Object>> getCompany()
+    public List<Map<String, Object>> getCompany(HttpServletRequest request)
     {
-        return companyService.getCompanies();
+        return companyService.getCompanies(request);
     }
 
     @ResponseBody
@@ -337,9 +337,9 @@ public class BackstageController
 
     @ResponseBody
     @RequestMapping("/getInfo")
-    public ResultDTO getInfo(HttpServletRequest request)
+    public ResultDTO getAccountInfo(HttpServletRequest request)
     {
-        return ResultDTO.okOf(supplierService.getSupplierInfo(request.getParameter("account")));
+        return ResultDTO.okOf(supplierService.getSupplierAccountInfo(request.getParameter("account")));
     }
 
     /**
